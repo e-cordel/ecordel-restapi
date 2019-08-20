@@ -1,0 +1,1 @@
+--insert into cordel (author, text, xilogravura) values ("Author 01", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.", "");
