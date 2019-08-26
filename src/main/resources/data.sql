@@ -1,1 +1,29 @@
---insert into cordel (author, text, xilogravura) values ("Author 01", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.", "");
+insert into cordel (author, text, xilogravura, description) 
+values ('Author 01', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 'https://i.pinimg.com/originals/25/9d/47/259d47304bf26a4678cb039b8d8ce7f9.jpg', 'Cordel descrition');
+
+insert into cordel (author, text, xilogravura, description) 
+values ('Author 02', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 'https://i.pinimg.com/originals/25/9d/47/259d47304bf26a4678cb039b8d8ce7f9.jpg', 'Cordel descrition');
+
+insert into cordel (author, text, xilogravura, description) 
+values ('Author 03', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 'https://i.pinimg.com/originals/25/9d/47/259d47304bf26a4678cb039b8d8ce7f9.jpg', 'Cordel descrition');
+
+insert into cordel (author, text, xilogravura, description) 
+values ('Author 04', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 'https://i.pinimg.com/originals/25/9d/47/259d47304bf26a4678cb039b8d8ce7f9.jpg', 'Cordel descrition');
+
+insert into cordel (author, text, xilogravura, description) 
+values ('Author 05', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 'https://i.pinimg.com/originals/25/9d/47/259d47304bf26a4678cb039b8d8ce7f9.jpg', 'Cordel descrition');
+
+insert into cordel (author, text, xilogravura, description) 
+values ('Author 06', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 'https://i.pinimg.com/originals/25/9d/47/259d47304bf26a4678cb039b8d8ce7f9.jpg', 'Cordel descrition');
+
+insert into cordel (author, text, xilogravura, description) 
+values ('Author 07', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 'https://i.pinimg.com/originals/25/9d/47/259d47304bf26a4678cb039b8d8ce7f9.jpg', 'Cordel descrition');
+
+insert into cordel (author, text, xilogravura, description) 
+values ('Author 08', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 'https://i.pinimg.com/originals/25/9d/47/259d47304bf26a4678cb039b8d8ce7f9.jpg', 'Cordel descrition');
+
+insert into cordel (author, text, xilogravura, description) 
+values ('Author 09', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 'https://i.pinimg.com/originals/25/9d/47/259d47304bf26a4678cb039b8d8ce7f9.jpg', 'Cordel descrition');
+
+insert into cordel (author, text, xilogravura, description) 
+values ('Author 10', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 'https://i.pinimg.com/originals/25/9d/47/259d47304bf26a4678cb039b8d8ce7f9.jpg', 'Cordel descrition');
