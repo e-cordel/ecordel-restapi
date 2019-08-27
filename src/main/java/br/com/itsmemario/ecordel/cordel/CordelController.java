@@ -7,6 +7,7 @@ import java.util.Collection;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,7 @@ public class CordelController {
 	}
 
 	@GetMapping("{id}")
+	//@Cacheable(value="")
 	public Cordel getCordel(@PathVariable String id) {
 		return new Cordel("Mário S.", "This is a cordel", "https://i.pinimg.com/originals/25/9d/47/259d47304bf26a4678cb039b8d8ce7f9.jpg","Description");
 	}
