@@ -27,3 +27,6 @@ values ('Author 09', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. S
 
 insert into cordel (author, text, xilogravura, description) 
 values ('Author 10', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 'https://i.pinimg.com/originals/25/9d/47/259d47304bf26a4678cb039b8d8ce7f9.jpg', 'Cordel descrition');
+
+
+insert into ECORDEL_USER(username, password, enabled) values ('admin','$2a$10$a1U/XuTEv1zrHOKStAEO6OUrIvVvQJLrLOUffqzCuD1Z6Thac1yBC',true);
