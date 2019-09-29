@@ -69,6 +69,10 @@ public class ECorderlUser implements UserDetails{
 	public boolean isEnabled() {
 		return enabled;
 	}
+
+	public Long getId() {
+		return id;
+	}
 	
 	
 
