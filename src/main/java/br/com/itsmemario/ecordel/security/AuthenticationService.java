@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -73,6 +74,26 @@ public class AuthenticationService implements UserDetailsService{
 
 	public void setSecretKey(String secretKey) {
 		this.secretKey = secretKey;
+	}
+
+	public boolean isValidToken(String token) {
+		try {
+			return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)!=null;
+		}catch(io.jsonwebtoken.SignatureException e) {
+			return false;
+		}
+	}
+
+	public Optional<ECorderlUser> getUserFromToken(String token) {
+		try {
+			Claims body = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+			Long id = Long.parseLong(body.getSubject());
+			return repository.findById(id);
+		}catch(io.jsonwebtoken.SignatureException e) {
+			e.printStackTrace();
+			return Optional.ofNullable(null);
+		}
+		
 	}
 	
 	

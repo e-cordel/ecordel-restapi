@@ -7,6 +7,8 @@ public class LoginData {
 	private String username;
 	private String password;
 	
+	public LoginData() {}
+	
 	public LoginData(String username, String password) {
 		super();
 		this.username = username;
