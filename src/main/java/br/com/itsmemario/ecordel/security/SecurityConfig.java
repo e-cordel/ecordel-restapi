@@ -38,6 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.antMatchers(HttpMethod.GET, "/cordel").permitAll()
 			.antMatchers(HttpMethod.GET, "/cordel/*").permitAll()
 			.antMatchers(HttpMethod.POST, "/auth").permitAll()
+			.antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
 			.anyRequest().authenticated()
 			//.and().formLogin();
 			.and().csrf().disable()
@@ -48,6 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	public void configure(WebSecurity web) throws Exception {
+		 web.ignoring()
+	        .antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**");
 		
 	}
 	

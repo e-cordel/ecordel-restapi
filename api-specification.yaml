@@ -1,0 +1,61 @@
+swagger: "2.0"
+
+info:
+  description: "Rest API to perform operations on e-cordels"
+  version: "1.0.0"
+  title: "E-cordel API"
+  contact:
+    name: Mário Sousa
+    url: http://itsmemario.com.br
+    email: super.mario.santos.sousa@gmail.com
+
+host: "ecordel.com.br"
+
+paths:
+  /cordels:
+    get:
+      summary: "Find all cordels"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+    post:
+      summary: "Create a new cordel"
+      responses:
+        200:
+          description: OK
+
+  /cordels/{id}:
+    get:
+      summary: "Find and specific cordel"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Cordel identification number"
+          required: true
+          type: "string"
+          format: "uuid"
+      responses:
+        200:
+          description: "successful operation"
+            #schema:
+          #TODO
+        404:
+          description: "Not found"
+    put:
+      summary: "Update the cordel identified by id"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Cordel identification number"
+          required: true
+          type: "string"
+          format: "uuid"
+      responses:
+        200:
+          description: OK

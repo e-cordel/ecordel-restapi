@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping("cordel")
+@RequestMapping("cordels")
 public class CordelController {
 	
 	private CordelService service;
@@ -32,18 +32,8 @@ public class CordelController {
 	}
 
 	@GetMapping("{id}")
-	//@Cacheable(value="")
 	public Cordel getCordel(@PathVariable String id) {
 		return new Cordel("Mário S.", "This is a cordel", "https://i.pinimg.com/originals/25/9d/47/259d47304bf26a4678cb039b8d8ce7f9.jpg","Description");
-	}
-	
-	@GetMapping("all")
-	public Collection<Cordel> getAll(){
-		ArrayList<Cordel> arrayList = new ArrayList<>();
-		arrayList.add(new Cordel("Mário S.", "This is a cordel", "https://i.pinimg.com/originals/25/9d/47/259d47304bf26a4678cb039b8d8ce7f9.jpg","Description"));
-		arrayList.add(new Cordel("Mário S.", "This is a cordel", "https://i.pinimg.com/originals/25/9d/47/259d47304bf26a4678cb039b8d8ce7f9.jpg","Description"));
-		arrayList.add(new Cordel("Mário S.", "This is a cordel", "https://i.pinimg.com/originals/25/9d/47/259d47304bf26a4678cb039b8d8ce7f9.jpg","Description"));
-		return arrayList;
 	}
 	
 	@GetMapping
