@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class CordelService {
 	
@@ -23,7 +25,9 @@ public class CordelService {
 	public Cordel save(Cordel cordel) {
 		return repository.save(cordel);
 	}
-	
-	
 
+
+	public Optional<Cordel> findById(Long id) {
+		return repository.findById(id);
+	}
 }
