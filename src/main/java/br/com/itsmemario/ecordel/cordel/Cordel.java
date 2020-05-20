@@ -1,8 +1,8 @@
 package br.com.itsmemario.ecordel.cordel;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Data
 @Builder
+@AllArgsConstructor
 class Cordel {
 	
 	@Id
@@ -27,4 +28,5 @@ class Cordel {
 	private String xilogravura;
 	private String description;
 
+	Cordel() {}
 }
