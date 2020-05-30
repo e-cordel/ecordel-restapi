@@ -18,8 +18,8 @@ public class CordelService {
 		this.repository = repository;
 	}
 
-	public Page<Cordel> getCordels(Pageable pageable) {
-		return repository.findAll(pageable);
+	public Page<CordelSummary> getCordels(Pageable pageable) {
+		return repository.findAllProjectedBy(pageable);
 	}
 	
 	public Cordel save(Cordel cordel) {

@@ -33,8 +33,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-
-		http.authorizeRequests()
+		//h2;console only
+		http.headers().frameOptions().disable()
+			.and()
+			.authorizeRequests()
 			.antMatchers(HttpMethod.GET, "/cordels").permitAll()
 			.antMatchers(HttpMethod.GET, "/cordels/*").permitAll()
 			.antMatchers(HttpMethod.POST, "/auth").permitAll()

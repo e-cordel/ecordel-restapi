@@ -34,7 +34,7 @@ public class CordelController {
 	}
 	
 	@GetMapping
-	public Page<Cordel> getCordels(Pageable pageable){
+	public Page<CordelSummary> getCordels(Pageable pageable){
 		return service.getCordels(pageable);
 	}
 	
