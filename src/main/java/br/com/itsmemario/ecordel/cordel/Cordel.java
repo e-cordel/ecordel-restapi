@@ -1,19 +1,11 @@
 package br.com.itsmemario.ecordel.cordel;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
-@Data
-@Builder
-@AllArgsConstructor
 class Cordel {
 	
 	@Id
@@ -24,9 +16,82 @@ class Cordel {
 	@NotBlank
 	private String title;
 	@NotBlank
-	private String text;
+	private String content;
 	private String xilogravura;
 	private String description;
+	@ElementCollection
+	@CollectionTable(name = "cordel_tags")
+	private Set<String> tags;
 
 	Cordel() {}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getXilogravura() {
+		return xilogravura;
+	}
+
+	public void setXilogravura(String xilogravura) {
+		this.xilogravura = xilogravura;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Set<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(Set<String> tags) {
+		this.tags = tags;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Cordel cordel = (Cordel) o;
+		return Objects.equals(id, cordel.id) &&
+				Objects.equals(title, cordel.title);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, title);
+	}
 }
