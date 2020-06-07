@@ -55,8 +55,10 @@ paths:
       responses:
         200:
           description: "successful operation"
-          #schema:
-          #TODO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cordel'
         404:
           description: "Not found"
     put:
@@ -94,7 +96,7 @@ components:
         content:
           type: array
           items:
-            $ref: '#/components/schemas/Cordel'
+            $ref: '#/components/schemas/CordelSummary'
         pageable:
           type: object
           $ref: '#/components/schemas/Page'
@@ -121,8 +123,9 @@ components:
         empty:
           type: boolean
           description: indicates if the page is empty
-    Cordel:
+    CordelSummary:
       type: object
+      description: Cordel main data used for endpoints that return many objects.
       properties:
         id:
           type: integer
@@ -133,12 +136,42 @@ components:
         title:
           type: string
           description: cordel title
+        description:
+          type: string
+          description: author's name
         xilogravura:
           type: string
           description: image url
-        text:
+        tags:
+          type: array
+          items:
+            type: string
+    Cordel:
+      type: object
+      description: Cordel data with content.
+      properties:
+        id:
+          type: integer
+          description: cordel id
+        author:
+          type: string
+          description: author's name
+        title:
+          type: string
+          description: cordel title
+        description:
+          type: string
+          description: author's name
+        content:
           type: string
           description: cordel text
+        xilogravura:
+          type: string
+          description: image url
+        tags:
+          type: array
+          items:
+            type: string
     Page:
       type: object
       properties:
