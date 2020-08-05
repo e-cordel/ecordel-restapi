@@ -1,7 +1,5 @@
 package br.com.itsmemario.ecordel.security;
 
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-//@RestController
-//@RequestMapping("/auth")
+import javax.validation.Valid;
+
+@RestController
+@RequestMapping("/auth")
 public class AuthenticationController {
 	
-	Logger logger = LoggerFactory.getLogger(AuthenticationController.class.getName());
+	private Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 	
 	private AuthenticationManager authenticationManager;
 	private AuthenticationService authenticationService;

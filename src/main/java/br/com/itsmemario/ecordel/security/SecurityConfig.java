@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		//auth.userDetailsService(authenticationService) .passwordEncoder(new BCryptPasswordEncoder());
+		auth.userDetailsService(authenticationService) .passwordEncoder(new BCryptPasswordEncoder());
 	}
 	
 	@Override
@@ -41,11 +41,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.antMatchers(HttpMethod.GET, "/cordels/*").permitAll()
 			.antMatchers(HttpMethod.POST, "/auth").permitAll()
 			.antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
-			//.anyRequest().authenticated()
+			.anyRequest().authenticated()
 			//.and().formLogin();
-			.and().csrf().disable();
-			//.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			//.and().addFilterBefore(new TokenAuthenticationFilter(authenticationService), UsernamePasswordAuthenticationFilter.class);
+			.and().csrf().disable()// TODO review
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and().addFilterBefore(new TokenAuthenticationFilter(authenticationService), UsernamePasswordAuthenticationFilter.class);
 
 	}
 	
