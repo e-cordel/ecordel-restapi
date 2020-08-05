@@ -43,22 +43,22 @@ CREATE SEQUENCE public.ecordel_user_id_seq
 
 ALTER SEQUENCE public.ecordel_user_id_seq OWNED BY public.ecordel_user.id;
 
-CREATE TABLE public.ecorderl_authority (
+CREATE TABLE public.ecordel_authority (
     id bigint NOT NULL,
     authority character varying(255)
 );
 
-CREATE SEQUENCE public.ecorderl_authority_id_seq
+CREATE SEQUENCE public.ecordel_authority_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
 
-ALTER SEQUENCE public.ecorderl_authority_id_seq OWNED BY public.ecorderl_authority.id;
+ALTER SEQUENCE public.ecordel_authority_id_seq OWNED BY public.ecordel_authority.id;
 
 ALTER TABLE ONLY public.cordel ALTER COLUMN id SET DEFAULT nextval('public.cordel_id_seq'::regclass);
 
 ALTER TABLE ONLY public.ecordel_user ALTER COLUMN id SET DEFAULT nextval('public.ecordel_user_id_seq'::regclass);
 
-ALTER TABLE ONLY public.ecorderl_authority ALTER COLUMN id SET DEFAULT nextval('public.ecorderl_authority_id_seq'::regclass);
+ALTER TABLE ONLY public.ecordel_authority ALTER COLUMN id SET DEFAULT nextval('public.ecordel_authority_id_seq'::regclass);

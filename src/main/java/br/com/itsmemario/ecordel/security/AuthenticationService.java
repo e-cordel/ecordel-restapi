@@ -1,8 +1,10 @@
 package br.com.itsmemario.ecordel.security;
 
-import java.util.Date;
-import java.util.Optional;
-
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -11,18 +13,19 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.Date;
+import java.util.Optional;
 
 @Service
-public class AuthenticationService implements UserDetailsService{
+public class AuthenticationService implements UserDetailsService {
+
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	private static final String ISSUER = "e-cordel";
 	private UserRepository repository;
 	
 	@Value("${jwt.token.expiration}")
-	private Long tokenExpriation;
+	private Long tokenExpiration;
 	
 	@Value("${jwt.token.secretKey}")
 	private String secretKey;
@@ -47,25 +50,23 @@ public class AuthenticationService implements UserDetailsService{
 		ECorderlUser principal = (ECorderlUser) authentication.getPrincipal();
 		
 		Date today = new Date();
-		Date expiration = new Date(today.getTime() + tokenExpriation);
+		Date expiration = new Date(today.getTime() + tokenExpiration);
 		
-		String token = Jwts.builder()
+		return Jwts.builder()
 			.setIssuer(ISSUER)
 			.setSubject(principal.getId().toString())
 			.setIssuedAt(today)
 			.setExpiration(expiration)
 			.signWith(SignatureAlgorithm.HS256, secretKey)
 			.compact();
-				
-		return token;
 	}
 
-	public Long getTokenExpriation() {
-		return tokenExpriation;
+	public Long getTokenExpiration() {
+		return tokenExpiration;
 	}
 
-	public void setTokenExpriation(Long tokenExpriation) {
-		this.tokenExpriation = tokenExpriation;
+	public void setTokenExpiration(Long tokenExpiration) {
+		this.tokenExpiration = tokenExpiration;
 	}
 
 	public String getSecretKey() {
@@ -89,13 +90,11 @@ public class AuthenticationService implements UserDetailsService{
 			Claims body = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
 			Long id = Long.parseLong(body.getSubject());
 			return repository.findById(id);
-		}catch(io.jsonwebtoken.SignatureException e) {
-			e.printStackTrace();
-			return Optional.ofNullable(null);
+		} catch (io.jsonwebtoken.SignatureException e) {
+			logger.warn("No possible to parser token: {}", e.getMessage());
+			return Optional.empty();
 		}
-		
 	}
-	
 	
 	
 }

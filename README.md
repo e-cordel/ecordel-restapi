@@ -2,7 +2,7 @@
 
 This is the REST API for e-cordel project.
 
-In this project you can find an openapi [specification](./api-specification.yaml) with all the information about the endpoints available. 
+In this project you can find an openapi [specification](./openapi.yaml) with all the information about the endpoints available. 
 
 ## How to build
 

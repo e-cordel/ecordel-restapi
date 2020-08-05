@@ -27,7 +27,7 @@ public class ECorderlUser implements UserDetails{
 	private boolean enabled = true;
 	
 	@ManyToMany(fetch=FetchType.EAGER)
-	private Set<ECorderlAuthority> authorities = new HashSet<>();
+	private Set<ECordelAuthority> authorities = new HashSet<>();
 	
 	ECorderlUser() {}
 
