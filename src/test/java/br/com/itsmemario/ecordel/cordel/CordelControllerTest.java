@@ -9,6 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
@@ -24,15 +25,23 @@ public class CordelControllerTest {
 
     @MockBean
     CordelService cordelService;
+    private Cordel cordel;
 
     @Before
     public void setUp() throws Exception {
-
+        cordel = new Cordel();
+        cordel.setId(1l);
+        cordel.setAuthor("");
+        cordel.setContent("");
+        cordel.setTitle("");
+        cordel.setTags(Collections.emptySet());
+        cordel.setXilogravura("");
+        cordel.setDescription("");
     }
 
     @Test
     public void getCordel() throws Exception {
-        when(cordelService.findById(1l)).thenReturn(Optional.of(new Cordel()));
+        when(cordelService.findById(1l)).thenReturn(Optional.of(cordel));
         mockMvc.perform(get("/cordels/1"))
                 .andExpect(status().isOk());
     }

@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class EcordelApplicationTests {
+public class EcordelApplicationTests extends AbstractIntegrationTest{
 
 	@Test
 	public void contextLoads() {
