@@ -43,7 +43,7 @@ public class CordelController {
 	public ResponseEntity<Cordel> create(@RequestBody @Valid Cordel cordel, UriComponentsBuilder uriBuilder){
 		service.save(cordel);
 		URI uri = uriBuilder.path("/cordel/{id}").buildAndExpand(cordel.getId()).toUri();
-		return ResponseEntity.created(uri).body(cordel); 
+		return ResponseEntity.created(uri).build();
 	}
 
 	@PutMapping("{id}")

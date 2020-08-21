@@ -31,7 +31,6 @@ public class CordelControllerTest {
     public void setUp() throws Exception {
         cordel = new Cordel();
         cordel.setId(1l);
-        cordel.setAuthor("");
         cordel.setContent("");
         cordel.setTitle("");
         cordel.setTags(Collections.emptySet());
