@@ -162,8 +162,8 @@ components:
           type: integer
           description: cordel id
         author:
-          type: string
-          description: author's name
+          type: object
+          $ref: '#/components/schemas/AuthorSummary'
         title:
           type: string
           description: cordel title
@@ -177,6 +177,19 @@ components:
           type: array
           items:
             type: string
+    AuthorSummary:
+      type: object
+      description: Author main data used for endpoints that return many objects.
+      properties:
+        name:
+          type: string
+          description: author's name
+        email:
+          type: string
+          description: author's email
+        about:
+          type: string
+          description: small text about the author
     Cordel:
       type: object
       description: Cordel data with content.
