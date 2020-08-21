@@ -1,18 +1,21 @@
 package br.com.itsmemario.ecordel.cordel;
 
+import br.com.itsmemario.ecordel.author.Author;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
-class Cordel {
+public class Cordel {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	@NotBlank
-	private String author;
+	@ManyToOne
+	@JoinColumn(name = "author_id")
+	private Author author;
 	@NotBlank
 	private String title;
 	@NotBlank
@@ -33,11 +36,11 @@ class Cordel {
 		this.id = id;
 	}
 
-	public String getAuthor() {
+	public Author getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(String author) {
+	public void setAuthor(Author author) {
 		this.author = author;
 	}
 

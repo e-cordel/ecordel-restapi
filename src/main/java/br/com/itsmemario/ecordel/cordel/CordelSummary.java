@@ -1,12 +1,14 @@
 package br.com.itsmemario.ecordel.cordel;
 
+import br.com.itsmemario.ecordel.author.AuthorSummary;
+
 import java.util.Set;
 
 
-interface CordelSummary {
+public interface CordelSummary {
 
 	Long getId();
-	String getAuthor();
+	AuthorSummary getAuthor();
 	String getTitle();
 	String getXilogravura();
 	String getDescription();
