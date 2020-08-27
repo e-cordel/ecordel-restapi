@@ -13,7 +13,7 @@ public class AuthorService {
         this.repository = repository;
     }
 
-    public Page<AuthorSummary> findAll(Pageable pageable) {
+    public Page<AuthorView> findAll(Pageable pageable) {
         return repository.findAllProjectedBy(pageable);
     }
 

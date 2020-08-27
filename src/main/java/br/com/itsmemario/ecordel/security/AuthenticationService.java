@@ -79,7 +79,10 @@ public class AuthenticationService implements UserDetailsService {
 
 	public boolean isValidToken(String token) {
 		try {
-			return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)!=null;
+			return Jwts.parser()
+					.setSigningKey(secretKey)
+					.requireIssuer(ISSUER)
+					.parseClaimsJws(token)!=null;
 		}catch(io.jsonwebtoken.SignatureException e) {
 			return false;
 		}

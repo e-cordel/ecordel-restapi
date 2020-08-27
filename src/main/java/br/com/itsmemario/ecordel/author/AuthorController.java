@@ -21,7 +21,7 @@ public class AuthorController {
     }
 
     @GetMapping
-    public Page<AuthorSummary> getAll(Pageable pageable){
+    public Page<AuthorView> getAll(Pageable pageable){
         return service.findAll(pageable);
     }
 
