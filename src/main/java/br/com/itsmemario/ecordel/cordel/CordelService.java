@@ -27,9 +27,9 @@ public class CordelService {
 		return repository.save(cordel);
 	}
 
-//	public Page<Cordel> findByTags(List<String> tags, Pageable pageable){
-//		return repository.findByTags(tags, pageable);
-//	}
+	public Page<CordelView> findByTags(List<String> tags, Pageable pageable){
+		return repository.findByTags(tags, pageable);
+	}
 
 
 	public Optional<Cordel> findById(Long id) {

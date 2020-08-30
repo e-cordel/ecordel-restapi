@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Author {
+public class Author implements AuthorView{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

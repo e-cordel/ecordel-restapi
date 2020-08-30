@@ -28,7 +28,15 @@ paths:
           schema:
             type: integer
           required: false
-          description: Number cordels per page
+          description: Cordels per page
+        - name: tags
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          required: false
+          description: search corldels with specified tags
       responses:
         200:
           description: "successful operation"
