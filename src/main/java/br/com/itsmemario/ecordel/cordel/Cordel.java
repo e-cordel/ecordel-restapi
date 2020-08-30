@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-public class Cordel {
+public class Cordel implements CordelView{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

@@ -19,26 +19,45 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 class CustomCordelRepositoryImpl implements CustomCordelRepository {
 
-    @PersistenceContext
-    EntityManager entityManager;
+    public static final String TAGS = "tags";
 
-    private String sql = "select distinct(c.id) as id, c.title, c.description, c.xilogravura, a.name, a.email \n" +
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    private final String FIND_BY_TAGS_SQL = "select distinct(c.id) as id, c.title, c.description, c.xilogravura, a.name, a.email \n" +
             "from cordel_tags ct \n" +
             "join cordel c on c.id = ct.cordel_id \n" +
             "join author a on a.id = c.author_id \n" +
             "where ct.tags in (:tags)\n" +
             "limit :limit offset :offset";
 
-    @Override
-    public Page<Cordel> findByTags(List<String> tags, Pageable pageable) {
-        Query query = entityManager.createNativeQuery(this.sql);
-        query.setParameter("tags", tags);
-        query.setParameter("limit", pageable.getPageSize());
-        query.setParameter("offset", pageable.getOffset());
-        List<Object[]> resultList = query.getResultList();
-        List<Cordel> cordels = resultList.stream().map(this::buildCordel).collect(Collectors.toList());
+    private final String FIND_BY_TAGS_SQL_COUNT = "select COUNT(distinct(c.id)) \n" +
+            "from cordel_tags ct \n" +
+            "join cordel c on c.id = ct.cordel_id \n" +
+            "join author a on a.id = c.author_id \n" +
+            "where ct.tags in (:tags)\n" ;
 
-        return new PageImpl(cordels, pageable, cordels.size());
+    @Override
+    public Page<CordelView> findByTags(List<String> tags, Pageable pageable) {
+        long count = countResults(tags);
+
+        if(count > 0) {
+            Query query = entityManager.createNativeQuery(this.FIND_BY_TAGS_SQL);
+            query.setParameter(TAGS, tags);
+            query.setParameter("limit", pageable.getPageSize());
+            query.setParameter("offset", pageable.getOffset());
+            List<Object[]> resultList = query.getResultList();
+            List<Cordel> cordels = resultList.stream().map(this::buildCordel).collect(Collectors.toList());
+
+            return new PageImpl(cordels, pageable, count);
+        }
+
+        return Page.empty(pageable);
+    }
+
+    private long countResults(List<String> tags) {
+        BigInteger count = (BigInteger) entityManager.createNativeQuery(FIND_BY_TAGS_SQL_COUNT).setParameter(TAGS, tags).getSingleResult();
+        return count.longValue();
     }
 
     private Cordel buildCordel(Object[] fields) {

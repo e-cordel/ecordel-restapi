@@ -57,8 +57,8 @@ public class CordelRepositoryTest extends AbstractIntegrationTest {
 
     @Test
     public void findByTagsProjectedBy() {
-        Page<Cordel> cordels = repository.findByTags(Arrays.asList("tag1", "tag2"), PageRequest.of(0,1));
+        Page<CordelView> cordels = repository.findByTags(Arrays.asList("tag1", "tag2"), PageRequest.of(0,1));
         assertThat(cordels).hasSize(1);
-        assertThat(cordels.getContent().get(0)).extracting(Cordel::getDescription).isEqualTo("description");
+        assertThat(cordels.getContent().get(0)).extracting(CordelView::getDescription).isEqualTo("description");
     }
 }
