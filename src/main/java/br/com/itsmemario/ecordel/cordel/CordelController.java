@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -56,6 +57,22 @@ public class CordelController {
 		URI uri = uriBuilder.path("/cordel/{id}").buildAndExpand(cordel.getId()).toUri();
 		logger.info("new cordel Location header: {}", uri.getPath());
 		return ResponseEntity.created(uri).build();
+	}
+
+	@PutMapping("{id}/xilogravura")
+	public ResponseEntity<Cordel> putImage(@PathVariable Long id, @RequestParam("file") MultipartFile file){
+		logger.info("request received, update xilogravura for cordel: {}", id);
+		Optional<Cordel> byId = service.findById(id);
+		if(byId.isPresent()){
+			Cordel cordel =byId.get();
+			String xilogravura = service.updateXilogravura(file, cordel);
+			Cordel response = new Cordel();
+			response.setId(id);
+			response.setXilogravura(xilogravura);
+			return ResponseEntity.ok(response);
+		}else{
+			return ResponseEntity.notFound().build();
+		}
 	}
 
 	@PutMapping("{id}")
