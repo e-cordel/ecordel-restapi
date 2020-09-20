@@ -1,3 +1,5 @@
+app.xilogravura.path: "./"
+
 jwt:
   token:
     expiration: 86400000

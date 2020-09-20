@@ -28,6 +28,12 @@ public class Cordel implements CordelView{
 
 	Cordel() {}
 
+	public static Cordel of(Long id) {
+		Cordel cordel = new Cordel();
+		cordel.id = id;
+		return cordel;
+	}
+
 	public Long getId() {
 		return id;
 	}

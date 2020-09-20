@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -73,6 +74,11 @@ public class CordelController {
 		}else{
 			return ResponseEntity.notFound().build();
 		}
+	}
+
+	@GetMapping(value = "{id}/xilogravura", produces = MediaType.IMAGE_JPEG_VALUE)
+	public byte[] getImage(@PathVariable Long id){
+		return service.getImage(Cordel.of(id));
 	}
 
 	@PutMapping("{id}")
