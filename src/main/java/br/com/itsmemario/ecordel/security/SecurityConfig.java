@@ -37,9 +37,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.headers().frameOptions().disable()
 			.and()
 			.authorizeRequests()
-			.antMatchers(HttpMethod.GET, "/authors*").permitAll()
-			.antMatchers(HttpMethod.GET, "/cordels*").permitAll()
 			.antMatchers(HttpMethod.POST, "/auth").permitAll()
+			.antMatchers(HttpMethod.GET, "/authors/**").permitAll()
+			.antMatchers(HttpMethod.GET, "/cordels/**").permitAll()
 			.antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
 			.anyRequest().authenticated()
 			//.and().formLogin();
