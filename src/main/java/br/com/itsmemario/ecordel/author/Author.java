@@ -2,8 +2,10 @@ package br.com.itsmemario.ecordel.author;
 
 import br.com.itsmemario.ecordel.cordel.Cordel;
 
-import javax.persistence.*;
-import java.util.HashSet;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Set;
 
 @Entity
@@ -15,9 +17,6 @@ public class Author implements AuthorView{
     private String name;
     private String about;
     private String email;
-
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    private Set<Cordel> cordels = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -41,14 +40,6 @@ public class Author implements AuthorView{
 
     public void setAbout(String about) {
         this.about = about;
-    }
-
-    public Set<Cordel> getCordels() {
-        return cordels;
-    }
-
-    public void setCordels(Set<Cordel> cordels) {
-        this.cordels = cordels;
     }
 
     public String getEmail() {

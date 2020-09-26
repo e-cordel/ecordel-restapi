@@ -55,7 +55,7 @@ public class CordelController {
 	public ResponseEntity<Cordel> create(@RequestBody @Valid Cordel cordel, UriComponentsBuilder uriBuilder){
 		logger.info("request received for create cordel: {}", cordel);
 		service.save(cordel);
-		URI uri = uriBuilder.path("/cordel/{id}").buildAndExpand(cordel.getId()).toUri();
+		URI uri = uriBuilder.path("/cordels/{id}").buildAndExpand(cordel.getId()).toUri();
 		logger.info("new cordel Location header: {}", uri.getPath());
 		return ResponseEntity.created(uri).build();
 	}
