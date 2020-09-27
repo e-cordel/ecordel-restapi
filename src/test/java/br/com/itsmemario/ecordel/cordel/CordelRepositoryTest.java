@@ -7,13 +7,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
@@ -60,5 +58,12 @@ public class CordelRepositoryTest extends AbstractIntegrationTest {
         Page<CordelView> cordels = repository.findByTags(Arrays.asList("tag1", "tag2"), PageRequest.of(0,1));
         assertThat(cordels).hasSize(1);
         assertThat(cordels.getContent().get(0)).extracting(CordelView::getDescription).isEqualTo("description");
+    }
+
+    @Test
+    public void findByTitleLike() {
+        Page<CordelView> page = repository.findByTitleLike("tit%", PageRequest.of(0,10));
+        page.getContent().forEach(cordelView -> System.out.println(cordelView.getTitle()));
+        assertThat(page).hasSize(1);
     }
 }

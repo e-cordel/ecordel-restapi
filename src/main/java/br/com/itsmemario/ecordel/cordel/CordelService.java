@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -79,5 +79,9 @@ public class CordelService {
 
 	private String getFielName(Cordel cordel) {
 		return cordel.getId() + JPG;
+	}
+
+	public Page<CordelView> findByTitle(String title, Pageable pageable) {
+		return repository.findByTitleLike(String.format("%%%s%%",title), pageable);
 	}
 }
