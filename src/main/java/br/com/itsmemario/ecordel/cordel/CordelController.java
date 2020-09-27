@@ -13,7 +13,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin
@@ -43,10 +42,11 @@ public class CordelController {
 	}
 	
 	@GetMapping
-	public Page<CordelView> getCordels(@RequestParam(required = false) List<String> tags, Pageable pageable){
+	public Page<CordelView> getCordels(@RequestParam(required = false) String title,
+									   Pageable pageable){
 		logger.info("request received get cordels");
-		if(tags != null && !tags.isEmpty()){
-			return service.findByTags(tags, pageable);
+		if(title != null && !title.isEmpty()){
+			return service.findByTitle(title, pageable);
 		}
 		return service.getCordels(pageable);
 	}
