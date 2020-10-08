@@ -38,16 +38,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and()
-			.headers().frameOptions().disable()
-			.and()
+			.csrf().disable()// TODO review
 			.authorizeRequests()
 			.antMatchers(HttpMethod.POST, "/auth").permitAll()
-			.antMatchers(HttpMethod.GET, "/authors/**").permitAll()
-			.antMatchers(HttpMethod.GET, "/cordels/**").permitAll()
-			.antMatchers(HttpMethod.POST, "/cordels").permitAll()
-			.antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
-			.anyRequest().authenticated()
-			.and().csrf().disable()// TODO review
+			.antMatchers(HttpMethod.GET, "/**").permitAll()
+			.antMatchers(HttpMethod.POST, "/cordels/**").hasAnyAuthority(ECordelAuthority.ADMIN, ECordelAuthority.AUTHOR)
+			.anyRequest().authenticated().and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and().addFilterBefore(new TokenAuthenticationFilter(authenticationService), UsernamePasswordAuthenticationFilter.class);
 
