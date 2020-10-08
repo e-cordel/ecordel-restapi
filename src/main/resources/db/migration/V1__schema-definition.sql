@@ -17,7 +17,7 @@ ALTER SEQUENCE public.author_id_seq OWNED BY public.author.id;
 CREATE TABLE public.cordel (
     id bigint primary key,
     author_id bigint,
-    content character varying(255),
+    content text,
     description character varying(255),
     title character varying(255),
     xilogravura character varying(255),

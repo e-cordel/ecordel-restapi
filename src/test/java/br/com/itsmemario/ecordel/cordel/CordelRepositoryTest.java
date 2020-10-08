@@ -14,8 +14,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,11 +28,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class CordelRepositoryTest extends AbstractIntegrationTest {
 
+    private static final Path BIG_FILE = Paths.get("src/test/resources/content.txt");
     @Autowired
     CordelRepository repository;
 
     @Autowired
     AuthorRepository authorRepository;
+    private Long id;
 
     @Before
     public void setUp() throws Exception {
@@ -38,7 +45,20 @@ public class CordelRepositoryTest extends AbstractIntegrationTest {
         cordel.setAuthor(author);
         cordel.setContent("content");
         cordel.setTags(new HashSet<>(Arrays.asList("tag1","tag2")));
-        repository.save(cordel);
+        id = repository.save(cordel).getId();
+    }
+
+    @Test
+    public void saveBigTextAsContent() throws IOException {
+        Cordel byId = repository.findById(id).get();
+        String lines = Files.readAllLines(BIG_FILE).stream().collect(Collectors.joining());
+        byId.setContent(lines);
+
+        Cordel saved = repository.save(byId);
+
+        assertThat(saved)
+                .isNotNull()
+                .extracting(Cordel::getContent).asString().isNotEmpty();
     }
 
     @After
