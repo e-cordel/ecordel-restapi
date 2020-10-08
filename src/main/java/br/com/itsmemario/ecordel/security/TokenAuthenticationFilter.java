@@ -1,18 +1,17 @@
 package br.com.itsmemario.ecordel.security;
 
-import java.io.IOException;
-import java.util.Optional;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Optional;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter{
 
@@ -62,7 +61,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter{
 			ECorderlUser user = userFromToken.get();
 			logger.info("authorizing {}",user.getUsername());
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-			SecurityContextHolder.getContext().setAuthentication(authentication);		
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}
 	
 	}
