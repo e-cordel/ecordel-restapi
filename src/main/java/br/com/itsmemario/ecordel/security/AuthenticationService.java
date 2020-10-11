@@ -19,6 +19,7 @@ import java.util.Optional;
 @Service
 public class AuthenticationService implements UserDetailsService {
 
+	public static final String BEARER = "Bearer";
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	private static final String ISSUER = "e-cordel";
@@ -45,20 +46,22 @@ public class AuthenticationService implements UserDetailsService {
 		throw new UsernameNotFoundException("User not found!");
 	}
 
-	public String generateToken(Authentication authentication) {
+	public TokenDto generateToken(Authentication authentication) {
 		
 		ECorderlUser principal = (ECorderlUser) authentication.getPrincipal();
 		
 		Date today = new Date();
 		Date expiration = new Date(today.getTime() + tokenExpiration);
 		
-		return Jwts.builder()
+		String token = Jwts.builder()
 			.setIssuer(ISSUER)
 			.setSubject(principal.getId().toString())
 			.setIssuedAt(today)
 			.setExpiration(expiration)
 			.signWith(SignatureAlgorithm.HS256, secretKey)
 			.compact();
+
+		return new TokenDto(token, BEARER, expiration.getTime());
 	}
 
 	public Long getTokenExpiration() {
