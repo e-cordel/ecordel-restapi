@@ -1,3 +1,19 @@
+CREATE TABLE public.xilogravura (
+    id bigint primary key,
+    description character varying(255),
+    url character varying(255),
+    xilografo character varying(255)
+);
+
+CREATE SEQUENCE public.xilogravura_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE public.xilogravura_id_seq OWNED BY public.xilogravura.id;
+
 CREATE TABLE public.author (
     id bigint primary key,
     name character varying(255),
@@ -76,6 +92,8 @@ ALTER SEQUENCE public.ecordel_authority_id_seq OWNED BY public.ecordel_authority
 ALTER TABLE ONLY public.cordel ALTER COLUMN id SET DEFAULT nextval('public.cordel_id_seq'::regclass);
 
 ALTER TABLE ONLY public.author ALTER COLUMN id SET DEFAULT nextval('public.author_id_seq'::regclass);
+
+ALTER TABLE ONLY public.xilogravura ALTER COLUMN id SET DEFAULT nextval('public.xilogravura_id_seq'::regclass);
 
 ALTER TABLE ONLY public.ecordel_user ALTER COLUMN id SET DEFAULT nextval('public.ecordel_user_id_seq'::regclass);
 
