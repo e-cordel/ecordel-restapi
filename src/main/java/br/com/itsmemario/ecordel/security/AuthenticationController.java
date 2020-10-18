@@ -35,7 +35,7 @@ public class AuthenticationController {
 	@PostMapping
 	public ResponseEntity<TokenDto> authenticate(@RequestBody @Valid LoginData data){
 		
-		logger.info("Username and password {} {}", data.getUsername(), data.getPassword());
+		logger.info("Username and password {} ***", data.getUsername());
 		
 		try {
 			UsernamePasswordAuthenticationToken authenticationToken = data.toAuthenticationToken();

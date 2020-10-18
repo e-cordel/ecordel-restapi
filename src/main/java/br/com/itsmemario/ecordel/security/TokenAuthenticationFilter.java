@@ -56,9 +56,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter{
 	}
 
 	private void authorizeRequestWithToken(String token) {
-		Optional<ECorderlUser> userFromToken = authenticationService.getUserFromToken(token);
+		Optional<CordelUser> userFromToken = authenticationService.getUserFromToken(token);
 		if(userFromToken.isPresent()) {
-			ECorderlUser user = userFromToken.get();
+			CordelUser user = userFromToken.get();
 			logger.info("authorizing {}",user.getUsername());
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 			SecurityContextHolder.getContext().setAuthentication(authentication);

@@ -36,8 +36,9 @@ CREATE TABLE public.cordel (
     content text,
     description character varying(255),
     title character varying(255),
-    xilogravura character varying(255),
-    FOREIGN KEY (author_id) REFERENCES author (id)
+    xilogravura_id bigint,
+    FOREIGN KEY (author_id) REFERENCES author (id),
+    FOREIGN KEY (xilogravura_id) REFERENCES xilogravura (id)
 );
 
 CREATE SEQUENCE public.cordel_id_seq
@@ -54,40 +55,40 @@ CREATE TABLE public.cordel_tags (
     tags character varying(255)
 );
 
-CREATE TABLE public.ecordel_user (
+CREATE TABLE public.cordel_user (
     id bigint NOT NULL,
     enabled boolean NOT NULL,
     password character varying(255),
     username character varying(255)
 );
 
-CREATE TABLE public.ecordel_user_authorities (
-    ecorderl_user_id bigint NOT NULL,
-    authorities_id bigint NOT NULL
+CREATE TABLE public.user_authority (
+    user_id bigint NOT NULL,
+    authority_id bigint NOT NULL
 );
 
-CREATE SEQUENCE public.ecordel_user_id_seq
+CREATE SEQUENCE public.cordel_user_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
 
-ALTER SEQUENCE public.ecordel_user_id_seq OWNED BY public.ecordel_user.id;
+ALTER SEQUENCE public.cordel_user_id_seq OWNED BY public.cordel_user.id;
 
-CREATE TABLE public.ecordel_authority (
+CREATE TABLE public.cordel_authority (
     id bigint NOT NULL,
     authority character varying(255)
 );
 
-CREATE SEQUENCE public.ecordel_authority_id_seq
+CREATE SEQUENCE public.cordel_authority_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
 
-ALTER SEQUENCE public.ecordel_authority_id_seq OWNED BY public.ecordel_authority.id;
+ALTER SEQUENCE public.cordel_authority_id_seq OWNED BY public.cordel_authority.id;
 
 ALTER TABLE ONLY public.cordel ALTER COLUMN id SET DEFAULT nextval('public.cordel_id_seq'::regclass);
 
@@ -95,6 +96,6 @@ ALTER TABLE ONLY public.author ALTER COLUMN id SET DEFAULT nextval('public.autho
 
 ALTER TABLE ONLY public.xilogravura ALTER COLUMN id SET DEFAULT nextval('public.xilogravura_id_seq'::regclass);
 
-ALTER TABLE ONLY public.ecordel_user ALTER COLUMN id SET DEFAULT nextval('public.ecordel_user_id_seq'::regclass);
+ALTER TABLE ONLY public.cordel_user ALTER COLUMN id SET DEFAULT nextval('public.cordel_user_id_seq'::regclass);
 
-ALTER TABLE ONLY public.ecordel_authority ALTER COLUMN id SET DEFAULT nextval('public.ecordel_authority_id_seq'::regclass);
+ALTER TABLE ONLY public.cordel_authority ALTER COLUMN id SET DEFAULT nextval('public.cordel_authority_id_seq'::regclass);

@@ -39,7 +39,7 @@ public class AuthenticationService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<ECorderlUser> user = repository.findByUsername(username);
+		Optional<CordelUser> user = repository.findByUsername(username);
 		if (user.isPresent()) {
 			return user.get();
 		}
@@ -48,7 +48,7 @@ public class AuthenticationService implements UserDetailsService {
 
 	public TokenDto generateToken(Authentication authentication) {
 		
-		ECorderlUser principal = (ECorderlUser) authentication.getPrincipal();
+		CordelUser principal = (CordelUser) authentication.getPrincipal();
 		
 		Date today = new Date();
 		Date expiration = new Date(today.getTime() + tokenExpiration);
@@ -91,7 +91,7 @@ public class AuthenticationService implements UserDetailsService {
 		}
 	}
 
-	public Optional<ECorderlUser> getUserFromToken(String token) {
+	public Optional<CordelUser> getUserFromToken(String token) {
 		try {
 			Claims body = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
 			Long id = Long.parseLong(body.getSubject());

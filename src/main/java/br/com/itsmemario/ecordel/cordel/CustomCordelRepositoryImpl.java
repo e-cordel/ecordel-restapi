@@ -1,6 +1,7 @@
 package br.com.itsmemario.ecordel.cordel;
 
 import br.com.itsmemario.ecordel.author.Author;
+import br.com.itsmemario.ecordel.xilogravura.Xilogravura;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -21,21 +22,18 @@ class CustomCordelRepositoryImpl implements CustomCordelRepository {
 
     public static final String TAGS = "tags";
 
+    private static final String FIND_BY_TAGS_SQL_FROM = " from cordel_tags ct \n" +
+            "join cordel c on c.id = ct.cordel_id \n" +
+            "join author a on a.id = c.author_id \n" +
+            "where ct.tags in (:tags) \n";
+
+    private static final String FIND_BY_TAGS_SQL = "select distinct(c.id) as id, c.title, c.description, a.name, a.email \n" +
+            FIND_BY_TAGS_SQL_FROM + " limit :limit offset :offset";
+
+    private static final String FIND_BY_TAGS_SQL_COUNT = "select COUNT(distinct(c.id)) " + FIND_BY_TAGS_SQL_FROM ;
+
     @PersistenceContext
     private EntityManager entityManager;
-
-    private final String FIND_BY_TAGS_SQL = "select distinct(c.id) as id, c.title, c.description, c.xilogravura, a.name, a.email \n" +
-            "from cordel_tags ct \n" +
-            "join cordel c on c.id = ct.cordel_id \n" +
-            "join author a on a.id = c.author_id \n" +
-            "where ct.tags in (:tags)\n" +
-            "limit :limit offset :offset";
-
-    private final String FIND_BY_TAGS_SQL_COUNT = "select COUNT(distinct(c.id)) \n" +
-            "from cordel_tags ct \n" +
-            "join cordel c on c.id = ct.cordel_id \n" +
-            "join author a on a.id = c.author_id \n" +
-            "where ct.tags in (:tags)\n" ;
 
     @Override
     public Page<CordelView> findByTags(List<String> tags, Pageable pageable) {
@@ -65,8 +63,7 @@ class CustomCordelRepositoryImpl implements CustomCordelRepository {
         cordel.setId(((BigInteger)fields[0]).longValue());
         cordel.setTitle(String.valueOf(fields[1]));
         cordel.setDescription(String.valueOf(fields[2]));
-        cordel.setXilogravura(String.valueOf(fields[3]));
-        cordel.setAuthor(buildAuthor(fields[4],fields[5]));
+        cordel.setAuthor(buildAuthor(fields[3],fields[4]));
         return cordel;
     }
 
