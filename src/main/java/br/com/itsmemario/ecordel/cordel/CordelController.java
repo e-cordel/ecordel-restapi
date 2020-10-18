@@ -60,8 +60,9 @@ public class CordelController {
 		return ResponseEntity.created(uri).build();
 	}
 
+	//TODO refactor to include xilogravura details
 	@PutMapping("{id}/xilogravura")
-	public ResponseEntity<Cordel> putImage(@PathVariable Long id, @RequestParam("file") MultipartFile file){
+	public ResponseEntity<Cordel> putXilogravura(@PathVariable Long id, @RequestParam("file") MultipartFile file){
 		logger.info("request received, update xilogravura for cordel: {}", id);
 		Optional<Cordel> byId = service.findById(id);
 		if(byId.isPresent()){
@@ -69,16 +70,11 @@ public class CordelController {
 			String xilogravura = service.updateXilogravura(file, cordel);
 			Cordel response = new Cordel();
 			response.setId(id);
-			response.setXilogravura(xilogravura);
+//			response.setXilogravura(xilogravura);
 			return ResponseEntity.ok(response);
 		}else{
 			return ResponseEntity.notFound().build();
 		}
-	}
-
-	@GetMapping(value = "{id}/xilogravura", produces = MediaType.IMAGE_JPEG_VALUE)
-	public byte[] getImage(@PathVariable Long id){
-		return service.getImage(Cordel.of(id));
 	}
 
 	@PutMapping("{id}")

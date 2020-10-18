@@ -34,7 +34,6 @@ public class CordelControllerTest {
         cordel.setContent("");
         cordel.setTitle("");
         cordel.setTags(Collections.emptySet());
-        cordel.setXilogravura("");
         cordel.setDescription("");
     }
 

@@ -1,6 +1,7 @@
 package br.com.itsmemario.ecordel.cordel;
 
 import br.com.itsmemario.ecordel.author.Author;
+import br.com.itsmemario.ecordel.xilogravura.Xilogravura;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -20,7 +21,9 @@ public class Cordel implements CordelView{
 	private String title;
 	@NotBlank
 	private String content;
-	private String xilogravura;
+	@OneToOne
+	@JoinColumn(name = "xilogravura_id")
+	private Xilogravura xilogravura;
 	private String description;
 	@ElementCollection
 	@CollectionTable(name = "cordel_tags")
@@ -66,11 +69,11 @@ public class Cordel implements CordelView{
 		this.content = content;
 	}
 
-	public String getXilogravura() {
+	public Xilogravura getXilogravura() {
 		return xilogravura;
 	}
 
-	public void setXilogravura(String xilogravura) {
+	public void setXilogravura(Xilogravura xilogravura) {
 		this.xilogravura = xilogravura;
 	}
 

@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
-public interface UserRepository extends JpaRepository<ECorderlUser, Long>{
+public interface UserRepository extends JpaRepository<CordelUser, Long>{
 	
-	Optional<ECorderlUser> findByUsername(String username);
+	Optional<CordelUser> findByUsername(String username);
 
 }

@@ -5,6 +5,6 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public interface CustomCordelRepository {
+interface CustomCordelRepository {
     Page<CordelView> findByTags(List<String> tags, Pageable pageable);
 }

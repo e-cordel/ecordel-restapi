@@ -4,21 +4,17 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-@Table(name = "ECORDEL_USER")
-public class ECorderlUser implements UserDetails{
-	
+@Table(name = "cordel_user")
+public class CordelUser implements UserDetails{
+
+	public static final String USER_AUTHORITY_TABLE = "user_authority";
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
@@ -27,11 +23,16 @@ public class ECorderlUser implements UserDetails{
 	private boolean enabled = true;
 	
 	@ManyToMany(fetch=FetchType.EAGER)
-	private Set<ECordelAuthority> authorities = new HashSet<>();
+	@JoinTable(
+		name = USER_AUTHORITY_TABLE,
+		joinColumns = @JoinColumn(name="user_id"),
+		inverseJoinColumns = @JoinColumn(name="authority_id")
+	)
+	private Set<CordelAuthority> authorities = new HashSet<>();
 	
-	ECorderlUser() {}
+	CordelUser() {}
 
-	public ECorderlUser(String username, String password) {
+	public CordelUser(String username, String password) {
 		super();
 		this.username = username;
 		this.password = password;

@@ -2,13 +2,11 @@ package br.com.itsmemario.ecordel.security;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-public class ECordelAuthority implements GrantedAuthority{
+@Table(name = "cordel_authority")
+public class CordelAuthority implements GrantedAuthority{
 	
 	public static final String COMMON_USER = "USER";
 	public static final String ADMIN = "ADMIN";
@@ -20,9 +18,9 @@ public class ECordelAuthority implements GrantedAuthority{
 	private Long id;
 	private String authority;
 	
-	ECordelAuthority() {}
+	CordelAuthority() {}
 
-	public ECordelAuthority(String authority) {
+	public CordelAuthority(String authority) {
 		this.authority = authority;
 	}
 
@@ -31,8 +29,8 @@ public class ECordelAuthority implements GrantedAuthority{
 		return authority;
 	}
 	
-	public static ECordelAuthority commonUser() {
-		return new ECordelAuthority(COMMON_USER);
+	public static CordelAuthority commonUser() {
+		return new CordelAuthority(COMMON_USER);
 	}
 
 }
