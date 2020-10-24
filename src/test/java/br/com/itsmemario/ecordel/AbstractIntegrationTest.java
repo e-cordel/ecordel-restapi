@@ -22,7 +22,6 @@ public class AbstractIntegrationTest {
         private static void startContainers() {
             Startables.deepStart(Stream.of(postgres)).join();
             // we can add further containers
-            // here like rabbitmq or other databases
         }
 
         private static Map<String, String> createConnectionConfiguration() {

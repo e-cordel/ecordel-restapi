@@ -1,10 +1,12 @@
 package br.com.itsmemario.ecordel.cordel;
 
+import br.com.itsmemario.ecordel.xilogravura.XilogravuraService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,7 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = {CordelController.class}, secure = false)
+@WebMvcTest(controllers = {CordelController.class,}, secure = false)
 public class CordelControllerTest {
 
     @Autowired
@@ -25,6 +27,10 @@ public class CordelControllerTest {
 
     @MockBean
     CordelService cordelService;
+
+    @MockBean
+    XilogravuraService xilogravuraService;
+
     private Cordel cordel;
 
     @Before

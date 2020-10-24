@@ -1,4 +1,4 @@
-app.xilogravura.path: "./"
+app.xilogravura.path: "./target/xilogravuras"
 
 jwt:
   token:
