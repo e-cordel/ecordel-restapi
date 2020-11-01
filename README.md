@@ -27,3 +27,6 @@ or, you can run with docker if you already hava a image
 tip: --rm parameter will exclude container image after execution and it cause data loss.
 
 ## How to test
+
+    mvn test
+
