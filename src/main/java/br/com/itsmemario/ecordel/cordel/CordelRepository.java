@@ -25,5 +25,4 @@ interface CordelRepository extends CustomCordelRepository, JpaRepository<Cordel,
 
     Page<CordelView> findAllProjectedBy(Pageable pageable);
 
-    Page<CordelView> findByTitleLike(String title, Pageable pageable);
 }

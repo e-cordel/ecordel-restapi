@@ -23,5 +23,8 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 interface CustomCordelRepository {
+
     Page<CordelView> findByTags(List<String> tags, Pageable pageable);
+
+    Page<CordelSummary> findByTitleLike(String title, Pageable pageable);
 }

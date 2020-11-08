@@ -18,7 +18,6 @@
 package br.com.itsmemario.ecordel.cordel;
 
 import br.com.itsmemario.ecordel.xilogravura.Xilogravura;
-import br.com.itsmemario.ecordel.xilogravura.XilogravuraService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,12 +40,10 @@ public class CordelController {
 	private final Logger logger = LoggerFactory.getLogger(CordelController.class);
 
 	private CordelService service;
-	private XilogravuraService xilogravuraService;
 
 	@Autowired
-	CordelController(CordelService service, XilogravuraService xilogravuraService) {
+	CordelController(CordelService service) {
 		this.service = service;
-		this.xilogravuraService = xilogravuraService;
 	}
 
 	@GetMapping("{id}")
@@ -63,12 +60,9 @@ public class CordelController {
 	}
 
 	@GetMapping
-	public Page<CordelView> getCordels(@RequestParam(required = false) String title, Pageable pageable){
+	public Page<CordelSummary> getCordels(@RequestParam(required = false) String title, Pageable pageable){
 		logger.info("request received get cordels");
-		if(title != null && !title.isEmpty()){
-			return service.findByTitle(title, pageable);
-		}
-		return service.getCordels(pageable);
+		return service.findByTitle(title, pageable);
 	}
 	
 	@PostMapping

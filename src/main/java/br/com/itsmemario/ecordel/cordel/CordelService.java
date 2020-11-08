@@ -61,8 +61,8 @@ public class CordelService {
 		return repository.findById(id);
 	}
 
-	public Page<CordelView> findByTitle(String title, Pageable pageable) {
-		return repository.findByTitleLike(String.format("%%%s%%",title), pageable);
+	public Page<CordelSummary> findByTitle(String title, Pageable pageable) {
+		return repository.findByTitleLike(title, pageable);
 	}
 
 	public Cordel updateXilogravura(Long cordelId, Xilogravura xilogravura, MultipartFile file) {

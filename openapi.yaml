@@ -178,22 +178,14 @@ components:
         id:
           type: integer
           description: cordel id
-        author:
-          type: object
-          $ref: '#/components/schemas/Author'
         title:
           type: string
           description: cordel title
-        description:
+        authorName:
           type: string
-          description: author's name
-        xilogravura:
+        xilogravuraUrl:
           type: string
           description: image url
-        tags:
-          type: array
-          items:
-            type: string
     Author:
       type: object
       properties:
