@@ -17,13 +17,10 @@
 
 package br.com.itsmemario.ecordel.author;
 
-import br.com.itsmemario.ecordel.cordel.Cordel;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Set;
 
 @Entity
 public class Author implements AuthorView{

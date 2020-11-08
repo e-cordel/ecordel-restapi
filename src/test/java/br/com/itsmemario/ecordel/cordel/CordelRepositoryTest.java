@@ -37,7 +37,7 @@ public class CordelRepositoryTest extends AbstractIntegrationTest {
     private Long id;
 
     @Before
-    public void setUp() throws Exception {
+    public void insertNewCordel() throws Exception {
         Author author = authorRepository.save(new Author());
         Cordel cordel = new Cordel();
         cordel.setDescription("description");
@@ -62,7 +62,7 @@ public class CordelRepositoryTest extends AbstractIntegrationTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void deleteAllCordels() throws Exception {
         repository.deleteAll();
     }
 
@@ -82,8 +82,22 @@ public class CordelRepositoryTest extends AbstractIntegrationTest {
 
     @Test
     public void findByTitleLike() {
-        Page<CordelView> page = repository.findByTitleLike("tit%", PageRequest.of(0,10));
-        page.getContent().forEach(cordelView -> System.out.println(cordelView.getTitle()));
+        Page<CordelSummary> page = repository.findByTitleLike("tit", PageRequest.of(0,10));
+        page.getContent().forEach(cordel -> System.out.println(cordel.getTitle()));
         assertThat(page).hasSize(1);
+
+        page = repository.findByTitleLike("aaa", PageRequest.of(0,10));
+        assertThat(page).hasSize(0);
     }
+
+    @Test
+    public void testPaginationResultsByTitle() throws Exception {
+        deleteAllCordels();
+        for(int i = 0; i<5;i++) insertNewCordel();
+
+        Page<CordelSummary> page = repository.findByTitleLike("tit", PageRequest.of(1,3));
+        page.getContent().forEach(cordel -> System.out.println(cordel.getTitle()));
+        assertThat(page).hasSize(2);
+    }
+
 }
