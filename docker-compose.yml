@@ -1,0 +1,18 @@
+version: "2.4"
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - postgres
+    ports:
+      - "8180:80"
+    environment:
+      PGADMIN_DEFAULT_PASSWORD: postgres
+      PGADMIN_DEFAULT_EMAIL: email@email.com
