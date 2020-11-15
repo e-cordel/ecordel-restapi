@@ -2,6 +2,7 @@ package br.com.itsmemario.ecordel.xilogravura;
 
 
 import br.com.itsmemario.ecordel.AbstractIntegrationTest;
+import br.com.itsmemario.ecordel.author.Author;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,6 @@ public class XilogravuraRepositoryTest extends AbstractIntegrationTest {
         Xilogravura xilogravura = new Xilogravura();
         xilogravura.setUrl("url");
         xilogravura.setDescription("description");
-        xilogravura.setXilografo("xilografo");
 
         Xilogravura saved = repository.save(xilogravura);
 
