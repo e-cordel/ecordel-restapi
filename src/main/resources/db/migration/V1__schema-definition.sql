@@ -59,12 +59,13 @@ CREATE TABLE public.cordel_user (
     id bigint NOT NULL,
     enabled boolean NOT NULL,
     password character varying(255),
-    username character varying(255)
+    username character varying(255) UNIQUE
 );
 
 CREATE TABLE public.user_authority (
     user_id bigint NOT NULL,
-    authority_id bigint NOT NULL
+    authority_id bigint NOT NULL,
+    CONSTRAINT unique_user_authority UNIQUE (user_id, authority_id)
 );
 
 CREATE SEQUENCE public.cordel_user_id_seq
