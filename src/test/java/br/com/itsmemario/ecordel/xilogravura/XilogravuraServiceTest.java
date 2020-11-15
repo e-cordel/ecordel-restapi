@@ -1,6 +1,7 @@
 package br.com.itsmemario.ecordel.xilogravura;
 
 import br.com.itsmemario.ecordel.AbstractIntegrationTest;
+import br.com.itsmemario.ecordel.author.Author;
 import br.com.itsmemario.ecordel.file.FileManager;
 import org.junit.After;
 import org.junit.Test;
@@ -34,7 +35,6 @@ public class XilogravuraServiceTest extends AbstractIntegrationTest {
     public void createXilogravuraWithFile() {
         Xilogravura xilogravura = new Xilogravura();
         xilogravura.setDescription("Description");
-        xilogravura.setXilografo("Xilografo");
 
         MockMultipartFile file = new MockMultipartFile("file.txt", "content".getBytes());
 

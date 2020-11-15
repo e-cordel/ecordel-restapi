@@ -7,8 +7,14 @@ values ('Author 2', 'About Author 2', 'author2@ecordel.com');
 insert into author (name, about, email)
 values ('Author 3', 'About Author 3', 'author3@ecordel.com');
 
-insert into xilogravura (description, xilografo, url)
-values ('xilo', 'João', 'https://i.pinimg.com/originals/25/9d/47/259d47304bf26a4678cb039b8d8ce7f9.jpg');
+insert into xilogravura (description, xilografo_id, url)
+values ('xilo', 1, 'https://i.pinimg.com/originals/25/9d/47/259d47304bf26a4678cb039b8d8ce7f9.jpg');
+
+insert into xilogravura (description, xilografo_id, url)
+values ('xilo', 2, 'https://i.pinimg.com/564x/81/bf/ba/81bfbafaba269d02d357c9fa88e1a856.jpg');
+
+insert into xilogravura (description, xilografo_id, url)
+values ('xilo', 3, 'https://www5.usp.br/wp-content/uploads/portal20140507_1.jpg');
 
 insert into cordel (title, author_id, content, xilogravura_id, description)
 values ('Title 01', 1, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 1, 'Cordel descrition');
@@ -17,31 +23,31 @@ insert into cordel_tags (cordel_id, tags) values (1,'tag2');
 insert into cordel_tags (cordel_id, tags) values (1,'tag3');
 
 insert into cordel (title, author_id, content, xilogravura_id, description)
-values ('Title 01', 2, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 1, 'Cordel descrition');
+values ('Title 01', 2, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 2, 'Cordel descrition');
 insert into cordel_tags (cordel_id, tags) values (2,'tag1');
 insert into cordel_tags (cordel_id, tags) values (2,'tag2');
 insert into cordel_tags (cordel_id, tags) values (2,'tag3');
 
 insert into cordel (title, author_id, content, xilogravura_id, description)
-values ('Title 03', 3, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 1, 'Cordel descrition');
+values ('Title 03', 3, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 3, 'Cordel descrition');
 
 insert into cordel (title, author_id, content, xilogravura_id, description)
 values ('Title 04', 1, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 1, 'Cordel descrition');
 
 insert into cordel (title, author_id, content, xilogravura_id, description)
-values ('Title 05', 2, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 1, 'Cordel descrition');
+values ('Title 05', 2, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 2, 'Cordel descrition');
 
 insert into cordel (title, author_id, content, xilogravura_id, description)
-values ('Title 06', 3, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 1, 'Cordel descrition');
+values ('Title 06', 3, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 3, 'Cordel descrition');
 
 insert into cordel (title, author_id, content, xilogravura_id, description)
 values ('Title 07', 1, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 1, 'Cordel descrition');
 
 insert into cordel (title, author_id, content, xilogravura_id, description)
-values ('Title 08', 2, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 1, 'Cordel descrition');
+values ('Title 08', 2, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 2, 'Cordel descrition');
 
 insert into cordel (title, author_id, content, xilogravura_id, description)
-values ('Title 09', 3, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 1, 'Cordel descrition');
+values ('Title 09', 3, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 3, 'Cordel descrition');
 
 insert into cordel (title, author_id, content, xilogravura_id, description)
 values ('Title 10', 1, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis nisi, mollis vitae odio ac, dignissim gravida nunc. Nam ac bibendum lectus. Nulla id fermentum eros, sed ornare risus. Pellentesque faucibus dui et luctus efficitur.', 1, 'Cordel descrition');
