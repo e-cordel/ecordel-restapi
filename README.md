@@ -30,3 +30,6 @@ tip: --rm parameter will exclude container image after execution and it cause da
 
     mvn test
 
+## How to contribute
+
+To get more help or find out how to contribute with this project please take a look at [this page](http://www.ecordel.com.br/como-contribuir).
