@@ -17,10 +17,9 @@
 
 package br.com.itsmemario.ecordel.xilogravura;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import br.com.itsmemario.ecordel.author.Author;
+
+import javax.persistence.*;
 
 @Entity
 public class Xilogravura {
@@ -30,8 +29,11 @@ public class Xilogravura {
     private Long id;
 
     private String url;
-    private String xilografo;
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "xilografo_id")
+    private Author xilografo;
 
     public Long getId() {
         return id;
@@ -45,11 +47,11 @@ public class Xilogravura {
         this.url = url;
     }
 
-    public String getXilografo() {
+    public Author getXilografo() {
         return xilografo;
     }
 
-    public void setXilografo(String xilografo) {
+    public void setXilografo(Author xilografo) {
         this.xilografo = xilografo;
     }
 
