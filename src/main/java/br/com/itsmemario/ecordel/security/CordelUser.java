@@ -6,7 +6,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "cordel_user")
@@ -73,7 +75,10 @@ public class CordelUser implements UserDetails{
 	public Long getId() {
 		return id;
 	}
-	
+
+	public List<String> getAuthorityNames(){
+		return authorities.stream().map(CordelAuthority::getAuthority).collect(Collectors.toList());
+	}
 	
 
 }

@@ -37,6 +37,7 @@ import java.util.Optional;
 public class AuthenticationService implements UserDetailsService {
 
 	public static final String BEARER = "Bearer";
+	public static final String ROLES = "roles";
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	private static final String ISSUER = "e-cordel";
@@ -73,6 +74,7 @@ public class AuthenticationService implements UserDetailsService {
 		String token = Jwts.builder()
 			.setIssuer(ISSUER)
 			.setSubject(principal.getId().toString())
+			.claim(ROLES, principal.getAuthorityNames())
 			.setIssuedAt(today)
 			.setExpiration(expiration)
 			.signWith(SignatureAlgorithm.HS256, secretKey)
