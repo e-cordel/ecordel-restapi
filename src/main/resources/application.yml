@@ -1,12 +1,5 @@
 app.xilogravura.path: "./"
 
-info.app:
-  name: @project.name@
-  description: @project.description@
-  version: @project.version@
-  encoding: @project.build.sourceEncoding@
-  java.version: @java.version@
-
 spring:
   jpa:
     properties:
