@@ -126,7 +126,7 @@ class CustomCordelRepositoryImpl implements CustomCordelRepository {
     }
 
     private <T> TypedQuery<T> createQueryWithTitle(String title, StringBuilder sql, Class<T> clazz) {
-        String where = " WHERE c.title LIKE :title";
+        String where = " WHERE lower(c.title) LIKE lower( :title )";
         TypedQuery<T> query;
         sql.append(where);
         query = entityManager.createQuery(sql.toString(), clazz);
