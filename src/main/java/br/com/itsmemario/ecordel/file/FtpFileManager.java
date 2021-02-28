@@ -17,71 +17,43 @@
 
 package br.com.itsmemario.ecordel.file;
 
-import org.apache.commons.net.PrintCommandListener;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
+@Slf4j
+@Primary
+@Component
 public class FtpFileManager implements FileManager {
 
-    @Value("${ftp.server}")
-    private String server;
-
-    @Value("${fpt.port}")
-    private int port;
-
-    @Value("${fpt.user}")
-    private String user;
-
-    @Value("${fpt.password}")
-    private String password;
-
-    @Value("${ftp.directory}")
-    private String directory;
-
+    private final FtpConfig ftpConfig;
     private final FTPClient ftpClient;
 
-    public FtpFileManager(FTPClient ftpClient) {
-        this.ftpClient = ftpClient;
-    }
-
-    void connectServer() throws IOException {
-        ftpClient.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
-
-        ftpClient.connect(server, port);
-
-        ftpClient.enterLocalPassiveMode();
-        ftpClient.changeWorkingDirectory(directory);
-
-        int reply = ftpClient.getReplyCode();
-        if (!FTPReply.isPositiveCompletion(reply)) {
-            ftpClient.disconnect();
-            throw new IOException("Exception in connecting to FTP server");
-        }
-
-        ftpClient.login(user, password);
-    }
-
-    void closeServer(){
-        try {
-            ftpClient.disconnect();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+    public FtpFileManager(FtpConfig ftpConfig) {
+        this.ftpConfig = ftpConfig;
+        ftpClient = new FTPClient();
     }
 
     @Override
     public String saveFile(byte[] bytes, String fileName){
         try {
-            connectServer();
+            connect();
 
-            ftpClient.storeFile(fileName, new ByteArrayInputStream(bytes));
+            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            ftpClient.setFileTransferMode(FTP.BINARY_FILE_TYPE);
+            boolean success = ftpClient.storeFile(fileName, new ByteArrayInputStream(bytes));
+            if(success) log.info("File uploaded");
 
-            closeServer();
-            return fileName;
+            disconnect();
+
+            return ftpConfig.getBaseUrl()+fileName;
         } catch (IOException e) {
             throw new FileProcessException("Error when saving file", e);
         }
@@ -90,14 +62,10 @@ public class FtpFileManager implements FileManager {
     @Override
     public InputStream getFile(String fileName) {
        try {
-           connectServer();
-
+           connect();
            InputStream inputStream = ftpClient.retrieveFileStream(fileName);
-
-           closeServer();
-
+           disconnect();
            return inputStream;
-
        } catch (IOException e) {
            throw new FileProcessException("Error when saving file", e);
        }
@@ -106,13 +74,34 @@ public class FtpFileManager implements FileManager {
     @Override
     public void deleteFile(String fileName) {
         try {
-            connectServer();
-
-            ftpClient.deleteFile(fileName);
-
-            closeServer();
+            connect();
+            boolean deleted = ftpClient.deleteFile(fileName);
+            if(deleted) log.info("File deleted");
+            disconnect();
         } catch (IOException e) {
             throw new FileProcessException("Error when deleting file", e);
+        }
+    }
+
+    private void connect() throws IOException {
+        ftpClient.connect(ftpConfig.getServer(), ftpConfig.getPort());
+        ftpClient.enterLocalPassiveMode();
+        int reply = ftpClient.getReplyCode();
+        if (!FTPReply.isPositiveCompletion(reply)) {
+            ftpClient.disconnect();
+            throw new IOException("Not possible to connect to FTP server");
+        }
+
+        ftpClient.login(ftpConfig.getUser(), ftpConfig.getPassword());
+        log.trace("Connected to ftp server");
+    }
+
+    void disconnect(){
+        try {
+            ftpClient.disconnect();
+            log.trace("Disconnected from ftp server");
+        } catch (IOException e) {
+            log.error(e.getMessage());
         }
     }
 }

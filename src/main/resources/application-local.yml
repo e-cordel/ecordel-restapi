@@ -1,11 +1,10 @@
 app.xilogravura.path: "./"
 
 ftp:
-  server:
-  port:
-  user:
-  password:
-  directory:
+  server: ftp.turismonocariri.com.br
+  port: 21
+  user: user
+  password: password
 
 jwt:
   token:
