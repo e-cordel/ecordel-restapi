@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Projeto e-cordel (http://ecordel.com.br)
+ * Copyright 2021 Projeto e-cordel (http://ecordel.com.br)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,19 @@
 
 package br.com.itsmemario.ecordel.file;
 
-import java.io.InputStream;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
-public interface FileManager {
+@Configuration
+@ConfigurationProperties(prefix="ftp")
+@Data
+class FtpConfig {
 
-    /**
-     * Save file and return an URL to access the file.
-     * @param bytes
-     * @param fileName
-     * @return public URL of the file
-     */
-    String saveFile(byte[] bytes, String fileName);
-    InputStream getFile(String fileName);
-    void deleteFile(String fileName);
+    private String server;
+    private int port;
+    private String user;
+    private String password;
+    private String baseUrl;
+
 }

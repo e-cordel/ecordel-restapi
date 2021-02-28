@@ -22,7 +22,6 @@ import br.com.itsmemario.ecordel.file.FileProcessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -31,7 +30,7 @@ import java.util.UUID;
 public class XilogravuraService {
 
     private static final String JPG = ".jpg";
-    private final String XILOGRAVURA_NAME_PATTERN = "/xilogravura/{file}";
+    private final String XILOGRAVURA_NAME_PATTERN = "http://xilos.ecordel.com.br/{file}";
 
     private XilogravuraRepository repository;
     private FileManager fileManager;
@@ -49,8 +48,7 @@ public class XilogravuraService {
     public Xilogravura createXilogravuraWithFile(Xilogravura xilogravura, MultipartFile file){
         try {
             String fileName = generateRandomFileName();
-            fileManager.saveFile(file.getBytes(), fileName);
-            String url = ServletUriComponentsBuilder.fromCurrentContextPath().path(XILOGRAVURA_NAME_PATTERN).buildAndExpand(fileName).toUriString();
+            String url = fileManager.saveFile(file.getBytes(), fileName);
             xilogravura.setUrl(url);
             return repository.save(xilogravura);
         } catch (IOException e) {
