@@ -1,5 +1,12 @@
 app.xilogravura.path: "./"
 
+ftp:
+  server:
+  port:
+  user:
+  password:
+  directory:
+
 jwt:
   token:
     expiration: 86400000
