@@ -1,5 +1,12 @@
 app.xilogravura.path: "./target/xilogravuras"
 
+ftp:
+  server: localhost
+  port: 10021
+  user: user
+  password: pass
+  baseUrl: "http://xilos.ecordel.com.br/"
+
 jwt:
   token:
     expiration: 86400000
