@@ -20,14 +20,14 @@ package br.com.itsmemario.ecordel.file;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-@Service
+@Component
 public class LocalFileManager implements FileManager {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

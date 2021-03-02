@@ -1,5 +1,11 @@
 app.xilogravura.path: "./"
 
+ftp:
+  server: ftp.turismonocariri.com.br
+  port: 21
+  user: user
+  password: password
+
 jwt:
   token:
     expiration: 86400000
