@@ -32,7 +32,6 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.Optional;
 
-@CrossOrigin
 @RestController
 @RequestMapping("cordels")
 public class CordelController {
