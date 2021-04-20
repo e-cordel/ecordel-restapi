@@ -20,6 +20,9 @@
     <properties>
         <java.version>1.8</java.version>
         <docker.image.prefix>itsmemario</docker.image.prefix>
+        <sonar.projectKey>e-cordel_ecordel-restapi</sonar.projectKey>
+        <sonar.organization>e-cordel</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <dependencies>
