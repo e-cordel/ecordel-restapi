@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(controllers = {CordelController.class,}, secure = false)
-public class CordelControllerTest {
+public class CordelEntityControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -31,21 +30,21 @@ public class CordelControllerTest {
     @MockBean
     XilogravuraService xilogravuraService;
 
-    private Cordel cordel;
+    private CordelEntity cordelEntity;
 
     @Before
     public void setUp() throws Exception {
-        cordel = new Cordel();
-        cordel.setId(1l);
-        cordel.setContent("");
-        cordel.setTitle("");
-        cordel.setTags(Collections.emptySet());
-        cordel.setDescription("");
+        cordelEntity = new CordelEntity();
+        cordelEntity.setId(1l);
+        cordelEntity.setContent("");
+        cordelEntity.setTitle("");
+        cordelEntity.setTags(Collections.emptySet());
+        cordelEntity.setDescription("");
     }
 
     @Test
     public void getCordel() throws Exception {
-        when(cordelService.findById(1l)).thenReturn(Optional.of(cordel));
+        when(cordelService.findById(1l)).thenReturn(Optional.of(cordelEntity));
         mockMvc.perform(get("/cordels/1"))
                 .andExpect(status().isOk());
     }

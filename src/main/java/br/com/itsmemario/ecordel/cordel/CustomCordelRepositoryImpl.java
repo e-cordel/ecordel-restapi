@@ -17,7 +17,7 @@
 
 package br.com.itsmemario.ecordel.cordel;
 
-import br.com.itsmemario.ecordel.author.Author;
+import br.com.itsmemario.ecordel.author.AuthorEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -80,20 +80,20 @@ class CustomCordelRepositoryImpl implements CustomCordelRepository {
         return count.longValue();
     }
 
-    private Cordel buildCordel(Object[] fields) {
-        Cordel cordel = new Cordel();
-        cordel.setId(((BigInteger)fields[0]).longValue());
-        cordel.setTitle(String.valueOf(fields[1]));
-        cordel.setDescription(String.valueOf(fields[2]));
-        cordel.setAuthor(buildAuthor(fields[3],fields[4]));
-        return cordel;
+    private CordelEntity buildCordel(Object[] fields) {
+        CordelEntity cordelEntity = new CordelEntity();
+        cordelEntity.setId(((BigInteger)fields[0]).longValue());
+        cordelEntity.setTitle(String.valueOf(fields[1]));
+        cordelEntity.setDescription(String.valueOf(fields[2]));
+        cordelEntity.setAuthor(buildAuthor(fields[3],fields[4]));
+        return cordelEntity;
     }
 
-    private Author buildAuthor(Object name, Object email) {
-        Author author = new Author();
-        author.setName(String.valueOf(name));
-        author.setEmail(String.valueOf(email));
-        return author;
+    private AuthorEntity buildAuthor(Object name, Object email) {
+        AuthorEntity authorEntity = new AuthorEntity();
+        authorEntity.setName(String.valueOf(name));
+        authorEntity.setEmail(String.valueOf(email));
+        return authorEntity;
     }
 
     @Override

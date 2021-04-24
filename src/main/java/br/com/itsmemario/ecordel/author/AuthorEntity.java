@@ -22,8 +22,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity
-public class Author implements AuthorView{
+@Entity(name = "author")
+public class AuthorEntity implements AuthorView{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

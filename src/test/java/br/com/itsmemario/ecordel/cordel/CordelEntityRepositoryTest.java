@@ -1,7 +1,7 @@
 package br.com.itsmemario.ecordel.cordel;
 
 import br.com.itsmemario.ecordel.AbstractIntegrationTest;
-import br.com.itsmemario.ecordel.author.Author;
+import br.com.itsmemario.ecordel.author.AuthorEntity;
 import br.com.itsmemario.ecordel.author.AuthorRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CordelRepositoryTest extends AbstractIntegrationTest {
+public class CordelEntityRepositoryTest extends AbstractIntegrationTest {
 
     private static final Path BIG_FILE = Paths.get("src/test/resources/content.txt");
     @Autowired
@@ -38,27 +38,27 @@ public class CordelRepositoryTest extends AbstractIntegrationTest {
 
     @Before
     public void insertNewCordel() throws Exception {
-        Author author = authorRepository.save(new Author());
-        Cordel cordel = new Cordel();
-        cordel.setDescription("description");
-        cordel.setTitle("title");
-        cordel.setAuthor(author);
-        cordel.setContent("content");
-        cordel.setTags(new HashSet<>(Arrays.asList("tag1","tag2")));
-        id = repository.save(cordel).getId();
+        AuthorEntity authorEntity = authorRepository.save(new AuthorEntity());
+        CordelEntity cordelEntity = new CordelEntity();
+        cordelEntity.setDescription("description");
+        cordelEntity.setTitle("title");
+        cordelEntity.setAuthor(authorEntity);
+        cordelEntity.setContent("content");
+        cordelEntity.setTags(new HashSet<>(Arrays.asList("tag1","tag2")));
+        id = repository.save(cordelEntity).getId();
     }
 
     @Test
     public void saveBigTextAsContent() throws IOException {
-        Cordel byId = repository.findById(id).get();
+        CordelEntity byId = repository.findById(id).get();
         String lines = Files.readAllLines(BIG_FILE).stream().collect(Collectors.joining());
         byId.setContent(lines);
 
-        Cordel saved = repository.save(byId);
+        CordelEntity saved = repository.save(byId);
 
         assertThat(saved)
                 .isNotNull()
-                .extracting(Cordel::getContent).asString().isNotEmpty();
+                .extracting(CordelEntity::getContent).asString().isNotEmpty();
     }
 
     @After

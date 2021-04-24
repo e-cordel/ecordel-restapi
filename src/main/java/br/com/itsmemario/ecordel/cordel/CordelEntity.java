@@ -17,41 +17,41 @@
 
 package br.com.itsmemario.ecordel.cordel;
 
-import br.com.itsmemario.ecordel.author.Author;
-import br.com.itsmemario.ecordel.xilogravura.Xilogravura;
+import br.com.itsmemario.ecordel.author.AuthorEntity;
+import br.com.itsmemario.ecordel.xilogravura.XilogravuraEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 import java.util.Set;
 
-@Entity
-public class Cordel implements CordelView{
+@Entity(name = "cordel")
+public class CordelEntity implements CordelView{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	@ManyToOne
 	@JoinColumn(name = "author_id")
-	private Author author;
+	private AuthorEntity authorEntity;
 	@NotBlank
 	private String title;
 	@NotBlank
 	private String content;
 	@OneToOne
 	@JoinColumn(name = "xilogravura_id")
-	private Xilogravura xilogravura;
+	private XilogravuraEntity xilogravuraEntity;
 	private String description;
 	@ElementCollection
 	@CollectionTable(name = "cordel_tags")
 	private Set<String> tags;
 
-	Cordel() {}
+	CordelEntity() {}
 
-	public static Cordel of(Long id) {
-		Cordel cordel = new Cordel();
-		cordel.id = id;
-		return cordel;
+	public static CordelEntity of(Long id) {
+		CordelEntity cordelEntity = new CordelEntity();
+		cordelEntity.id = id;
+		return cordelEntity;
 	}
 
 	public Long getId() {
@@ -62,12 +62,12 @@ public class Cordel implements CordelView{
 		this.id = id;
 	}
 
-	public Author getAuthor() {
-		return author;
+	public AuthorEntity getAuthor() {
+		return authorEntity;
 	}
 
-	public void setAuthor(Author author) {
-		this.author = author;
+	public void setAuthor(AuthorEntity authorEntity) {
+		this.authorEntity = authorEntity;
 	}
 
 	public String getTitle() {
@@ -86,12 +86,12 @@ public class Cordel implements CordelView{
 		this.content = content;
 	}
 
-	public Xilogravura getXilogravura() {
-		return xilogravura;
+	public XilogravuraEntity getXilogravura() {
+		return xilogravuraEntity;
 	}
 
-	public void setXilogravura(Xilogravura xilogravura) {
-		this.xilogravura = xilogravura;
+	public void setXilogravura(XilogravuraEntity xilogravuraEntity) {
+		this.xilogravuraEntity = xilogravuraEntity;
 	}
 
 	public String getDescription() {
@@ -114,13 +114,15 @@ public class Cordel implements CordelView{
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Cordel cordel = (Cordel) o;
-		return Objects.equals(id, cordel.id) &&
-				Objects.equals(title, cordel.title);
+		CordelEntity cordelEntity = (CordelEntity) o;
+		return Objects.equals(id, cordelEntity.id) &&
+				Objects.equals(title, cordelEntity.title);
 	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, title);
 	}
+
+
 }
