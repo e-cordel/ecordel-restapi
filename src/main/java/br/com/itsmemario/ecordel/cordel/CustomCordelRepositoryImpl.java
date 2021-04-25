@@ -53,8 +53,8 @@ class CustomCordelRepositoryImpl implements CustomCordelRepository {
 
     private static final String FIND_BY_TAGS_SQL_COUNT = "select COUNT(distinct(c.id)) " + FIND_BY_TAGS_SQL_FROM ;
 
-    private static final String CORDEL_SUMMARY = "SELECT new br.com.itsmemario.ecordel.cordel.CordelSummary(c.id, c.title, x.url, a.name) FROM Cordel c JOIN c.author a LEFT JOIN c.xilogravura x";
-    private static final String COUNT_CORDEL_SUMMARY = "SELECT COUNT(c.id) FROM Cordel c JOIN c.author a LEFT JOIN c.xilogravura x";
+    private static final String CORDEL_SUMMARY = "SELECT new br.com.itsmemario.ecordel.cordel.CordelSummary(c.id, c.title, x.url, a.name) FROM cordel c JOIN c.author a LEFT JOIN c.xilogravura x";
+    private static final String COUNT_CORDEL_SUMMARY = "SELECT COUNT(c.id) FROM cordel c JOIN c.author a LEFT JOIN c.xilogravura x";
     public static final String TITLE = "title";
 
     @PersistenceContext

@@ -33,14 +33,14 @@ public class CordelEntity implements CordelView{
 	private Long id;
 	@ManyToOne
 	@JoinColumn(name = "author_id")
-	private AuthorEntity authorEntity;
+	private AuthorEntity author;
 	@NotBlank
 	private String title;
 	@NotBlank
 	private String content;
 	@OneToOne
 	@JoinColumn(name = "xilogravura_id")
-	private XilogravuraEntity xilogravuraEntity;
+	private XilogravuraEntity xilogravura;
 	private String description;
 	@ElementCollection
 	@CollectionTable(name = "cordel_tags")
@@ -63,11 +63,11 @@ public class CordelEntity implements CordelView{
 	}
 
 	public AuthorEntity getAuthor() {
-		return authorEntity;
+		return author;
 	}
 
 	public void setAuthor(AuthorEntity authorEntity) {
-		this.authorEntity = authorEntity;
+		this.author = authorEntity;
 	}
 
 	public String getTitle() {
@@ -87,11 +87,11 @@ public class CordelEntity implements CordelView{
 	}
 
 	public XilogravuraEntity getXilogravura() {
-		return xilogravuraEntity;
+		return xilogravura;
 	}
 
 	public void setXilogravura(XilogravuraEntity xilogravuraEntity) {
-		this.xilogravuraEntity = xilogravuraEntity;
+		this.xilogravura = xilogravuraEntity;
 	}
 
 	public String getDescription() {
