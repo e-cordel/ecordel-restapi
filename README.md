@@ -1,6 +1,6 @@
-# e-cordelEntity REST API
+# e-cordel REST API
 
-This is the REST API for e-cordelEntity project.
+This is the REST API for e-cordelproject.
 
 In this project you can find an openapi [specification](./openapi.yaml) with all the information about the endpoints available. 
 
