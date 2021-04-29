@@ -15,21 +15,11 @@
  *
  */
 
-package br.com.itsmemario.ecordel.cordel;
-
-import br.com.itsmemario.ecordel.author.AuthorView;
-import br.com.itsmemario.ecordel.xilogravura.XilogravuraView;
-
-import java.util.Set;
+package br.com.itsmemario.ecordel.xilogravura;
 
 
-public interface CordelView {
+public interface XilogravuraView {
 
-	Long getId();
-	AuthorView getAuthor();
-	String getTitle();
-	XilogravuraView getXilogravura();
-	String getDescription();
-	Set<String> getTags();
+    Long getId();
 
 }

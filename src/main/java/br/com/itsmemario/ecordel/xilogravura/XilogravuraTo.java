@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Projeto e-cordel (http://ecordel.com.br)
+ * Copyright 2021 Projeto e-cordel (http://ecordel.com.br)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,23 +17,18 @@
 
 package br.com.itsmemario.ecordel.xilogravura;
 
-import br.com.itsmemario.ecordel.author.Author;
+import br.com.itsmemario.ecordel.author.AuthorTo;
 
-import javax.persistence.*;
 
-@Entity
-public class Xilogravura {
 
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+public class XilogravuraTo implements XilogravuraView{
+
     private Long id;
 
     private String url;
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "xilografo_id")
-    private Author xilografo;
+    private AuthorTo xilografo;
 
     public Long getId() {
         return id;
@@ -47,11 +42,11 @@ public class Xilogravura {
         this.url = url;
     }
 
-    public Author getXilografo() {
+    public AuthorTo getXilografo() {
         return xilografo;
     }
 
-    public void setXilografo(Author xilografo) {
+    public void setXilografo(AuthorTo xilografo) {
         this.xilografo = xilografo;
     }
 
@@ -61,5 +56,13 @@ public class Xilogravura {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public XilogravuraEntity toEntity(){
+        XilogravuraEntity xilogravuraEntity = new XilogravuraEntity();
+        xilogravuraEntity.setUrl(this.url);
+        xilogravuraEntity.setDescription(this.description);
+        xilogravuraEntity.setXilografo(xilografo.toEntity());
+        return xilogravuraEntity;
     }
 }

@@ -2,7 +2,6 @@ package br.com.itsmemario.ecordel.xilogravura;
 
 
 import br.com.itsmemario.ecordel.AbstractIntegrationTest;
-import br.com.itsmemario.ecordel.author.Author;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +19,13 @@ public class XilogravuraRepositoryTest extends AbstractIntegrationTest {
 
     @Test
     public void saveTest() {
-        Xilogravura xilogravura = new Xilogravura();
-        xilogravura.setUrl("url");
-        xilogravura.setDescription("description");
+        XilogravuraEntity xilogravuraEntity = new XilogravuraEntity();
+        xilogravuraEntity.setUrl("url");
+        xilogravuraEntity.setDescription("description");
 
-        Xilogravura saved = repository.save(xilogravura);
+        XilogravuraEntity saved = repository.save(xilogravuraEntity);
 
         assertThat(saved).isNotNull();
-        assertThat(saved.getId()).isGreaterThan(0);
+        assertThat(saved.getId()).isPositive();
     }
 }

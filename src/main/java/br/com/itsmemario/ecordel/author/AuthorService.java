@@ -34,7 +34,8 @@ public class AuthorService {
         return repository.findAllProjectedBy(pageable);
     }
 
-    public Author save(Author author) {
-        return repository.save(author);
+    public AuthorEntity save(AuthorTo author) {
+        AuthorEntity authorEntity = author.toEntity();
+        return repository.save(authorEntity);
     }
 }

@@ -17,7 +17,7 @@
 
 package br.com.itsmemario.ecordel.cordel;
 
-import br.com.itsmemario.ecordel.xilogravura.Xilogravura;
+import br.com.itsmemario.ecordel.xilogravura.XilogravuraTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +46,10 @@ public class CordelController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Cordel> getCordel(@PathVariable Long id) {
+	public ResponseEntity<CordelEntity> getCordel(@PathVariable Long id) {
 		logger.info("request received get cordel by id: {}", id);
 
-		Optional<Cordel> cordel = service.findById(id);
+		Optional<CordelEntity> cordel = service.findById(id);
 		if(cordel.isPresent()){
 			return ResponseEntity.ok(cordel.get());
 		}else {
@@ -65,32 +65,32 @@ public class CordelController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Cordel> create(@RequestBody @Valid Cordel cordel, UriComponentsBuilder uriBuilder){
-		logger.info("request received for create cordel: {}", cordel);
-		service.save(cordel);
-		URI uri = uriBuilder.path("/cordels/{id}").buildAndExpand(cordel.getId()).toUri();
+	public ResponseEntity<CordelEntity> create(@RequestBody @Valid CordelTo cordelTo, UriComponentsBuilder uriBuilder){
+		logger.info("request received for create cordel: {}", cordelTo);
+		service.save(cordelTo);
+		URI uri = uriBuilder.path("/cordels/{id}").buildAndExpand(cordelTo.getId()).toUri();
 		logger.info("new cordel Location header: {}", uri.getPath());
 		return ResponseEntity.created(uri).build();
 	}
 
 	@PutMapping("{id}/xilogravura")
-	public ResponseEntity<Cordel> putXilogravura(@PathVariable Long id, Xilogravura xilogravura, @RequestParam("file") MultipartFile file){
+	public ResponseEntity<CordelEntity> putXilogravura(@PathVariable Long id, XilogravuraTo xilogravuraTo, @RequestParam("file") MultipartFile file){
 		logger.info("request received, update xilogravura for cordel: {}", id);
 
-		Cordel cordel = service.updateXilogravura(id, xilogravura, file);
-		return ResponseEntity.ok(cordel);
+		CordelEntity cordelEntity = service.updateXilogravura(id, xilogravuraTo, file);
+		return ResponseEntity.ok(cordelEntity);
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Cordel> update(@RequestBody @Valid Cordel cordel, @PathVariable Long id){
+	public ResponseEntity<CordelEntity> update(@RequestBody @Valid CordelTo cordelTo, @PathVariable Long id){
 		logger.info("request received update cordel with id: {}", id);
-		Optional<Cordel> existingCordel = service.findById(id);
+		Optional<CordelEntity> existingCordel = service.findById(id);
 		if(!existingCordel.isPresent()){
 			return ResponseEntity.notFound().build();
 		}
-		cordel.setId(id);
-		Cordel newCordel = service.save(cordel);
-		return ResponseEntity.ok(newCordel);
+		cordelTo.setId(id);
+		CordelEntity newCordelEntity = service.save(cordelTo.toEntity());
+		return ResponseEntity.ok(newCordelEntity);
 	}
 
 }

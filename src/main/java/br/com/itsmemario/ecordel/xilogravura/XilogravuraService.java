@@ -41,16 +41,16 @@ public class XilogravuraService {
         this.fileManager = fileManager;
     }
 
-    public Xilogravura save(Xilogravura xilogravura){
-        return repository.save(xilogravura);
+    public XilogravuraEntity save(XilogravuraEntity xilogravuraEntity){
+        return repository.save(xilogravuraEntity);
     }
 
-    public Xilogravura createXilogravuraWithFile(Xilogravura xilogravura, MultipartFile file){
+    public XilogravuraEntity createXilogravuraWithFile(XilogravuraEntity xilogravuraEntity, MultipartFile file){
         try {
             String fileName = generateRandomFileName();
             String url = fileManager.saveFile(file.getBytes(), fileName);
-            xilogravura.setUrl(url);
-            return repository.save(xilogravura);
+            xilogravuraEntity.setUrl(url);
+            return repository.save(xilogravuraEntity);
         } catch (IOException e) {
             e.printStackTrace();
             throw new FileProcessException("Error while saving file", e);

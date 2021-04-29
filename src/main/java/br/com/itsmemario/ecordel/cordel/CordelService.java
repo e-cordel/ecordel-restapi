@@ -17,8 +17,9 @@
 
 package br.com.itsmemario.ecordel.cordel;
 
-import br.com.itsmemario.ecordel.xilogravura.Xilogravura;
+import br.com.itsmemario.ecordel.xilogravura.XilogravuraEntity;
 import br.com.itsmemario.ecordel.xilogravura.XilogravuraService;
+import br.com.itsmemario.ecordel.xilogravura.XilogravuraTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,15 +50,19 @@ public class CordelService {
 		return repository.findAllProjectedBy(pageable);
 	}
 	
-	public Cordel save(Cordel cordel) {
-		return repository.save(cordel);
+	public CordelEntity save(CordelTo cordelTo) {
+		return this.save(cordelTo.toEntity());
+	}
+
+	public CordelEntity save(CordelEntity cordelEntity) {
+		return repository.save(cordelEntity);
 	}
 
 	public Page<CordelView> findByTags(List<String> tags, Pageable pageable){
 		return repository.findByTags(tags, pageable);
 	}
 
-	public Optional<Cordel> findById(Long id) {
+	public Optional<CordelEntity> findById(Long id) {
 		return repository.findById(id);
 	}
 
@@ -65,14 +70,14 @@ public class CordelService {
 		return repository.findByTitleLike(title, pageable);
 	}
 
-	public Cordel updateXilogravura(Long cordelId, Xilogravura xilogravura, MultipartFile file) {
-		Optional<Cordel> byId = findById(cordelId);
+	public CordelEntity updateXilogravura(Long cordelId, XilogravuraTo xilogravuraTo, MultipartFile file) {
+		Optional<CordelEntity> byId = findById(cordelId);
 
 		if(byId.isPresent()) {
-			Cordel cordel = byId.get();
-			Xilogravura xilogravuraWithFile = xilogravuraService.createXilogravuraWithFile(xilogravura, file);
-			cordel.setXilogravura(xilogravuraWithFile);
-			return save(cordel);
+			CordelEntity cordelEntity = byId.get();
+			XilogravuraEntity xilogravuraEntityWithFile = xilogravuraService.createXilogravuraWithFile(xilogravuraTo.toEntity(), file);
+			cordelEntity.setXilogravura(xilogravuraEntityWithFile);
+			return save(cordelEntity);
 		}else{
 			throw new CordelNotFoundException();
 		}

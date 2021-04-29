@@ -17,16 +17,9 @@
 
 package br.com.itsmemario.ecordel.author;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
-@Entity
-public class Author implements AuthorView{
+public class AuthorTo implements AuthorView{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String about;
@@ -63,4 +56,15 @@ public class Author implements AuthorView{
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public AuthorEntity toEntity(){
+        AuthorEntity authorEntity = new AuthorEntity();
+        authorEntity.setId(this.id);
+        authorEntity.setName(this.name);
+        authorEntity.setAbout(this.about);
+        authorEntity.setEmail(this.email);
+        return authorEntity;
+    }
+
+
 }
