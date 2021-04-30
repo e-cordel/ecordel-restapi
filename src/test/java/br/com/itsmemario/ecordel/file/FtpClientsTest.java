@@ -20,9 +20,10 @@ package br.com.itsmemario.ecordel.file;
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.mockftpserver.fake.FakeFtpServer;
 import org.mockftpserver.fake.UserAccount;
 import org.mockftpserver.fake.filesystem.DirectoryEntry;
@@ -44,7 +45,7 @@ public class FtpClientsTest {
     static final String PASSWORD = "password";
     static final FakeFtpServer fakeFtpServer = new FakeFtpServer();
 
-    @BeforeClass
+    @BeforeAll
     public static void setup() throws IOException {
         setUpMockServer();
     }
@@ -59,13 +60,14 @@ public class FtpClientsTest {
         fakeFtpServer.start();
     }
 
-    @AfterClass
+    @AfterAll
     public static void teardown() {
         fakeFtpServer.stop();
     }
 
     @Test
-    public void testApacheCommonsFtpClient() throws IOException {
+    @DisplayName(" test apache commons ftp client")
+    void testApacheCommonsFtpClient() throws IOException {
 
         String file = "/file2.txt";
         String fileContent = "content";

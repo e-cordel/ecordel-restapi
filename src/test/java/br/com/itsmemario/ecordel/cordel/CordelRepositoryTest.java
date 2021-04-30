@@ -3,9 +3,9 @@ package br.com.itsmemario.ecordel.cordel;
 import br.com.itsmemario.ecordel.AbstractIntegrationTest;
 import br.com.itsmemario.ecordel.author.Author;
 import br.com.itsmemario.ecordel.author.AuthorRepository;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,7 +36,7 @@ public class CordelRepositoryTest extends AbstractIntegrationTest {
     AuthorRepository authorRepository;
     private Long id;
 
-    @Before
+    @BeforeEach
     public void insertNewCordel() throws Exception {
         Author author = authorRepository.save(new Author());
         Cordel cordel = new Cordel();
@@ -61,7 +61,7 @@ public class CordelRepositoryTest extends AbstractIntegrationTest {
                 .extracting(Cordel::getContent).asString().isNotEmpty();
     }
 
-    @After
+    @AfterEach
     public void deleteAllCordels() throws Exception {
         repository.deleteAll();
     }

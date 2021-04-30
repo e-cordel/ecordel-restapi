@@ -2,8 +2,7 @@ package br.com.itsmemario.ecordel.xilogravura;
 
 
 import br.com.itsmemario.ecordel.AbstractIntegrationTest;
-import br.com.itsmemario.ecordel.author.Author;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

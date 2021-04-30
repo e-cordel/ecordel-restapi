@@ -2,8 +2,8 @@ package br.com.itsmemario.ecordel.cordel;
 
 import br.com.itsmemario.ecordel.security.AuthenticationService;
 import br.com.itsmemario.ecordel.xilogravura.XilogravuraService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -36,7 +36,7 @@ public class CordelControllerTest {
 
     private Cordel cordel;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         cordel = new Cordel();
         cordel.setId(1L);
