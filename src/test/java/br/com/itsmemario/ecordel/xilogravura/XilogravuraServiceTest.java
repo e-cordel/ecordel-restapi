@@ -1,12 +1,10 @@
 package br.com.itsmemario.ecordel.xilogravura;
 
 import br.com.itsmemario.ecordel.AbstractIntegrationTest;
-import br.com.itsmemario.ecordel.author.Author;
-import br.com.itsmemario.ecordel.file.FileManager;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockftpserver.fake.FakeFtpServer;
 import org.mockftpserver.fake.UserAccount;
@@ -15,7 +13,6 @@ import org.mockftpserver.fake.filesystem.FileEntry;
 import org.mockftpserver.fake.filesystem.FileSystem;
 import org.mockftpserver.fake.filesystem.UnixFakeFileSystem;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -40,7 +37,7 @@ public class XilogravuraServiceTest extends AbstractIntegrationTest {
     static final String PASSWORD = "pass";
     static final FakeFtpServer fakeFtpServer = new FakeFtpServer();
 
-    @BeforeClass
+    @BeforeAll
     public static void setup() throws IOException {
         setUpMockServer();
     }
@@ -55,12 +52,12 @@ public class XilogravuraServiceTest extends AbstractIntegrationTest {
         fakeFtpServer.start();
     }
 
-    @AfterClass
+    @AfterAll
     public static void afterClass() throws Exception {
         fakeFtpServer.stop();
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         repository.deleteAll();
     }
