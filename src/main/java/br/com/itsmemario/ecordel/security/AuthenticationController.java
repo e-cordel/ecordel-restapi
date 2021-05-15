@@ -52,7 +52,7 @@ public class AuthenticationController {
 	@PostMapping
 	public ResponseEntity<TokenDto> authenticate(@RequestBody @Valid LoginData data){
 		
-		logger.info("Username and password {} ***", data.getUsername());
+		logger.info("Login attempt");
 		
 		try {
 			UsernamePasswordAuthenticationToken authenticationToken = data.toAuthenticationToken();

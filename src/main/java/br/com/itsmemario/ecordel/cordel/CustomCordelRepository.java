@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Projeto e-cordel (http://ecordel.com.br)
+ * Copyright 2020-2021 Projeto e-cordel (http://ecordel.com.br)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,5 +26,5 @@ interface CustomCordelRepository {
 
     Page<CordelView> findByTags(List<String> tags, Pageable pageable);
 
-    Page<CordelSummary> findByTitleLike(String title, Pageable pageable);
+    Page<CordelSummary> findPublishedByTitleLike(boolean published, String title, Pageable pageable);
 }
