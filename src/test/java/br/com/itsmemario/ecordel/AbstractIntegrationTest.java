@@ -21,7 +21,6 @@ public class AbstractIntegrationTest {
 
         private static void startContainers() {
             Startables.deepStart(Stream.of(postgres)).join();
-            // we can add further containers
         }
 
         private static Map<String, String> createConnectionConfiguration() {

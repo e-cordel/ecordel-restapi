@@ -6,7 +6,7 @@ info:
   title: "E-cordel API"
   contact:
     name: Mário Sousa
-    url: http://itsmemario.com.br
+    url: http://ecordel.com.br
     email: super.mario.santos.sousa@gmail.com
 
 servers:
@@ -35,6 +35,12 @@ paths:
             type: string
           required: false
           description: search corldels with titles that contains the parameter. It will work such as a like operation.
+        - name: published
+          in: query
+          schema:
+            type: boolean
+          required: false
+          description: search only publish corldels. This parameter is always true if is omitted.
       responses:
         200:
           description: "successful operation"

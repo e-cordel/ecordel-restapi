@@ -18,10 +18,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static br.com.itsmemario.ecordel.cordel.CordelUtil.newCordel;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
@@ -29,6 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CordelRepositoryTest extends AbstractIntegrationTest {
 
     private static final Path BIG_FILE = Paths.get("src/test/resources/content.txt");
+
     @Autowired
     CordelRepository repository;
 
@@ -36,7 +37,7 @@ public class CordelRepositoryTest extends AbstractIntegrationTest {
     AuthorRepository authorRepository;
 
     @AfterEach
-    void deleteAllCordels() throws Exception {
+    void deleteAllCordels() {
         repository.deleteAll();
     }
 
@@ -102,14 +103,8 @@ public class CordelRepositoryTest extends AbstractIntegrationTest {
     }
 
     Long insertNewCordel(boolean published) {
-        Author author = authorRepository.save(new Author());
-        Cordel cordel = new Cordel();
-        cordel.setDescription("description");
-        cordel.setTitle("title");
-        cordel.setAuthor(author);
-        cordel.setContent("content");
-        cordel.setPublished(published);
-        cordel.setTags(new HashSet<>(Arrays.asList("tag1","tag2")));
+        var author = authorRepository.save(new Author());
+        var cordel = newCordel(published, author);
         return repository.save(cordel).getId();
     }
 

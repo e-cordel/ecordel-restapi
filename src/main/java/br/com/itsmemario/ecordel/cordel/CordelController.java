@@ -29,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.Optional;
 
 @RestController
@@ -59,9 +58,9 @@ public class CordelController {
     }
 
     @GetMapping
-    public Page<CordelSummary> getPublishedCordels(@RequestParam(required = false) String title,
-                                                   @RequestParam(defaultValue = "true") boolean published,
-                                                   Pageable pageable) {
+    public Page<CordelSummary> getCordels(@RequestParam(required = false) String title,
+                                          @RequestParam(defaultValue = "true") boolean published,
+                                          Pageable pageable) {
         logger.info("request received get cordels");
         return service.findPublishedByTitle(published, title, pageable);
     }
@@ -71,7 +70,7 @@ public class CordelController {
         logger.info("request received for create cordel: {}", dto);
 
         service.save(dto.toEntity());
-        URI uri = uriBuilder.path("/cordels/{id}").buildAndExpand(dto.getId()).toUri();
+        var uri = uriBuilder.path("/cordels/{id}").buildAndExpand(dto.getId()).toUri();
         logger.info("new cordel Location header: {}", uri.getPath());
         return ResponseEntity.created(uri).build();
     }
@@ -92,11 +91,10 @@ public class CordelController {
             return ResponseEntity.notFound().build();
         }
 
-        Cordel newData = dto.toEntity();
-        newData.setId(id);
-        Cordel newCordel = service.save(newData);
+        var cordel = dto.toEntity();
+        cordel.setId(id);
 
-        return ResponseEntity.ok(newCordel);
+        return ResponseEntity.ok(service.save(cordel));
     }
 
 }

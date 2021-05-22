@@ -17,7 +17,7 @@
 
 package br.com.itsmemario.ecordel.cordel;
 
-import br.com.itsmemario.ecordel.author.Author;
+import br.com.itsmemario.ecordel.author.AuthorDto;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -32,7 +32,7 @@ public class CordelDto {
 
     private Long id;
     @NotNull
-    private Long authorId;
+    private AuthorDto author;
     @NotBlank
     private String title;
     @NotBlank
@@ -43,9 +43,9 @@ public class CordelDto {
     private Set<String> tags;
 
     public Cordel toEntity() {
-        Cordel cordel = new Cordel();
+        var cordel = new Cordel();
         cordel.setId( id );
-        cordel.setAuthor( Author.of( authorId ) );
+        cordel.setAuthor( author.toEntity() );
         cordel.setTitle( title );
         cordel.setDescription( description );
         cordel.setContent( content );
