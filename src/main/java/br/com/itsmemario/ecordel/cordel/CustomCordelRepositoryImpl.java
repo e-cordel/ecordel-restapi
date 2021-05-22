@@ -70,7 +70,7 @@ class CustomCordelRepositoryImpl implements CustomCordelRepository {
         long count = countResults(tags);
         if(count == 0) return Page.empty(pageable);
 
-        Query query = entityManager.createNativeQuery(FIND_BY_TAGS_SQL);
+        var query = entityManager.createNativeQuery(FIND_BY_TAGS_SQL);
         query.setParameter(TAGS, tags);
         query.setParameter(LIMIT, pageable.getPageSize());
         query.setParameter(OFFSET, pageable.getOffset());
@@ -133,7 +133,7 @@ class CustomCordelRepositoryImpl implements CustomCordelRepository {
     }
 
     private <T> TypedQuery<T> addTitleFilter(String title, StringBuilder sql, Class<T> clazz) {
-        String where = " AND lower(c.title) LIKE lower( :title ) ";
+        var where = " AND lower(c.title) LIKE lower( :title ) ";
         TypedQuery<T> query;
         sql.append(where);
         query = entityManager.createQuery(sql.toString(), clazz);

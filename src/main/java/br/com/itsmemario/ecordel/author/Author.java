@@ -33,7 +33,7 @@ public class Author implements AuthorView {
     private String email;
 
     public static Author of( Long id ) {
-        Author author = new Author();
+        var author = new Author();
         author.id = id;
         return author;
     }

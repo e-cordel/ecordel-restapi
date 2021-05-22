@@ -25,7 +25,7 @@ public class AuthorDto {
     private Long id;
 
     public Author toEntity() {
-        Author author = new Author();
+        var author = new Author();
         author.setId(id);
         return author;
     }

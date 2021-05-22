@@ -18,7 +18,7 @@ import static br.com.itsmemario.ecordel.cordel.CordelUtil.newCordel;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CordelControllerTest extends AbstractIntegrationTest {
+class CordelControllerTest extends AbstractIntegrationTest {
 
     @LocalServerPort
     private int port;
@@ -34,19 +34,19 @@ public class CordelControllerTest extends AbstractIntegrationTest {
 
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         cordelRepository.deleteAll();
         authorRepository.deleteAll();
     }
 
-    public Cordel insertCordel(boolean published) {
+    Cordel insertCordel(boolean published) {
         Author author = authorRepository.save(new Author());
         var cordel = newCordel(published, author);
         return cordelRepository.save(cordel);
     }
 
     @Test
-    public void ifACordelExists_ItMustReturnOkAndTheCordel() {
+    void ifACordelExists_ItMustReturnOkAndTheCordel() {
         Cordel cordel = insertCordel(true);
 
         ResponseEntity<Cordel> forEntity = restTemplate.getForEntity(getBaseUrl() + "/{id}", Cordel.class, cordel.getId());
@@ -56,7 +56,7 @@ public class CordelControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void ifACordelDoesNotExists_ItMustReturn404() {
+    void ifACordelDoesNotExists_ItMustReturn404() {
         Long id = 100l;
 
         ResponseEntity<Cordel> forEntity = restTemplate.getForEntity(getBaseUrl() + "/{id}", Cordel.class, id);
@@ -69,7 +69,7 @@ public class CordelControllerTest extends AbstractIntegrationTest {
         insertCordel(false);
 
         ResponseEntity<Map> response = restTemplate.getForEntity(getBaseUrl()+"?published=false", Map.class);
-        assertThat(response.getBody().get("totalElements")).isEqualTo(1);
+        assertThat(response.getBody()).containsEntry("totalElements",1);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
@@ -78,7 +78,7 @@ public class CordelControllerTest extends AbstractIntegrationTest {
         insertCordel(true);
 
         ResponseEntity<Map> response = restTemplate.getForEntity(getBaseUrl(), Map.class);
-        assertThat(response.getBody().get("totalElements")).isEqualTo(1);
+        assertThat(response.getBody()).containsEntry("totalElements",1);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
