@@ -1,3 +1,5 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=e-cordel_ecordel-restapi&metric=alert_status)](https://sonarcloud.io/dashboard?id=e-cordel_ecordel-restapi)
+
 # e-cordel REST API
 
 This is the REST API for e-cordel project.
