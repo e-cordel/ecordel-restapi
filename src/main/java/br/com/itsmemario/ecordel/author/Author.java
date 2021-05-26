@@ -23,7 +23,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Author implements AuthorView{
+public class Author implements AuthorView {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +31,12 @@ public class Author implements AuthorView{
     private String name;
     private String about;
     private String email;
+
+    public static Author of( Long id ) {
+        var author = new Author();
+        author.id = id;
+        return author;
+    }
 
     public Long getId() {
         return id;

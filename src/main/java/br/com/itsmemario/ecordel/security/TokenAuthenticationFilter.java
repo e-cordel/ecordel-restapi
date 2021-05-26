@@ -51,7 +51,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter{
 		if(isValidToken(token)) {
 			authorizeRequestWithToken(token.get());
 		}
-		
+			
 		filterChain.doFilter(request, response);
 		
 	}

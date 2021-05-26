@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 Projeto e-cordel (http://ecordel.com.br)
+ * Copyright 2021 Projeto e-cordel (http://ecordel.com.br)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,18 @@
  *
  */
 
-package br.com.itsmemario.ecordel.cordel;
+package br.com.itsmemario.ecordel.author;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import lombok.Data;
 
-import java.util.List;
+@Data
+public class AuthorDto {
 
-interface CustomCordelRepository {
+    private Long id;
 
-    Page<CordelView> findByTags(List<String> tags, Pageable pageable);
-
-    Page<CordelSummary> findPublishedByTitleLike(boolean published, String title, Pageable pageable);
+    public Author toEntity() {
+        var author = new Author();
+        author.setId(id);
+        return author;
+    }
 }

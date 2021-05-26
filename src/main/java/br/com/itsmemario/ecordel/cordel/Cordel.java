@@ -45,6 +45,7 @@ public class Cordel implements CordelView {
 	@ElementCollection
 	@CollectionTable(name = "cordel_tags")
 	private Set<String> tags;
+	private boolean published;
 
 	Cordel() {}
 
@@ -108,6 +109,14 @@ public class Cordel implements CordelView {
 
 	public void setTags(Set<String> tags) {
 		this.tags = tags;
+	}
+
+	public boolean isPublished() {
+		return published;
+	}
+
+	public void setPublished(boolean published) {
+		this.published = published;
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Projeto e-cordel (http://ecordel.com.br)
+ * Copyright 2020-2021 Projeto e-cordel (http://ecordel.com.br)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.math.BigInteger;
 import java.util.List;
@@ -53,9 +52,14 @@ class CustomCordelRepositoryImpl implements CustomCordelRepository {
 
     private static final String FIND_BY_TAGS_SQL_COUNT = "select COUNT(distinct(c.id)) " + FIND_BY_TAGS_SQL_FROM ;
 
-    private static final String CORDEL_SUMMARY = "SELECT new br.com.itsmemario.ecordel.cordel.CordelSummary(c.id, c.title, x.url, a.name) FROM Cordel c JOIN c.author a LEFT JOIN c.xilogravura x";
-    private static final String COUNT_CORDEL_SUMMARY = "SELECT COUNT(c.id) FROM Cordel c JOIN c.author a LEFT JOIN c.xilogravura x";
-    public static final String TITLE = "title";
+    private static final String CORDEL_SUMMARY = " SELECT new br.com.itsmemario.ecordel.cordel.CordelSummary(c.id, c.title, x.url, a.name) " +
+            " FROM Cordel c JOIN c.author a LEFT JOIN c.xilogravura x WHERE c.published = :published ";
+
+    private static final String COUNT_CORDEL_SUMMARY = "SELECT COUNT(c.id) FROM Cordel c JOIN c.author a " +
+            " LEFT JOIN c.xilogravura x WHERE c.published = :published ";
+
+    private static final String TITLE = "title";
+    public static final String PUBLISHED = "published";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -65,7 +69,7 @@ class CustomCordelRepositoryImpl implements CustomCordelRepository {
         long count = countResults(tags);
         if(count == 0) return Page.empty(pageable);
 
-        Query query = entityManager.createNativeQuery(this.FIND_BY_TAGS_SQL);
+        var query = entityManager.createNativeQuery(FIND_BY_TAGS_SQL);
         query.setParameter(TAGS, tags);
         query.setParameter(LIMIT, pageable.getPageSize());
         query.setParameter(OFFSET, pageable.getOffset());
@@ -97,7 +101,7 @@ class CustomCordelRepositoryImpl implements CustomCordelRepository {
     }
 
     @Override
-    public Page<CordelSummary> findByTitleLike(String title, Pageable pageable) {
+    public Page<CordelSummary> findPublishedByTitleLike(boolean published, String title, Pageable pageable) {
 
         StringBuilder sql = new StringBuilder(CORDEL_SUMMARY);
         StringBuilder countSql = new StringBuilder(COUNT_CORDEL_SUMMARY);
@@ -106,15 +110,17 @@ class CustomCordelRepositoryImpl implements CustomCordelRepository {
         TypedQuery<CordelSummary> query = entityManager.createQuery(sql.toString(), CordelSummary.class);
 
         if(isAValidString(title)){
-            query = createQueryWithTitle(title, sql, CordelSummary.class);
-            countQuery = createQueryWithTitle(title, countSql, Long.class);
+            query = addTitleFilter(title, sql, CordelSummary.class);
+            countQuery = addTitleFilter(title, countSql, Long.class);
         }
 
+        countQuery.setParameter(PUBLISHED, published);
         Long count = countQuery.getSingleResult();
         if(count == 0) return Page.empty(pageable);
 
         query.setMaxResults(pageable.getPageSize());
         query.setFirstResult((int)pageable.getOffset());
+        query.setParameter(PUBLISHED, published);
 
         List<CordelSummary> resultList = query.getResultList();
 
@@ -125,8 +131,8 @@ class CustomCordelRepositoryImpl implements CustomCordelRepository {
         return title != null && title.length() >= MINIMUM_SIZE;
     }
 
-    private <T> TypedQuery<T> createQueryWithTitle(String title, StringBuilder sql, Class<T> clazz) {
-        String where = " WHERE lower(c.title) LIKE lower( :title )";
+    private <T> TypedQuery<T> addTitleFilter(String title, StringBuilder sql, Class<T> clazz) {
+        var where = " AND lower(c.title) LIKE lower( :title ) ";
         TypedQuery<T> query;
         sql.append(where);
         query = entityManager.createQuery(sql.toString(), clazz);

@@ -1,55 +1,88 @@
 package br.com.itsmemario.ecordel.cordel;
 
-import br.com.itsmemario.ecordel.security.AuthenticationService;
-import br.com.itsmemario.ecordel.xilogravura.XilogravuraService;
-import org.junit.jupiter.api.BeforeEach;
+import br.com.itsmemario.ecordel.AbstractIntegrationTest;
+import br.com.itsmemario.ecordel.author.Author;
+import br.com.itsmemario.ecordel.author.AuthorRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import java.util.Collections;
-import java.util.Optional;
+import java.util.Map;
 
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static br.com.itsmemario.ecordel.cordel.CordelUtil.newCordel;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
-@WebMvcTest(CordelController.class)
-public class CordelControllerTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class CordelControllerTest extends AbstractIntegrationTest {
+
+    @LocalServerPort
+    private int port;
 
     @Autowired
-    MockMvc mockMvc;
+    private TestRestTemplate restTemplate;
 
-    @MockBean
-    CordelService cordelService;
+    @Autowired
+    CordelRepository cordelRepository;
 
-    @MockBean
-    XilogravuraService xilogravuraService;
+    @Autowired
+    AuthorRepository authorRepository;
 
-    @MockBean
-    AuthenticationService authenticationService;
 
-    private Cordel cordel;
+    @AfterEach
+    void tearDown() {
+        cordelRepository.deleteAll();
+        authorRepository.deleteAll();
+    }
 
-    @BeforeEach
-    public void setUp() throws Exception {
-        cordel = new Cordel();
-        cordel.setId(1L);
-        cordel.setContent("");
-        cordel.setTitle("");
-        cordel.setTags(Collections.emptySet());
-        cordel.setDescription("");
+    Cordel insertCordel(boolean published) {
+        Author author = authorRepository.save(new Author());
+        var cordel = newCordel(published, author);
+        return cordelRepository.save(cordel);
     }
 
     @Test
-    public void getCordel() throws Exception {
-        when(cordelService.findById(1l)).thenReturn(Optional.of(cordel));
-        mockMvc.perform(get("/cordels/1"))
-                .andExpect(status().isOk());
+    void ifACordelExists_ItMustReturnOkAndTheCordel() {
+        Cordel cordel = insertCordel(true);
+
+        ResponseEntity<Cordel> forEntity = restTemplate.getForEntity(getBaseUrl() + "/{id}", Cordel.class, cordel.getId());
+
+        assertThat(forEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(forEntity.getBody()).hasFieldOrPropertyWithValue("content", cordel.getContent());
+    }
+
+    @Test
+    void ifACordelDoesNotExists_ItMustReturn404() {
+        Long id = 100l;
+
+        ResponseEntity<Cordel> forEntity = restTemplate.getForEntity(getBaseUrl() + "/{id}", Cordel.class, id);
+
+        assertThat(forEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    void ifPublishedParamIsFalse_theOnlyDraftCordelsMustBeRetrieved() {
+        insertCordel(false);
+
+        ResponseEntity<Map> response = restTemplate.getForEntity(getBaseUrl()+"?published=false", Map.class);
+        assertThat(response.getBody()).containsEntry("totalElements",1);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    void ifPublishedParamIsNotInformed_itMustBeConsideredTrue() {
+        insertCordel(true);
+
+        ResponseEntity<Map> response = restTemplate.getForEntity(getBaseUrl(), Map.class);
+        assertThat(response.getBody()).containsEntry("totalElements",1);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    private String getBaseUrl() {
+        return "http://localhost:" + port + "/cordels";
     }
 }

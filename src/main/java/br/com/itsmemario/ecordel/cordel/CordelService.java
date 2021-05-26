@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Projeto e-cordel (http://ecordel.com.br)
+ * Copyright 2020-2021 Projeto e-cordel (http://ecordel.com.br)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ package br.com.itsmemario.ecordel.cordel;
 
 import br.com.itsmemario.ecordel.xilogravura.Xilogravura;
 import br.com.itsmemario.ecordel.xilogravura.XilogravuraService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,8 +30,6 @@ import java.util.Optional;
 
 @Service
 public class CordelService {
-
-	private final Logger logger = LoggerFactory.getLogger(CordelService.class);
 
 	private CordelRepository repository;
 	private XilogravuraService xilogravuraService;
@@ -48,7 +44,7 @@ public class CordelService {
 	public Page<CordelView> getCordels(Pageable pageable) {
 		return repository.findAllProjectedBy(pageable);
 	}
-	
+
 	public Cordel save(Cordel cordel) {
 		return repository.save(cordel);
 	}
@@ -61,8 +57,8 @@ public class CordelService {
 		return repository.findById(id);
 	}
 
-	public Page<CordelSummary> findByTitle(String title, Pageable pageable) {
-		return repository.findByTitleLike(title, pageable);
+	public Page<CordelSummary> findPublishedByTitle(boolean published, String title, Pageable pageable) {
+		return repository.findPublishedByTitleLike(published, title, pageable);
 	}
 
 	public Cordel updateXilogravura(Long cordelId, Xilogravura xilogravura, MultipartFile file) {
