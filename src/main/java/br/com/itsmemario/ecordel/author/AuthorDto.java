@@ -23,12 +23,10 @@ import lombok.Data;
 public class AuthorDto {
 
     private Long id;
-    private String about;
 
     public Author toEntity() {
         var author = new Author();
         author.setId(id);
-        author.setAbout(about);
         return author;
     }
 }
