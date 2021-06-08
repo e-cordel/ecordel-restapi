@@ -32,9 +32,10 @@ public class Author implements AuthorView {
     private String about;
     private String email;
 
-    public static Author of( Long id ) {
+    public static Author of( Long id, String about ) {
         var author = new Author();
         author.id = id;
+        author.about = about;
         return author;
     }
 

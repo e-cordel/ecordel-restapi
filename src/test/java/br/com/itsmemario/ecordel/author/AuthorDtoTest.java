@@ -17,18 +17,24 @@
 
 package br.com.itsmemario.ecordel.author;
 
-import lombok.Data;
+import org.junit.jupiter.api.Test;
 
-@Data
-public class AuthorDto {
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
-    private Long id;
-    private String about;
+public class AuthorDtoTest {
 
-    public Author toEntity() {
-        var author = new Author();
-        author.setId(id);
-        author.setAbout(about);
-        return author;
+    @Test
+    void toEntity() {
+        AuthorDto authorDto = new AuthorDto();
+        authorDto.setId(1L);
+        authorDto.setAbout("about the author");
+
+        Author author = authorDto.toEntity();
+
+        assertAll(
+                () -> assertThat(author.getId()).isEqualTo(authorDto.getId()),
+                () -> assertThat(author.getAbout()).isEqualTo(authorDto.getAbout())
+        );
     }
 }
