@@ -5,9 +5,8 @@ info:
   version: "1.0.0"
   title: "E-cordel API"
   contact:
-    name: Mário Sousa
-    url: http://ecordel.com.br
-    email: super.mario.santos.sousa@gmail.com
+    url: https://ecordel.com.br
+    email: contato@ecordel.com.br
 
 servers:
   - url: https://ecordel-restapi.herokuapp.com/
