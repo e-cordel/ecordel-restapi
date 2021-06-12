@@ -17,3 +17,6 @@ spring:
       hibernate.jdbc.lob.non_contextual_creation: true
     hibernate:
       ddl-auto: none
+
+#  flyway:
+#    baselineOnMigrate: true
