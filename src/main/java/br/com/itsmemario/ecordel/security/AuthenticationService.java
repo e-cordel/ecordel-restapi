@@ -17,13 +17,13 @@
 
 package br.com.itsmemario.ecordel.security;
 
+import br.com.itsmemario.ecordel.security.jwt.JwtToken;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -34,26 +34,17 @@ import java.util.Date;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class AuthenticationService implements UserDetailsService {
 
 	public static final String BEARER = "Bearer";
 	public static final String ROLES = "roles";
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+
 	private static final String ISSUER = "e-cordel";
-	private UserRepository repository;
-	
-	@Value("${jwt.token.expiration}")
-	private Long tokenExpiration;
-	
-	@Value("${jwt.token.secretKey}")
-	private String secretKey;
-	
-	@Autowired
-	AuthenticationService(UserRepository repository) {
-		super();
-		this.repository = repository;
-	}
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	private final UserRepository repository;
+	private final JwtToken jwtToken;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -69,7 +60,7 @@ public class AuthenticationService implements UserDetailsService {
 		CordelUser principal = (CordelUser) authentication.getPrincipal();
 		
 		Date today = new Date();
-		Date expiration = new Date(today.getTime() + tokenExpiration);
+		Date expiration = new Date(today.getTime() + jwtToken.getExpiration());
 		
 		String token = Jwts.builder()
 			.setIssuer(ISSUER)
@@ -77,32 +68,16 @@ public class AuthenticationService implements UserDetailsService {
 			.claim(ROLES, principal.getAuthorityNames())
 			.setIssuedAt(today)
 			.setExpiration(expiration)
-			.signWith(SignatureAlgorithm.HS256, secretKey)
+			.signWith(SignatureAlgorithm.HS256, jwtToken.getSecretKey())
 			.compact();
 
 		return new TokenDto(token, BEARER, expiration.getTime());
 	}
 
-	public Long getTokenExpiration() {
-		return tokenExpiration;
-	}
-
-	public void setTokenExpiration(Long tokenExpiration) {
-		this.tokenExpiration = tokenExpiration;
-	}
-
-	public String getSecretKey() {
-		return secretKey;
-	}
-
-	public void setSecretKey(String secretKey) {
-		this.secretKey = secretKey;
-	}
-
 	public boolean isValidToken(String token) {
 		try {
 			return Jwts.parser()
-					.setSigningKey(secretKey)
+					.setSigningKey(jwtToken.getSecretKey())
 					.requireIssuer(ISSUER)
 					.parseClaimsJws(token)!=null;
 		}catch(io.jsonwebtoken.SignatureException e) {
@@ -112,7 +87,7 @@ public class AuthenticationService implements UserDetailsService {
 
 	public Optional<CordelUser> getUserFromToken(String token) {
 		try {
-			Claims body = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+			Claims body = Jwts.parser().setSigningKey(jwtToken.getSecretKey()).parseClaimsJws(token).getBody();
 			Long id = Long.parseLong(body.getSubject());
 			return repository.findById(id);
 		} catch (io.jsonwebtoken.SignatureException e) {
