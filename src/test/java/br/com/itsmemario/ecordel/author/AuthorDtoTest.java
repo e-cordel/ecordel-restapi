@@ -22,19 +22,23 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class AuthorDtoTest {
+class AuthorDtoTest {
 
     @Test
     void toEntity() {
-        AuthorDto authorDto = new AuthorDto();
+        var authorDto = new AuthorDto();
         authorDto.setId(1L);
         authorDto.setAbout("about the author");
+        authorDto.setEmail("email");
+        authorDto.setName("name");
 
         Author author = authorDto.toEntity();
 
         assertAll(
                 () -> assertThat(author.getId()).isEqualTo(authorDto.getId()),
-                () -> assertThat(author.getAbout()).isEqualTo(authorDto.getAbout())
+                () -> assertThat(author.getAbout()).isEqualTo(authorDto.getAbout()),
+                () -> assertThat(author.getEmail()).isEqualTo(authorDto.getEmail()),
+                () -> assertThat(author.getName()).isEqualTo(authorDto.getName())
         );
     }
 }

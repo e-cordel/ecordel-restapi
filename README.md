@@ -30,9 +30,9 @@ Add in VMArguments to run in a IDE
 
 You can run with maven
 
-    mvn spring-boot:run
+    mvn spring-boot:run -Dspring-boot.run.profiles=local
 
-or, you can run with docker if you already hava a image
+or, you can run with docker if you already have an image
 
     docker container run --name ecordel --rm -p 8080:8080 ecordel-restapi:1
 
@@ -41,6 +41,10 @@ tip: --rm parameter will exclude container image after execution and it cause da
 ## How to test
 
     mvn test
+    
+### Writing Tests
+
+If you wanna use db connection on your test you must extend the class `AbstractIntegrationTest`. This class will run the docker container and configure the spring datasource. 
 
 ## How to contribute
 

@@ -19,16 +19,23 @@ package br.com.itsmemario.ecordel.author;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 public class AuthorDto {
 
     private Long id;
     private String about;
+    @NotNull
+    private String name;
+    private String email;
 
     public Author toEntity() {
         var author = new Author();
         author.setId(id);
         author.setAbout(about);
+        author.setName(name);
+        author.setEmail(email);
         return author;
     }
 }
