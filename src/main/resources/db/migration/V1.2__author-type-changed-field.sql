@@ -5,4 +5,4 @@
 
 ALTER TABLE public.author ALTER COLUMN about TYPE text;
 
-
+ALTER TABLE public.author ALTER COLUMN name SET NOT NULL;

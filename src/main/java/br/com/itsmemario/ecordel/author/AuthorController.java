@@ -43,8 +43,8 @@ public class AuthorController {
     }
 
     @PostMapping
-    public ResponseEntity<Author> newAuthor(@RequestBody @Valid Author author, UriComponentsBuilder uriBuilder){
-        service.save(author);
+    public ResponseEntity<Author> newAuthor(@RequestBody @Valid AuthorDto author, UriComponentsBuilder uriBuilder){
+        service.save(author.toEntity());
         URI uri = uriBuilder.path("/authors/{id}").buildAndExpand(author.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
