@@ -17,10 +17,7 @@
 
 package br.com.itsmemario.ecordel.author;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Author implements AuthorView {
@@ -28,11 +25,21 @@ public class Author implements AuthorView {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column( nullable = false )
     private String name;
     private String about;
     private String email;
 
-    public static Author of( Long id ) {
+    /**
+     * Default constructor used by JPA
+     */
+    Author() {}
+
+    public Author(String name) {
+        this.name = name;
+    }
+
+    public static Author of(Long id ) {
         var author = new Author();
         author.id = id;
         return author;

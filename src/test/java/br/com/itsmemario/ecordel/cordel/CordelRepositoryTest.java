@@ -103,7 +103,7 @@ public class CordelRepositoryTest extends AbstractIntegrationTest {
     }
 
     Long insertNewCordel(boolean published) {
-        var author = authorRepository.save(new Author());
+        var author = authorRepository.save(new Author("name"));
         var cordel = newCordel(published, author);
         return repository.save(cordel).getId();
     }

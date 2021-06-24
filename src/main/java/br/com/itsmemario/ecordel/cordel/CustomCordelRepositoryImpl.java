@@ -94,8 +94,7 @@ class CustomCordelRepositoryImpl implements CustomCordelRepository {
     }
 
     private Author buildAuthor(Object name, Object email) {
-        Author author = new Author();
-        author.setName(String.valueOf(name));
+        Author author = new Author(String.valueOf(name));
         author.setEmail(String.valueOf(email));
         return author;
     }
