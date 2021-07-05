@@ -37,4 +37,6 @@ public class JwtToken {
 
     private String secretKey;
 
+    private boolean active;
+
 }
