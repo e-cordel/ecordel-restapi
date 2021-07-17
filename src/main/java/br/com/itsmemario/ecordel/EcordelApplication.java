@@ -17,18 +17,30 @@
 
 package br.com.itsmemario.ecordel;
 
+import br.com.itsmemario.ecordel.security.jwt.JwtToken;
+import br.com.itsmemario.ecordel.security.jwt.JwtTokenService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
 @SpringBootApplication
 @EnableSpringDataWebSupport
 @EnableCaching
+@RequiredArgsConstructor
 public class EcordelApplication {
+
+	private final JwtTokenService jwtTokenService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(EcordelApplication.class, args);
+	}
+
+	@Bean
+	public JwtToken jwtToken() {
+		return jwtTokenService.findTop();
 	}
 
 }
