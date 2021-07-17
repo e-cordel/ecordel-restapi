@@ -1,5 +1,7 @@
 app.xilogravura.path: "./"
 
+server.servlet.context-path: "/api/v1"
+
 ftp:
   server: ftp.turismonocariri.com.br
   port: 21

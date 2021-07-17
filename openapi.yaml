@@ -9,9 +9,39 @@ info:
     email: contato@ecordel.com.br
 
 servers:
-  - url: https://ecordel-restapi.herokuapp.com/
+  - url: https://ecordel-restapi.herokuapp.com/api/v1
 
 paths:
+  /auth:
+    post:
+      summary: Login and get token
+      requestBody:
+        $ref: '#/components/requestBodies/login'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        401:
+          description: Unauthorized
+      tags:
+        - Authentication
+  /authors:
+    post:
+      summary: "Create a new author"
+      requestBody:
+        $ref: '#/components/requestBodies/author'
+      responses:
+        201:
+          description: New author created
+        403:
+          description: Forbidden
+      security:
+        - bearerAuth: []
+      tags:
+        - Author
   /cordels:
     get:
       summary: "Retrieve all cordels by pages"
@@ -121,27 +151,60 @@ paths:
         - bearerAuth: []
       tags:
         - Cordel
-  /auth:
-    post:
-      summary: Login and get token
+  /cordels/{id}/xilogravura:
+    put:
+      summary: Associate a xilogravura to a cordel
+      parameters:
+        - name: "id"
+          in: "path"
+          schema:
+            type : integer
+          description: "Cordel identification number"
+          required: true
+      requestBody:
+        $ref: '#/components/requestBodies/xilogravura'
       responses:
         200:
           description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Token'
+        403:
+          description: Forbidden
+      security:
+        - bearerAuth: []
       tags:
-        - Authentication
-
+        - Cordel
 components:
   requestBodies:
+    author:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Author'
     cordel:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Cordel'
-
+    login:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+    xilogravura:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              description:
+                type: string
+              file:
+                type: string
+                format: binary
   schemas:
     ReponsePage:
       type: object
@@ -197,6 +260,7 @@ components:
         name:
           type: string
           description: author's name
+          minLength: 3
         email:
           type: string
           description: author's email
@@ -242,6 +306,17 @@ components:
         token:
           type: string
         authenticationMethod:
+          type: string
+        expiresAt:
+          type: integer
+    Xilogravura:
+      type: object
+      properties:
+        id:
+          type: integer
+        description:
+          type: string
+        url:
           type: string
 
   securitySchemes:
