@@ -55,4 +55,11 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).extracting("token").isNotNull();
     }
+
+    @Test
+    void failedAuthenticationMustReturn401() {
+        var url =  "http://localhost:" + port + "/auth";
+        ResponseEntity<TokenDto> response = restTemplate.postForEntity(url, new LoginData("", ""), TokenDto.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    }
 }
