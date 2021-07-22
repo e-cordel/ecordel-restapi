@@ -1,5 +1,7 @@
 app.xilogravura.path: "./"
 
+server.servlet.context-path: "/api/v1"
+
 ftp:
   server: ftp.turismonocariri.com.br
   port: 21
@@ -17,3 +19,6 @@ spring:
       hibernate.jdbc.lob.non_contextual_creation: true
     hibernate:
       ddl-auto: none
+
+#  flyway:
+#    baselineOnMigrate: true

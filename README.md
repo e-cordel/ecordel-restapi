@@ -22,7 +22,7 @@ To up postgres in a docker local
 
     docker-compose up -d
 
-Add in VMArguments to run in a IDE
+Add in VMArguments to run in an IDE
 
     -Dspring.profiles.active=local
 

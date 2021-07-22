@@ -5,14 +5,43 @@ info:
   version: "1.0.0"
   title: "E-cordel API"
   contact:
-    name: Mário Sousa
-    url: http://ecordel.com.br
-    email: super.mario.santos.sousa@gmail.com
+    url: https://ecordel.com.br
+    email: contato@ecordel.com.br
 
 servers:
-  - url: https://ecordel-restapi.herokuapp.com/
+  - url: https://ecordel-restapi.herokuapp.com/api/v1
 
 paths:
+  /auth:
+    post:
+      summary: Login and get token
+      requestBody:
+        $ref: '#/components/requestBodies/login'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        401:
+          description: Unauthorized
+      tags:
+        - Authentication
+  /authors:
+    post:
+      summary: "Create a new author"
+      requestBody:
+        $ref: '#/components/requestBodies/author'
+      responses:
+        201:
+          description: New author created
+        403:
+          description: Forbidden
+      security:
+        - bearerAuth: []
+      tags:
+        - Author
   /cordels:
     get:
       summary: "Retrieve all cordels by pages"
@@ -65,7 +94,7 @@ paths:
         - Cordel
   /cordels/{id}:
     get:
-      summary: "Find and specific cordel"
+      summary: "Get a specific cordel with all content"
       parameters:
         - name: "id"
           in: "path"
@@ -79,7 +108,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Cordel'
+                $ref: '#/components/schemas/FullCordel'
         404:
           description: "Not found"
       tags:
@@ -122,28 +151,145 @@ paths:
         - bearerAuth: []
       tags:
         - Cordel
-  /auth:
-    post:
-      summary: Login and get token
+  /cordels/{id}/xilogravura:
+    put:
+      summary: Associate a xilogravura to a cordel
+      parameters:
+        - name: "id"
+          in: "path"
+          schema:
+            type : integer
+          description: "Cordel identification number"
+          required: true
+      requestBody:
+        $ref: '#/components/requestBodies/xilogravura'
       responses:
         200:
           description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Token'
+        403:
+          description: Forbidden
+      security:
+        - bearerAuth: []
       tags:
-        - Authentication
-
+        - Cordel
 components:
   requestBodies:
+    author:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Author'
     cordel:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Cordel'
-
+    login:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+    xilogravura:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              description:
+                type: string
+              file:
+                type: string
+                format: binary
   schemas:
+    Author:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: author's id
+        name:
+          type: string
+          description: author's name
+          minLength: 3
+        email:
+          type: string
+          description: author's email
+        about:
+          type: string
+          description: small text about the author
+    Cordel:
+      type: object
+      description: Cordel data with content. For operations like POST and PUT the inner objects only need the id
+      properties:
+        author:
+          type: object
+          properties:
+            id:
+              type: integer
+        title:
+          type: string
+          description: cordel title
+        description:
+          type: string
+          description: cordel's description
+        content:
+          type: string
+          description: cordel text
+        tags:
+          type: array
+          items:
+            type: string
+    CordelSummary:
+      type: object
+      description: Cordel main data used for endpoints that return many objects. This item does not include the content.
+      properties:
+        id:
+          type: integer
+          description: cordel id
+        title:
+          type: string
+          description: cordel title
+        authorName:
+          type: string
+        xilogravuraUrl:
+          type: string
+          description: image url
+    FullCordel:
+      type: object
+      description: Cordel data with content. For operations like POST and PUT the inner objects only need the id
+      properties:
+        id:
+          type: integer
+          description: cordel id
+        author:
+          $ref: '#/components/schemas/Author'
+        title:
+          type: string
+          description: cordel title
+        description:
+          type: string
+          description: cordel's description
+        content:
+          type: string
+          description: cordel text
+        xilogravura:
+          $ref: '#/components/schemas/Xilogravura'
+        tags:
+          type: array
+          items:
+            type: string
+    Page:
+      type: object
+      properties:
+        pageSize:
+          type: integer
+        pageNumber:
+          type: integer
     ReponsePage:
       type: object
       properties:
@@ -152,7 +298,6 @@ components:
           items:
             $ref: '#/components/schemas/CordelSummary'
         pageable:
-          type: object
           $ref: '#/components/schemas/Page'
         totalPages:
           type: integer
@@ -177,72 +322,23 @@ components:
         empty:
           type: boolean
           description: indicates if the page is empty
-    CordelSummary:
-      type: object
-      description: Cordel main data used for endpoints that return many objects. This item does not include the content.
-      properties:
-        id:
-          type: integer
-          description: cordel id
-        title:
-          type: string
-          description: cordel title
-        authorName:
-          type: string
-        xilogravuraUrl:
-          type: string
-          description: image url
-    Author:
-      type: object
-      properties:
-        name:
-          type: string
-          description: author's name
-        email:
-          type: string
-          description: author's email
-        about:
-          type: string
-          description: small text about the author
-    Cordel:
-      type: object
-      description: Cordel data with content.
-      properties:
-        id:
-          type: integer
-          description: cordel id
-        author:
-          type: string
-          description: author's name
-        title:
-          type: string
-          description: cordel title
-        description:
-          type: string
-          description: author's name
-        content:
-          type: string
-          description: cordel text
-        xilogravura:
-          type: string
-          description: image url
-        tags:
-          type: array
-          items:
-            type: string
-    Page:
-      type: object
-      properties:
-        pageSize:
-          type: integer
-        pageNumber:
-          type: integer
     Token:
       type: object
       properties:
         token:
           type: string
         authenticationMethod:
+          type: string
+        expiresAt:
+          type: integer
+    Xilogravura:
+      type: object
+      properties:
+        id:
+          type: integer
+        description:
+          type: string
+        url:
           type: string
 
   securitySchemes:
