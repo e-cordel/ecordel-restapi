@@ -240,6 +240,8 @@ components:
         content:
           type: string
           description: cordel text
+        published:
+          type: boolean
         tags:
           type: array
           items:

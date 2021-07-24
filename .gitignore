@@ -33,3 +33,6 @@ build/
 
 ##opeapi
 .openapi-generator
+
+#generated documentation
+src/main/resources/templates/index.html
