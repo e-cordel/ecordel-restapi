@@ -22,6 +22,7 @@ import br.com.itsmemario.ecordel.xilogravura.Xilogravura;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
@@ -104,7 +105,7 @@ public class Cordel implements CordelView {
 	}
 
 	public Set<String> getTags() {
-		return tags;
+		return Collections.unmodifiableSet(tags);
 	}
 
 	public void setTags(Set<String> tags) {

@@ -45,19 +45,20 @@ public class CordelController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Cordel> getCordel(@PathVariable Long id) {
+    public ResponseEntity<CordelDto> getCordel(@PathVariable Long id) {
         logger.info("request received get cordel by id: {}", id);
 
         Optional<Cordel> cordel = service.findById(id);
         if (cordel.isPresent()) {
-            return ResponseEntity.ok(cordel.get());
+            CordelDto body = CordelDto.of(cordel.get());
+            return ResponseEntity.ok(body);
         } else {
             logger.info("cordel with id {} not fond", id);
             return ResponseEntity.notFound().build();
         }
     }
 
-    @GetMapping
+    @GetMapping("summaries")
     public Page<CordelSummary> getCordels(@RequestParam(required = false) String title,
                                           @RequestParam(defaultValue = "true") boolean published,
                                           Pageable pageable) {
@@ -76,14 +77,14 @@ public class CordelController {
     }
 
     @PutMapping("{id}/xilogravura")
-    public ResponseEntity<Cordel> putXilogravura(@PathVariable Long id, Xilogravura xilogravura, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<CordelDto> putXilogravura(@PathVariable Long id, Xilogravura xilogravura, @RequestParam("file") MultipartFile file) {
         logger.info("request received, update xilogravura for cordel: {}", id);
         Cordel cordel = service.updateXilogravura(id, xilogravura, file);
-        return ResponseEntity.ok(cordel);
+        return ResponseEntity.ok(CordelDto.of(cordel));
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Cordel> update(@RequestBody @Valid CordelDto dto, @PathVariable Long id) {
+    public ResponseEntity<CordelDto> update(@RequestBody @Valid CordelDto dto, @PathVariable Long id) {
         logger.info("request received update cordel with id: {}", id);
 
         Optional<Cordel> existingCordel = service.findById(id);
@@ -93,8 +94,8 @@ public class CordelController {
 
         var cordel = dto.toEntity();
         cordel.setId(id);
-
-        return ResponseEntity.ok(service.save(cordel));
+        Cordel updatedCordel = service.save(cordel);
+        return ResponseEntity.ok(CordelDto.of(updatedCordel));
     }
 
 }
