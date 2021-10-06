@@ -24,6 +24,7 @@ import java.util.List;
 
 interface CustomCordelRepository {
 
+//    TODO remove? use CordelSummary
     Page<CordelView> findByTags(List<String> tags, Pageable pageable);
 
     Page<CordelSummary> findPublishedByTitleLike(boolean published, String title, Pageable pageable);

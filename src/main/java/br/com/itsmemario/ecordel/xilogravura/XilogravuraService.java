@@ -30,7 +30,6 @@ import java.util.UUID;
 public class XilogravuraService {
 
     private static final String JPG = ".jpg";
-    private final String XILOGRAVURA_NAME_PATTERN = "http://xilos.ecordel.com.br/{file}";
 
     private FileManager fileManager;
 
