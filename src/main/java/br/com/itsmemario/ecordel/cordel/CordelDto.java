@@ -53,9 +53,7 @@ public class CordelDto {
         dto.setContent(cordel.getContent());
         dto.setDescription(cordel.getDescription());
         dto.setTitle(cordel.getTitle());
-        if(cordel.getXilogravura()!=null) {
-            dto.setXilogravuraUrl(cordel.getXilogravura().getUrl());
-        }
+        dto.setXilogravuraUrl(cordel.getXilogravuraUrl());
         return dto;
     }
 
@@ -68,7 +66,7 @@ public class CordelDto {
         cordel.setContent( content );
         cordel.setPublished( published );
         cordel.setTags( tags );
-//        TODO create xilogravura from url
+        cordel.setXilogravuraUrl( xilogravuraUrl );
         return cordel;
     }
 

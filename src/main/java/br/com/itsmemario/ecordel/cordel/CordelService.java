@@ -17,7 +17,6 @@
 
 package br.com.itsmemario.ecordel.cordel;
 
-import br.com.itsmemario.ecordel.xilogravura.Xilogravura;
 import br.com.itsmemario.ecordel.xilogravura.XilogravuraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,10 +40,6 @@ public class CordelService {
 		this.xilogravuraService = xilogravuraService;
 	}
 
-	public Page<CordelView> getCordels(Pageable pageable) {
-		return repository.findAllProjectedBy(pageable);
-	}
-
 	public Cordel save(Cordel cordel) {
 		return repository.save(cordel);
 	}
@@ -61,13 +56,13 @@ public class CordelService {
 		return repository.findPublishedByTitleLike(published, title, pageable);
 	}
 
-	public Cordel updateXilogravura(Long cordelId, Xilogravura xilogravura, MultipartFile file) {
+	public Cordel updateXilogravura(Long cordelId, MultipartFile file) {
 		Optional<Cordel> byId = findById(cordelId);
 
 		if(byId.isPresent()) {
 			Cordel cordel = byId.get();
-			Xilogravura xilogravuraWithFile = xilogravuraService.createXilogravuraWithFile(xilogravura, file);
-			cordel.setXilogravura(xilogravuraWithFile);
+			String xilogravuraUrl = xilogravuraService.createXilogravuraWithFile(file);
+			cordel.setXilogravuraUrl( xilogravuraUrl );
 			return save(cordel);
 		}else{
 			throw new CordelNotFoundException();

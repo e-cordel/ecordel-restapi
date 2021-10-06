@@ -19,32 +19,14 @@ CREATE SEQUENCE public.author_id_seq
 
 ALTER SEQUENCE public.author_id_seq OWNED BY public.author.id;
 
-CREATE TABLE public.xilogravura (
-    id bigint primary key,
-    description character varying(255),
-    url character varying(255),
-    xilografo_id bigint,
-    FOREIGN KEY (xilografo_id) REFERENCES author (id)
-);
-
-CREATE SEQUENCE public.xilogravura_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-ALTER SEQUENCE public.xilogravura_id_seq OWNED BY public.xilogravura.id;
-
 CREATE TABLE public.cordel (
     id bigint primary key,
     author_id bigint,
     content text,
     description character varying(255),
     title character varying(255),
-    xilogravura_id bigint,
-    FOREIGN KEY (author_id) REFERENCES author (id),
-    FOREIGN KEY (xilogravura_id) REFERENCES xilogravura (id)
+    xilogravura_url character varying(255),
+    FOREIGN KEY (author_id) REFERENCES author (id)
 );
 
 CREATE SEQUENCE public.cordel_id_seq
@@ -100,8 +82,6 @@ ALTER SEQUENCE public.cordel_authority_id_seq OWNED BY public.cordel_authority.i
 ALTER TABLE ONLY public.cordel ALTER COLUMN id SET DEFAULT nextval('public.cordel_id_seq'::regclass);
 
 ALTER TABLE ONLY public.author ALTER COLUMN id SET DEFAULT nextval('public.author_id_seq'::regclass);
-
-ALTER TABLE ONLY public.xilogravura ALTER COLUMN id SET DEFAULT nextval('public.xilogravura_id_seq'::regclass);
 
 ALTER TABLE ONLY public.cordel_user ALTER COLUMN id SET DEFAULT nextval('public.cordel_user_id_seq'::regclass);
 

@@ -17,7 +17,6 @@
 
 package br.com.itsmemario.ecordel.cordel;
 
-import br.com.itsmemario.ecordel.xilogravura.Xilogravura;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,9 +76,9 @@ public class CordelController {
     }
 
     @PutMapping("{id}/xilogravura")
-    public ResponseEntity<CordelDto> putXilogravura(@PathVariable Long id, Xilogravura xilogravura, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<CordelDto> putXilogravura(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
         logger.info("request received, update xilogravura for cordel: {}", id);
-        Cordel cordel = service.updateXilogravura(id, xilogravura, file);
+        Cordel cordel = service.updateXilogravura(id, file);
         return ResponseEntity.ok(CordelDto.of(cordel));
     }
 

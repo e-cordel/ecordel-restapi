@@ -2,7 +2,6 @@ package br.com.itsmemario.ecordel.xilogravura;
 
 import br.com.itsmemario.ecordel.AbstractIntegrationTest;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,9 +28,6 @@ public class XilogravuraServiceTest extends AbstractIntegrationTest {
     @Autowired
     XilogravuraService service;
 
-    @Autowired
-    XilogravuraRepository repository;
-
     static final String FTP_HOME = "/ftp";
     static final String USER = "user";
     static final String PASSWORD = "pass";
@@ -57,23 +53,14 @@ public class XilogravuraServiceTest extends AbstractIntegrationTest {
         fakeFtpServer.stop();
     }
 
-    @AfterEach
-    public void tearDown() throws Exception {
-        repository.deleteAll();
-    }
-
     @Test
     public void createXilogravuraWithFile() {
-        Xilogravura xilogravura = new Xilogravura();
-        xilogravura.setDescription("Description");
-
         MockMultipartFile file = new MockMultipartFile("file.txt", "content".getBytes());
 
-        Xilogravura xilogravuraWithFile = service.createXilogravuraWithFile(xilogravura, file);
-        System.out.println(xilogravuraWithFile.getUrl());
+        String xilogravuraUrl = service.createXilogravuraWithFile(file);
+        System.out.println(xilogravuraUrl);
 
-        assertThat(xilogravuraWithFile.getUrl()).isNotEmpty();
-        assertThat(xilogravuraWithFile.getId()).isGreaterThan(0);
-        assertThat(repository.findById(1l)).isNotEmpty();
+        assertThat(xilogravuraUrl).isNotEmpty();
+        //TODO check if file exists
     }
 }
