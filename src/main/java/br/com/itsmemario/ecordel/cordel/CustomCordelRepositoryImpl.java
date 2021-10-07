@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 
 @Repository
 @Transactional(readOnly = true)
+// TODO remove?
 class CustomCordelRepositoryImpl implements CustomCordelRepository {
 
     private static final int MINIMUM_SIZE = 3;

@@ -30,6 +30,8 @@ import java.util.Optional;
 @Service
 public class CordelService {
 
+	private static final int MINIMUM_SIZE = 3;
+
 	private CordelRepository repository;
 	private XilogravuraService xilogravuraService;
 
@@ -53,7 +55,11 @@ public class CordelService {
 	}
 
 	public Page<CordelSummary> findPublishedByTitle(boolean published, String title, Pageable pageable) {
-		return repository.findPublishedByTitleLike(published, title, pageable);
+		if (isAValidString(title)) {
+			return repository.findAllByPublishedAndTitleLike(published, String.format("%%%s%%", title), pageable);
+		}
+
+		return repository.findAllByPublished(published, pageable);
 	}
 
 	public Cordel updateXilogravura(Long cordelId, MultipartFile file) {
@@ -67,5 +73,9 @@ public class CordelService {
 		}else{
 			throw new CordelNotFoundException();
 		}
+	}
+
+	private boolean isAValidString(String title) {
+		return title != null && title.length() >= MINIMUM_SIZE;
 	}
 }

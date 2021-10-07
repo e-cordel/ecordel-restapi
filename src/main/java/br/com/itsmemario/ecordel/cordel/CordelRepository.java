@@ -20,9 +20,18 @@ package br.com.itsmemario.ecordel.cordel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 interface CordelRepository extends CustomCordelRepository, JpaRepository<Cordel, Long>{
 
     Page<CordelView> findAllProjectedBy(Pageable pageable);
+
+    @Query("SELECT new br.com.itsmemario.ecordel.cordel.CordelSummary(c.id, c.title, c.xilogravuraUrl, a.name) " +
+            "FROM Cordel c JOIN c.author a WHERE c.published = :published")
+    Page<CordelSummary> findAllByPublished(boolean published, Pageable pageable);
+
+    @Query("SELECT new br.com.itsmemario.ecordel.cordel.CordelSummary(c.id, c.title, c.xilogravuraUrl, a.name) " +
+            "FROM Cordel c JOIN c.author a WHERE c.published = :published and lower(c.title) LIKE lower( :title ) ")
+    Page<CordelSummary> findAllByPublishedAndTitleLike(boolean published, String title, Pageable pageable);
 
 }

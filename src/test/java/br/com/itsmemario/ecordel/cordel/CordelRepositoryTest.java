@@ -75,11 +75,11 @@ public class CordelRepositoryTest extends AbstractIntegrationTest {
     @Test
     void findByPublishedTitleLike() {
         insertNewCordel(true);
-        Page<CordelSummary> page = repository.findPublishedByTitleLike(true, "tit", PageRequest.of(0,10));
-        page.getContent().forEach(cordel -> System.out.println(cordel.getTitle()));
+        Page<CordelSummary> page = repository.findAllByPublishedAndTitleLike(true, "%tit%", PageRequest.of(0,10));
+        assertThat(page.getContent().get(0).getAuthorName()).isEqualTo("name");
         assertThat(page).hasSize(1);
 
-        page = repository.findPublishedByTitleLike(true, "aaa", PageRequest.of(0,10));
+        page = repository.findAllByPublishedAndTitleLike(true, "aaa", PageRequest.of(0,10));
         assertThat(page).hasSize(0);
     }
 

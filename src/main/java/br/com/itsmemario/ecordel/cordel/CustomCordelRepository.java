@@ -27,5 +27,6 @@ interface CustomCordelRepository {
 //    TODO remove? use CordelSummary
     Page<CordelView> findByTags(List<String> tags, Pageable pageable);
 
+    // TODO remove using Query in CordelRepository
     Page<CordelSummary> findPublishedByTitleLike(boolean published, String title, Pageable pageable);
 }
