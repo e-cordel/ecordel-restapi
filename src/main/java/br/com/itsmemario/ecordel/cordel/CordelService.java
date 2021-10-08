@@ -24,7 +24,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -44,10 +43,6 @@ public class CordelService {
 
 	public Cordel save(Cordel cordel) {
 		return repository.save(cordel);
-	}
-
-	public Page<CordelView> findByTags(List<String> tags, Pageable pageable){
-		return repository.findByTags(tags, pageable);
 	}
 
 	public Optional<Cordel> findById(Long id) {

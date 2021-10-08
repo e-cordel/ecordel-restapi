@@ -22,7 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-interface CordelRepository extends CustomCordelRepository, JpaRepository<Cordel, Long>{
+interface CordelRepository extends JpaRepository<Cordel, Long>{
 
     Page<CordelView> findAllProjectedBy(Pageable pageable);
 
