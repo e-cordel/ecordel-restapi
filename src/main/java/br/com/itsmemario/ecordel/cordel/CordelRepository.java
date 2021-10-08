@@ -24,8 +24,6 @@ import org.springframework.data.jpa.repository.Query;
 
 interface CordelRepository extends JpaRepository<Cordel, Long>{
 
-    Page<CordelView> findAllProjectedBy(Pageable pageable);
-
     @Query("SELECT new br.com.itsmemario.ecordel.cordel.CordelSummary(c.id, c.title, c.xilogravuraUrl, a.name) " +
             "FROM Cordel c JOIN c.author a WHERE c.published = :published")
     Page<CordelSummary> findAllByPublished(boolean published, Pageable pageable);

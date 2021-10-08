@@ -56,14 +56,6 @@ public class CordelRepositoryTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void findAllProjectedBy() {
-        insertNewCordel(true);
-        Page<CordelView> cordelSummaries = repository.findAllProjectedBy(Pageable.unpaged());
-        assertThat(cordelSummaries).isNotEmpty();
-        assertThat(cordelSummaries.getContent().get(0)).isInstanceOf(CordelView.class);
-    }
-
-    @Test
     void findByPublishedTitleLike() {
         insertNewCordel(true);
         Page<CordelSummary> page = repository.findAllByPublishedAndTitleLike(true, "%tit%", PageRequest.of(0,10));

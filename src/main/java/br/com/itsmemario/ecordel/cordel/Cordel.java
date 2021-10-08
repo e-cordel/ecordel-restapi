@@ -26,7 +26,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-public class Cordel implements CordelView {
+public class Cordel {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
