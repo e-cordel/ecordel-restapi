@@ -44,7 +44,7 @@ paths:
         - Author
   /cordels/summaries:
     get:
-      summary: "Retrieve all cordels by pages"
+      summary: "Retrieve all summaries by pages"
       parameters:
         - name: page
           in: query
@@ -95,7 +95,7 @@ paths:
         - Cordel
   /cordels/{id}:
     get:
-      summary: "Get a specific cordel with all content"
+      summary: "Get a cordel with full content"
       parameters:
         - name: "id"
           in: "path"

@@ -40,17 +40,15 @@ public class XilogravuraService {
 
     public String createXilogravuraWithFile(MultipartFile file){
         try {
-//            todo move this code to file manager?
-            String fileName = generateRandomFileName();
+            var fileName = generateRandomFileName();
             return fileManager.saveFile(file.getBytes(), fileName);
         } catch (IOException e) {
-            e.printStackTrace();
             throw new FileProcessException("Error while saving file", e);
         }
     }
 
     private String generateRandomFileName() {
-        return UUID.randomUUID().toString() + JPG;
+        return UUID.randomUUID() + JPG;
     }
 
 }

@@ -26,6 +26,14 @@ Add in VMArguments to run in an IDE
 
     -Dspring.profiles.active=local
 
+### Development data
+
+You can use the file [data.sql](src/test/resources/db/data/data.sql) to insert data to your local db.
+
+### Cleaning DB
+
+All data volume is mapped to directory `tmp`. You can delete this folder to get rid of development data.
+
 ## How to run
 
 You can run with maven
@@ -44,7 +52,7 @@ tip: --rm parameter will exclude container image after execution and it cause da
     
 ### Writing Tests
 
-If you wanna use db connection on your test you must extend the class `AbstractIntegrationTest`. This class will run the docker container and configure the spring datasource. 
+If you want to use db connection on your test you must extend the class `AbstractIntegrationTest`. This class will run the docker container and configure the spring datasource. 
 
 ## How to contribute
 
