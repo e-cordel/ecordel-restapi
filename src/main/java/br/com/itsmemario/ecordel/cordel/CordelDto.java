@@ -41,6 +41,21 @@ public class CordelDto {
     private String content;
     private boolean published;
     private Set<String> tags;
+    private String xilogravuraUrl;
+
+    public static CordelDto of( Cordel cordel ){
+        var dto = new CordelDto();
+        var authorDto = AuthorDto.of(cordel.getAuthor());
+        dto.setAuthor(authorDto);
+        dto.setTags(cordel.getTags());
+        dto.setPublished(cordel.isPublished());
+        dto.setId(cordel.getId());
+        dto.setContent(cordel.getContent());
+        dto.setDescription(cordel.getDescription());
+        dto.setTitle(cordel.getTitle());
+        dto.setXilogravuraUrl(cordel.getXilogravuraUrl());
+        return dto;
+    }
 
     public Cordel toEntity() {
         var cordel = new Cordel();
@@ -51,6 +66,7 @@ public class CordelDto {
         cordel.setContent( content );
         cordel.setPublished( published );
         cordel.setTags( tags );
+        cordel.setXilogravuraUrl( xilogravuraUrl );
         return cordel;
     }
 

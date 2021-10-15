@@ -15,6 +15,6 @@ jobs:
         uses: Ilshidur/action-discord@0.3.0
         with:
           args: |
-            Nova contribuição recebida. \(>_<)/
+            Nova contribuição recebida. \\(>_<)/
             ${{ github.event.pull_request.title }}
             ${{ github.event.pull_request.html_url}}

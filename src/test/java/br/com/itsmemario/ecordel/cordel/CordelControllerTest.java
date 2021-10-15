@@ -85,7 +85,7 @@ class CordelControllerTest extends AbstractIntegrationTest {
     void ifPublishedParamIsFalse_theOnlyDraftCordelsMustBeRetrieved() {
         insertCordel(false);
 
-        ResponseEntity<Map> response = restTemplate.getForEntity(getBaseUrl()+"?published=false", Map.class);
+        ResponseEntity<Map> response = restTemplate.getForEntity(getBaseUrl()+"/summaries?published=false", Map.class);
         assertThat(response.getBody()).containsEntry("totalElements",1);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
@@ -94,7 +94,7 @@ class CordelControllerTest extends AbstractIntegrationTest {
     void ifPublishedParamIsNotInformed_itMustBeConsideredTrue() {
         insertCordel(true);
 
-        ResponseEntity<Map> response = restTemplate.getForEntity(getBaseUrl(), Map.class);
+        ResponseEntity<Map> response = restTemplate.getForEntity(getBaseUrl()+"/summaries", Map.class);
         assertThat(response.getBody()).containsEntry("totalElements",1);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }

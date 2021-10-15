@@ -17,7 +17,6 @@
 
 package br.com.itsmemario.ecordel.cordel;
 
-import br.com.itsmemario.ecordel.xilogravura.Xilogravura;
 import br.com.itsmemario.ecordel.xilogravura.XilogravuraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,11 +24,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CordelService {
+
+	private static final int MINIMUM_SIZE = 3;
 
 	private CordelRepository repository;
 	private XilogravuraService xilogravuraService;
@@ -41,16 +41,8 @@ public class CordelService {
 		this.xilogravuraService = xilogravuraService;
 	}
 
-	public Page<CordelView> getCordels(Pageable pageable) {
-		return repository.findAllProjectedBy(pageable);
-	}
-
 	public Cordel save(Cordel cordel) {
 		return repository.save(cordel);
-	}
-
-	public Page<CordelView> findByTags(List<String> tags, Pageable pageable){
-		return repository.findByTags(tags, pageable);
 	}
 
 	public Optional<Cordel> findById(Long id) {
@@ -58,19 +50,27 @@ public class CordelService {
 	}
 
 	public Page<CordelSummary> findPublishedByTitle(boolean published, String title, Pageable pageable) {
-		return repository.findPublishedByTitleLike(published, title, pageable);
+		if (isAValidString(title)) {
+			return repository.findAllByPublishedAndTitleLike(published, String.format("%%%s%%", title), pageable);
+		}
+
+		return repository.findAllByPublished(published, pageable);
 	}
 
-	public Cordel updateXilogravura(Long cordelId, Xilogravura xilogravura, MultipartFile file) {
+	public Cordel updateXilogravura(Long cordelId, MultipartFile file) {
 		Optional<Cordel> byId = findById(cordelId);
 
 		if(byId.isPresent()) {
 			Cordel cordel = byId.get();
-			Xilogravura xilogravuraWithFile = xilogravuraService.createXilogravuraWithFile(xilogravura, file);
-			cordel.setXilogravura(xilogravuraWithFile);
+			String xilogravuraUrl = xilogravuraService.createXilogravuraWithFile(file);
+			cordel.setXilogravuraUrl( xilogravuraUrl );
 			return save(cordel);
 		}else{
 			throw new CordelNotFoundException();
 		}
+	}
+
+	private boolean isAValidString(String title) {
+		return title != null && title.length() >= MINIMUM_SIZE;
 	}
 }

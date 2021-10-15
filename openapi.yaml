@@ -42,9 +42,9 @@ paths:
         - bearerAuth: []
       tags:
         - Author
-  /cordels:
+  /cordels/summaries:
     get:
-      summary: "Retrieve all cordels by pages"
+      summary: "Retrieve all summaries by pages"
       parameters:
         - name: page
           in: query
@@ -79,6 +79,7 @@ paths:
                 $ref: '#/components/schemas/ReponsePage'
       tags:
         - Cordel
+  /cordels:
     post:
       summary: "Create a new cordel"
       requestBody:
@@ -94,7 +95,7 @@ paths:
         - Cordel
   /cordels/{id}:
     get:
-      summary: "Get a specific cordel with all content"
+      summary: "Get a cordel with full content"
       parameters:
         - name: "id"
           in: "path"
@@ -108,7 +109,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FullCordel'
+                $ref: '#/components/schemas/Cordel'
         404:
           description: "Not found"
       tags:
@@ -240,6 +241,8 @@ components:
         content:
           type: string
           description: cordel text
+        xilogravuraUrl:
+          type: string
         published:
           type: boolean
         tags:
@@ -261,30 +264,6 @@ components:
         xilogravuraUrl:
           type: string
           description: image url
-    FullCordel:
-      type: object
-      description: Cordel data with content. For operations like POST and PUT the inner objects only need the id
-      properties:
-        id:
-          type: integer
-          description: cordel id
-        author:
-          $ref: '#/components/schemas/Author'
-        title:
-          type: string
-          description: cordel title
-        description:
-          type: string
-          description: cordel's description
-        content:
-          type: string
-          description: cordel text
-        xilogravura:
-          $ref: '#/components/schemas/Xilogravura'
-        tags:
-          type: array
-          items:
-            type: string
     Page:
       type: object
       properties:
@@ -333,16 +312,6 @@ components:
           type: string
         expiresAt:
           type: integer
-    Xilogravura:
-      type: object
-      properties:
-        id:
-          type: integer
-        description:
-          type: string
-        url:
-          type: string
-
   securitySchemes:
     bearerAuth:
       type: http

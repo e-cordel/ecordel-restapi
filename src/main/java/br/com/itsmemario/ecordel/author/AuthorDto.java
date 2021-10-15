@@ -30,6 +30,15 @@ public class AuthorDto {
     private String name;
     private String email;
 
+    public static AuthorDto of(Author author) {
+        var dto = new AuthorDto();
+        dto.setName(author.getName());
+        dto.setAbout(author.getAbout());
+        dto.setEmail(author.getEmail());
+        dto.setId(author.getId());
+        return dto;
+    }
+
     public Author toEntity() {
         var author = new Author();
         author.setId(id);

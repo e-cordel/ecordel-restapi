@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -57,29 +56,13 @@ public class CordelRepositoryTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void findAllProjectedBy() {
-        insertNewCordel(true);
-        Page<CordelView> cordelSummaries = repository.findAllProjectedBy(Pageable.unpaged());
-        assertThat(cordelSummaries).isNotEmpty();
-        assertThat(cordelSummaries.getContent().get(0)).isInstanceOf(CordelView.class);
-    }
-
-    @Test
-    void findByTagsProjectedBy() {
-        insertNewCordel(true);
-        Page<CordelView> cordels = repository.findByTags(Arrays.asList("tag1", "tag2"), PageRequest.of(0,1));
-        assertThat(cordels).hasSize(1);
-        assertThat(cordels.getContent().get(0)).extracting(CordelView::getDescription).isEqualTo("description");
-    }
-
-    @Test
     void findByPublishedTitleLike() {
         insertNewCordel(true);
-        Page<CordelSummary> page = repository.findPublishedByTitleLike(true, "tit", PageRequest.of(0,10));
-        page.getContent().forEach(cordel -> System.out.println(cordel.getTitle()));
+        Page<CordelSummary> page = repository.findAllByPublishedAndTitleLike(true, "%tit%", PageRequest.of(0,10));
+        assertThat(page.getContent().get(0).getAuthorName()).isEqualTo("name");
         assertThat(page).hasSize(1);
 
-        page = repository.findPublishedByTitleLike(true, "aaa", PageRequest.of(0,10));
+        page = repository.findAllByPublishedAndTitleLike(true, "%aaa%", PageRequest.of(0,10));
         assertThat(page).hasSize(0);
     }
 
@@ -87,7 +70,7 @@ public class CordelRepositoryTest extends AbstractIntegrationTest {
     void testPaginationResultsByPublishedTitle() throws Exception {
         IntStream.range(0,5).forEach( i -> insertNewCordel(true));
 
-        Page<CordelSummary> page = repository.findPublishedByTitleLike(true, "tit", PageRequest.of(1,3));
+        Page<CordelSummary> page = repository.findAllByPublishedAndTitleLike(true, "%tit%", PageRequest.of(1,3));
         page.getContent().forEach(cordel -> System.out.println(cordel.getTitle()));
         assertThat(page).hasSize(2);
     }
@@ -95,10 +78,10 @@ public class CordelRepositoryTest extends AbstractIntegrationTest {
     @Test
     void findNotPublishedWorkTest() {
         insertNewCordel(false);
-        Page<CordelSummary> page = repository.findPublishedByTitleLike(true, "tit", PageRequest.of(0, 10));
+        Page<CordelSummary> page = repository.findAllByPublishedAndTitleLike(true, "%tit%", PageRequest.of(0, 10));
         assertThat(page).isEmpty();
 
-        page = repository.findPublishedByTitleLike(false, "tit", PageRequest.of(0, 10));
+        page = repository.findAllByPublishedAndTitleLike(false, "%tit%", PageRequest.of(0, 10));
         assertThat(page).isNotEmpty().hasSize(1);
     }
 

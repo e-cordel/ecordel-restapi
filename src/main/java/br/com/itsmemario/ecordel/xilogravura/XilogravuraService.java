@@ -30,35 +30,25 @@ import java.util.UUID;
 public class XilogravuraService {
 
     private static final String JPG = ".jpg";
-    private final String XILOGRAVURA_NAME_PATTERN = "http://xilos.ecordel.com.br/{file}";
 
-    private XilogravuraRepository repository;
     private FileManager fileManager;
 
     @Autowired
-    public XilogravuraService(XilogravuraRepository repository, FileManager fileManager) {
-        this.repository = repository;
+    public XilogravuraService(FileManager fileManager) {
         this.fileManager = fileManager;
     }
 
-    public Xilogravura save(Xilogravura xilogravura){
-        return repository.save(xilogravura);
-    }
-
-    public Xilogravura createXilogravuraWithFile(Xilogravura xilogravura, MultipartFile file){
+    public String createXilogravuraWithFile(MultipartFile file){
         try {
-            String fileName = generateRandomFileName();
-            String url = fileManager.saveFile(file.getBytes(), fileName);
-            xilogravura.setUrl(url);
-            return repository.save(xilogravura);
+            var fileName = generateRandomFileName();
+            return fileManager.saveFile(file.getBytes(), fileName);
         } catch (IOException e) {
-            e.printStackTrace();
             throw new FileProcessException("Error while saving file", e);
         }
     }
 
     private String generateRandomFileName() {
-        return UUID.randomUUID().toString() + JPG;
+        return UUID.randomUUID() + JPG;
     }
 
 }
