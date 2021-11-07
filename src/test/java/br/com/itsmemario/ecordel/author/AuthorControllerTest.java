@@ -50,7 +50,8 @@ class AuthorControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Sql("classpath:db/data/user.sql")
+    @Sql(scripts = "classpath:db/data/add-admin-user.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "classpath:db/data/clean-user-authorities.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void requestWithValidTokenMustReturnStatusCodeCreated() throws Exception {
         TokenDto token = getAdminToken(mockMvc);
         AuthorDto dto = new AuthorDto();
