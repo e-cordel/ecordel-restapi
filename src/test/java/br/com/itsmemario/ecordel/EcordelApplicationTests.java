@@ -28,14 +28,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class EcordelApplicationTests extends AbstractIntegrationTest{
+public class EcordelApplicationTests extends AbstractIntegrationTest {
 
-	@Autowired
-	CordelService service;
+    @Autowired
+    CordelService service;
 
-	@Test
-	public void contextLoads() {
-		assertThat(service).isNotNull();
-	}
+    @Test
+    public void contextLoads() {
+        assertThat(service).isNotNull();
+    }
 
 }

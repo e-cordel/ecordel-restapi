@@ -18,6 +18,7 @@
 package br.com.itsmemario.ecordel.security;
 
 import br.com.itsmemario.ecordel.AbstractIntegrationTest;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,7 +29,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AuthenticationControllerTest extends AbstractIntegrationTest {
@@ -41,6 +41,11 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
 
     @Autowired
     UserRepository repository;
+
+    @AfterEach
+    void tearDown() {
+        repository.deleteAll();
+    }
 
     @Test
     void authenticateWithCorrectCredentials() {

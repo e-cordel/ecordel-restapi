@@ -18,15 +18,19 @@
 package br.com.itsmemario.ecordel.author;
 
 import br.com.itsmemario.ecordel.AbstractIntegrationTest;
+import br.com.itsmemario.ecordel.security.TokenDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
+import java.util.Map;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,20 +50,35 @@ class AuthorControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @Sql(scripts = "classpath:db/data/add-admin-user.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "classpath:db/data/clean-user-authorities.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void requestWithValidTokenMustReturnStatusCodeCreated() throws Exception {
+        TokenDto token = getAdminToken(mockMvc);
         AuthorDto dto = new AuthorDto();
         dto.setName("name");
         String json = new ObjectMapper().writer().writeValueAsString(dto);
         mockMvc.perform(
                 post("/authors")
-                        .with(jwt())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json)
+                        .header( HttpHeaders.AUTHORIZATION, token.toString() )
+                        .contentType( MediaType.APPLICATION_JSON )
+                        .content( json )
         ).andExpect(status().isCreated());
     }
 
     @Test
     void getAuthorsReturnStatusCodeOK() throws Exception {
         mockMvc.perform(get(AUTHORS)).andExpect(status().isOk());
+    }
+
+    private TokenDto getAdminToken(MockMvc mockMvc ) throws Exception {
+        Map<String, String> login = Map.of("username", "admin", "password", "admin");
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writer().writeValueAsString(login);
+        String response = mockMvc.perform(
+                post("/auth")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+        ).andReturn().getResponse().getContentAsString();
+        return objectMapper.readValue(response, TokenDto.class);
     }
 }

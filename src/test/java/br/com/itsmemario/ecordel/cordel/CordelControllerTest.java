@@ -49,7 +49,6 @@ class CordelControllerTest extends AbstractIntegrationTest {
     @Autowired
     AuthorRepository authorRepository;
 
-
     @AfterEach
     void tearDown() {
         cordelRepository.deleteAll();

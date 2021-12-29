@@ -42,7 +42,7 @@ You can run with maven
 
 or, you can run with docker if you already have an image
 
-    docker container run --name ecordel --rm -p 8080:8080 ecordel-restapi:1
+    docker container run --name ecordel --rm -p 5000:5000 ecordel-restapi:1
 
 tip: --rm parameter will exclude container image after execution and it cause data loss.
 

@@ -17,13 +17,19 @@
 
 package br.com.itsmemario.ecordel.security;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class TokenDto {
 	
 	private final String token;
 	private final String authenticationMethod;
 	private final Long expiresAt;
-	
-	public TokenDto(String token, String authenticationMethod, Long expiresAt) {
+
+	@JsonCreator
+	public TokenDto(@JsonProperty("token") String token,
+					@JsonProperty("authenticationMethod") String authenticationMethod,
+					@JsonProperty("expiresAt") Long expiresAt) {
 		super();
 		this.token = token;
 		this.authenticationMethod = authenticationMethod;
@@ -40,5 +46,10 @@ public class TokenDto {
 
 	public Long getExpiresAt() {
 		return expiresAt;
+	}
+
+	@Override
+	public String toString() {
+		return authenticationMethod + " " + token;
 	}
 }
