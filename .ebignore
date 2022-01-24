@@ -1,5 +1,6 @@
 /**
 !.ebextensions/
 !.platform/
+!.well-known/
 !target/*.jar
 !Procfile
