@@ -30,6 +30,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.Valid;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController
 @RequestMapping("cordels")
 public class CordelController {

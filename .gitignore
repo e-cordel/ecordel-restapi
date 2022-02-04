@@ -36,3 +36,8 @@ build/
 
 #generated documentation
 src/main/resources/templates/index.html
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

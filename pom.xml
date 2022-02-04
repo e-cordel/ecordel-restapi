@@ -145,6 +145,7 @@
     </dependencies>
 
     <build>
+        <finalName>server</finalName>
         <plugins>
             <plugin>
                 <groupId>org.jacoco</groupId>
