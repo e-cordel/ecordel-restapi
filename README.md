@@ -16,6 +16,16 @@ or, you can build a docker image
 
     docker build . -t ecordel-restapi:1
 
+### Dependency check 
+
+Dependency check is done automatically during `verify` phase.
+
+To suppress false positives include the propper information in the file [dependency-check-suppressions.xml](dependency-check-suppressions.xml)
+
+More info about this:
+
+https://jeremylong.github.io/DependencyCheck/general/suppression.html
+
 ## How to run in local develop
 
 To up postgres in a docker local
