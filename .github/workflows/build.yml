@@ -53,6 +53,20 @@ jobs:
           name: dependency-chech-report
           path: target/dependency-check-report.html
 
+      - name: Install eb-cli
+        run: pip install awsebcli --upgrade --user
+
+      - name: Configure AWS Credentials
+        use: aws-actions/configure-aws-credentials@v1
+        with: 
+          region: ${{ env.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          ws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+
+
+      - name: Deploy Application
+        run: eb deploy
+
       - name: Discord notification
         if: failure()
         env:
