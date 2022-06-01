@@ -46,7 +46,7 @@ jobs:
         run: pip install awsebcli --upgrade --user
 
       - name: Configure AWS Credentials
-        use: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v1
         with: 
           region: ${{ env.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
