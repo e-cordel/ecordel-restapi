@@ -53,7 +53,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
 
       - name: Deploy Application
-        run: eb deploy
+        run: eb deploy api-ecordel
 
       - name: Discord notification
         if: failure()
