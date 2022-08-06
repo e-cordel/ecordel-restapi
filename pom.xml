@@ -22,7 +22,7 @@
         <sonar.organization>e-cordel</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.coverage.jacoco.xmlReportPaths>${basedir}/target/site/jacoco/**</sonar.coverage.jacoco.xmlReportPaths>
-        <postgresql.version>42.3.3</postgresql.version>
+        <postgresql.version>42.4.1</postgresql.version>
         <commons-net.version>3.8.0</commons-net.version>
         <jjwt.version>0.9.1</jjwt.version>
         <lombok.version>1.18.12</lombok.version>
