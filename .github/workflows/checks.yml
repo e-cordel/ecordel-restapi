@@ -47,7 +47,7 @@ jobs:
       - uses: actions/upload-artifact@v1
         if: success() || failure()
         with:
-          name: dependency-chech-report
+          name: dependency-check-report
           path: target/dependency-check-report.html
 
       - name: Discord notification
@@ -58,4 +58,4 @@ jobs:
         with:
           args: |
             Alguma coisa errada não está certa! :cry:
-            "$BUILD_URL"
+            ${{ env.BUILD_URL }}

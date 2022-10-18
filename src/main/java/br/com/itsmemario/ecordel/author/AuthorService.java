@@ -21,6 +21,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AuthorService {
 
@@ -36,5 +38,9 @@ public class AuthorService {
 
     public Author save(Author author) {
         return repository.save(author);
+    }
+
+    public Optional<Author> findById(Long id) {
+        return repository.findById(id);
     }
 }
