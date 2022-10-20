@@ -77,9 +77,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		 web.ignoring()
 	        .antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**");
 	}
-	
+
+	/**
+	 * Deprecated used only to generate passwords locally
+	 * @param args
+	 */
 	public static void main(String[] args) {
-		System.out.println(new BCryptPasswordEncoder().encode("admin"));
+		//System.out.println(new BCryptPasswordEncoder().encode(""));
 	}
 	
 	@Bean

@@ -51,4 +51,14 @@ the vulnerable feature is disabled by default in spring boot
    ]]></notes>
     <vulnerabilityName>CVE-2022-25857</vulnerabilityName>
   </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: spring-boot-starter-security-2.7.4.jar
+   spring security version brought by starter is 5.7.3
+
+   the Spring Boot starter for Spring Security is mistaken with Spring Security itself.
+   https://stackoverflow.com/questions/72543477/cve-2022-22976-spring-boot-2-7-0
+   ]]></notes>
+    <cve>CVE-2022-22978</cve>
+  </suppress>
 </suppressions>
