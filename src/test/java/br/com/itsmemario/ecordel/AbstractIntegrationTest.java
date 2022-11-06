@@ -40,8 +40,8 @@ public class AbstractIntegrationTest {
             Startables.deepStart(Stream.of(postgres)).join();
         }
 
-        private static Map<String, String> createConnectionConfiguration() {
-            Map<String, String> map = new HashMap<>();
+        private static Map<String, Object> createConnectionConfiguration() {
+            Map<String, Object> map = new HashMap<>();
             map.put("spring.datasource.url", postgres.getJdbcUrl());
             map.put("spring.datasource.username", postgres.getUsername());
             map.put("spring.datasource.password", postgres.getPassword());
@@ -54,7 +54,7 @@ public class AbstractIntegrationTest {
             ConfigurableEnvironment environment = applicationContext.getEnvironment();
             MapPropertySource testcontainers = new MapPropertySource(
                     "testcontainers",
-                    (Map) createConnectionConfiguration()
+                    createConnectionConfiguration()
             );
             environment.getPropertySources().addFirst(testcontainers);
         }

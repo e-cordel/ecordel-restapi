@@ -1,8 +1,5 @@
 name: Test Check
 
-env:
-  BUILD_URL: "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-
 on:
   push:
     branches-ignore:
@@ -10,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Doing Tests
+    name: Build and Test
     runs-on: ubuntu-latest
     steps:
       - name: Project checkout  
@@ -58,4 +55,4 @@ jobs:
         with:
           args: |
             Alguma coisa errada não está certa! :cry:
-            ${{ env.BUILD_URL }}
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
