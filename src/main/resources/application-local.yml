@@ -22,3 +22,4 @@ spring:
 
 #  flyway:
 #    baselineOnMigrate: true
+server.port: 5000

@@ -26,12 +26,14 @@ class CordelSummary {
     private String title;
     private String xilogravuraUrl;
     private String authorName;
+    private Long authorId;
 
-    public CordelSummary(Long id, String title, String xilogravuraUrl, String authorName) {
+    public CordelSummary(Long id, String title, String xilogravuraUrl, String authorName, Long authorId) {
         this.id = id;
         this.title = title;
         this.xilogravuraUrl = xilogravuraUrl;
         this.authorName = authorName;
+        this.authorId = authorId;
     }
 
     public Long getId() {
@@ -48,5 +50,9 @@ class CordelSummary {
 
     public String getAuthorName() {
         return authorName;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
     }
 }
