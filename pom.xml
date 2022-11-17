@@ -29,6 +29,8 @@
         <testcontainers.version>1.15.2</testcontainers.version>
         <mockftp.version>2.7.1</mockftp.version>
         <commons-lang.version>2.5</commons-lang.version>
+        <!-- Fix CVE-2022-31692 TODO to be removed when upgrading spring boot-->
+        <spring-security.version>5.7.5</spring-security.version>
     </properties>
 
     <dependencies>
