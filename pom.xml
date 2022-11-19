@@ -5,13 +5,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.8</version>
+        <version>2.7.5</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>br.com.itsmemario</groupId>
     <artifactId>ecordel</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
     <name>e-cordel</name>
     <description>e-reader for cordels</description>
 
@@ -22,13 +22,15 @@
         <sonar.organization>e-cordel</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.coverage.jacoco.xmlReportPaths>${basedir}/target/site/jacoco/**</sonar.coverage.jacoco.xmlReportPaths>
-        <postgresql.version>42.3.3</postgresql.version>
+        <postgresql.version>42.5.0</postgresql.version>
         <commons-net.version>3.8.0</commons-net.version>
         <jjwt.version>0.9.1</jjwt.version>
         <lombok.version>1.18.12</lombok.version>
         <testcontainers.version>1.15.2</testcontainers.version>
         <mockftp.version>2.7.1</mockftp.version>
         <commons-lang.version>2.5</commons-lang.version>
+        <!-- Fix CVE-2022-31692 TODO to be removed when upgrading spring boot-->
+        <spring-security.version>5.7.5</spring-security.version>
     </properties>
 
     <dependencies>

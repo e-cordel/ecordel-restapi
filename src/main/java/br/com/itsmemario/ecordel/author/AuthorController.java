@@ -27,6 +27,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -52,5 +53,32 @@ public class AuthorController {
         var saved = service.save(author.toEntity());
         URI uri = uriBuilder.path("/authors/{id}").buildAndExpand(saved.getId()).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<AuthorDto> getAuthor(@PathVariable Long id){
+        logger.info("request received get author by id: {}", id);
+
+        Optional<Author> author = service.findById(id);
+        if (author.isPresent()) {
+            AuthorDto body = AuthorDto.of(author.get());
+            return ResponseEntity.ok(body);
+        } else {
+            logger.info("author with id {} not fond", id);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<AuthorDto> update(@RequestBody @Valid AuthorDto dto, @PathVariable Long id){
+        logger.info("request received for update author with id: {}", id);
+        Optional<Author> byId = service.findById(id);
+        if(byId.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        Author newAuthor = dto.toEntity();
+        dto.setId(id);
+        var saved = service.save(newAuthor);
+        return ResponseEntity.ok(AuthorDto.of(saved));
     }
 }

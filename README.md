@@ -21,7 +21,7 @@ You can build with maven
 
 Dependency check is done automatically during `verify` phase.
 
-To suppress false positives include the propper information in the file [dependency-check-suppressions.xml](dependency-check-suppressions.xml)
+To suppress false positives include the proper information in the file [dependency-check-suppressions.xml](dependency-check-suppressions.xml)
 
 More info about this:
 
@@ -31,7 +31,7 @@ https://jeremylong.github.io/DependencyCheck/general/suppression.html
 
 To up postgres in a docker local
 
-    docker-compose up -d
+    docker compose up -d
 
 Add in VMArguments to run in an IDE
 
@@ -50,12 +50,6 @@ All data volume is mapped to directory `tmp`. You can delete this folder to get 
 You can run with maven
 
     mvn spring-boot:run -Dspring-boot.run.profiles=local
-
-or, you can run with docker if you already have an image
-
-    docker container run --name ecordel --rm -p 5000:5000 ecordel-restapi:1
-
-tip: --rm parameter will exclude container image after execution and it cause data loss.
 
 ## How to test
 

@@ -44,4 +44,21 @@ the vulnerable feature is disabled by default in spring boot
     </notes>
     <cve>CVE-2016-1000027</cve>
   </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: snakeyaml-1.29.jar
+   the application does not process yaml other than application.yaml configuration
+   ]]></notes>
+    <vulnerabilityName>CVE-2022-25857</vulnerabilityName>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+   file name: spring-boot-starter-security-2.7.4.jar
+   spring security version brought by starter is 5.7.3
+
+   the Spring Boot starter for Spring Security is mistaken with Spring Security itself.
+   https://stackoverflow.com/questions/72543477/cve-2022-22976-spring-boot-2-7-0
+   ]]></notes>
+    <cve>CVE-2022-22978</cve>
+  </suppress>
 </suppressions>
