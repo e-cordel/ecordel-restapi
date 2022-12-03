@@ -47,9 +47,12 @@ the vulnerable feature is disabled by default in spring boot
   <suppress>
     <notes><![CDATA[
    file name: snakeyaml-1.29.jar
+   file name: snakeyaml-1.30.jar
    the application does not process yaml other than application.yaml configuration
    ]]></notes>
     <vulnerabilityName>CVE-2022-25857</vulnerabilityName>
+    <vulnerabilityName>CVE-2022-1471</vulnerabilityName>
+    <cve>CVE-2022-38749</cve>
   </suppress>
   <suppress>
     <notes><![CDATA[
