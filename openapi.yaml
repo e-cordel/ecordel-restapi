@@ -9,7 +9,7 @@ info:
     email: contato@ecordel.com.br
 
 servers:
-  - url: https://ecordel-restapi.herokuapp.com/api/v1
+  - url: https://localhost:8080/api/v1
 
 paths:
   /auth:
@@ -29,6 +29,19 @@ paths:
       tags:
         - Authentication
   /authors:
+    get:
+      summary: "Get authors"
+      responses:
+        200:
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorsResponsePage'
+        404:
+          description: Not found
+      tags:
+        - Author
     post:
       summary: "Create a new author"
       requestBody:
@@ -38,6 +51,49 @@ paths:
           description: New author created
         403:
           description: Forbidden
+      security:
+        - bearerAuth: []
+      tags:
+        - Author
+  /authors/{id}:
+    get:
+      summary: "Get an author by id"
+      parameters:
+        - name: "id"
+          in: "path"
+          schema:
+            type: integer
+          description: "Author identification number"
+          required: true
+      responses:
+        200:
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+        404:
+          description: Not found
+      tags:
+        - Author
+    put:
+      summary: "Edit an author"
+      parameters:
+        - name: "id"
+          in: "path"
+          schema:
+            type: integer
+          description: "Author identification number"
+          required: true
+      requestBody:
+        $ref: '#/components/requestBodies/author'
+      responses:
+        200:
+          description: OK
+        403:
+          description: Forbidden
+        404:
+          description: Not found. If there is no author with the provided id
       security:
         - bearerAuth: []
       tags:
@@ -76,7 +132,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReponsePage'
+                $ref: '#/components/schemas/SummariesResponsePage'
       tags:
         - Cordel
   /cordels:
@@ -223,6 +279,15 @@ components:
         about:
           type: string
           description: small text about the author
+    AuthorsResponsePage:
+      allOf:
+        - $ref: '#/components/schemas/ResponsePage'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/Author'
     Cordel:
       type: object
       description: Cordel data with content. For operations like POST and PUT the inner objects only need the id
@@ -261,6 +326,9 @@ components:
           description: cordel title
         authorName:
           type: string
+        authorId:
+          type: integer
+          description: author id
         xilogravuraUrl:
           type: string
           description: image url
@@ -271,13 +339,9 @@ components:
           type: integer
         pageNumber:
           type: integer
-    ReponsePage:
+    ResponsePage:
       type: object
       properties:
-        content:
-          type: array
-          items:
-            $ref: '#/components/schemas/CordelSummary'
         pageable:
           $ref: '#/components/schemas/Page'
         totalPages:
@@ -303,6 +367,15 @@ components:
         empty:
           type: boolean
           description: indicates if the page is empty
+    SummariesResponsePage:
+      allOf:
+        - $ref: '#/components/schemas/ResponsePage'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/CordelSummary'
     Token:
       type: object
       properties:
