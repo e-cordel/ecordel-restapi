@@ -12,9 +12,9 @@ ftp:
 
 spring:
   datasource:
-    url: jdbc:postgresql://${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}
-    username: ${RDS_USERNAME}
-    password: ${RDS_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/dbname
+    username: username
+    password: password
 
   jpa:
     properties:
