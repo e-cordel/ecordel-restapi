@@ -1,10 +1,10 @@
 name: Build and Deploy
 
-env:
-  BUILD_URL: "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-
 on:
   push:
+    branches:
+      - main
+  pull_request:
     branches:
       - main
 
@@ -42,19 +42,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
 
-      - name: Install eb-cli
-        run: pip install awsebcli --upgrade --user
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with: 
-          aws-region: sa-east-1
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-
-      - name: Deploy Application
-        run: eb deploy api-ecordel
-
       - name: Discord notification
         if: failure()
         env:
@@ -63,4 +50,4 @@ jobs:
         with:
           args: |
             Alguma coisa errada não está certa! :cry:
-            "$BUILD_URL"
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
