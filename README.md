@@ -12,11 +12,12 @@ You need
 - docker 20+  installed
 - maven 3.8.5+ installed
 
-## How to build localy
+## How to build locally
 
 You can build with maven
 
     mvn clean package
+
 ### Dependency check 
 
 Dependency check is done automatically during `verify` phase.
@@ -62,3 +63,7 @@ If you want to use db connection on your test you must extend the class `Abstrac
 ## How to contribute
 
 To get more help or find out how to contribute with this project please take a look at [this page](http://www.ecordel.com.br/como-contribuir).
+
+## Documentation
+
+See other doc files [here.](./docs/README.md)
