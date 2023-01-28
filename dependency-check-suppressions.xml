@@ -53,6 +53,8 @@ the vulnerable feature is disabled by default in spring boot
     <vulnerabilityName>CVE-2022-25857</vulnerabilityName>
     <vulnerabilityName>CVE-2022-1471</vulnerabilityName>
     <cve>CVE-2022-38749</cve>
+    <cpe>cpe:/a:snakeyaml_project:snakeyaml</cpe>
+    <cpe>cpe:/a:yaml_project:yaml</cpe>
   </suppress>
   <suppress>
     <notes><![CDATA[
