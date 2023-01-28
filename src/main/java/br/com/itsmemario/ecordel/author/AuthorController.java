@@ -77,7 +77,7 @@ public class AuthorController {
             return ResponseEntity.notFound().build();
         }
         Author newAuthor = dto.toEntity();
-        dto.setId(id);
+        newAuthor.setId(id);
         var saved = service.save(newAuthor);
         return ResponseEntity.ok(AuthorDto.of(saved));
     }
