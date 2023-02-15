@@ -3,7 +3,7 @@ package br.com.itsmemario.ecordel.security;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "cordel_user")
-public class CordelUser implements UserDetails{
+public class CordelUser implements UserDetails {
 
 	public static final String USER_AUTHORITY_TABLE = "user_authority";
 

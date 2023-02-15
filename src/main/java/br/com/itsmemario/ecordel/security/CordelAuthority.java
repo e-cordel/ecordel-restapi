@@ -19,7 +19,7 @@ package br.com.itsmemario.ecordel.security;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "cordel_authority")

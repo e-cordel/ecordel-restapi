@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.8</version>
+        <version>3.0.0</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
@@ -16,21 +16,20 @@
     <description>e-reader for cordels</description>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <docker.image.prefix>itsmemario</docker.image.prefix>
         <sonar.projectKey>e-cordel_ecordel-restapi</sonar.projectKey>
         <sonar.organization>e-cordel</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.coverage.jacoco.xmlReportPaths>${basedir}/target/site/jacoco/**</sonar.coverage.jacoco.xmlReportPaths>
-        <postgresql.version>42.5.0</postgresql.version>
-        <commons-net.version>3.8.0</commons-net.version>
+        <postgresql.version>42.5.3</postgresql.version>
+        <commons-net.version>3.9.0</commons-net.version>
         <jjwt.version>0.9.1</jjwt.version>
-        <lombok.version>1.18.12</lombok.version>
-        <testcontainers.version>1.15.2</testcontainers.version>
-        <mockftp.version>2.7.1</mockftp.version>
-        <commons-lang.version>2.5</commons-lang.version>
-        <!-- Fix CVE-2022-31692 TODO to be removed when upgrading spring boot-->
-        <spring-security.version>5.7.5</spring-security.version>
+        <lombok.version>1.18.26</lombok.version>
+        <testcontainers.version>1.17.6</testcontainers.version>
+        <mockftp.version>3.1.0</mockftp.version>
+        <commons-lang.version>2.6</commons-lang.version>
+        <jaxb-api.version>2.3.1</jaxb-api.version>
     </properties>
 
     <dependencies>
@@ -140,6 +139,12 @@
             <artifactId>commons-lang</artifactId>
             <version>${commons-lang.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>${jaxb-api.version}</version>
         </dependency>
 
     </dependencies>
