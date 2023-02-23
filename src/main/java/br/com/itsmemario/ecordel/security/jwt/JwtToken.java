@@ -20,7 +20,7 @@ package br.com.itsmemario.ecordel.security.jwt;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Data
 @Entity

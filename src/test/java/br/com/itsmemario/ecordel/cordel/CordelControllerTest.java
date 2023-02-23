@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -73,7 +73,7 @@ class CordelControllerTest extends AbstractIntegrationTest {
 
     @Test
     void ifACordelDoesNotExists_ItMustReturn404() {
-        Long id = 100l;
+        Long id = 100L;
 
         ResponseEntity<Cordel> forEntity = restTemplate.getForEntity(getBaseUrl() + "/{id}", Cordel.class, id);
 
