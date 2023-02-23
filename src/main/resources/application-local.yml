@@ -10,9 +10,9 @@ ftp:
 
 spring:
   datasource:
-   url: jdbc:postgresql://localhost:49153/ecd
+   url: jdbc:postgresql://localhost:5432/ecd
    username: postgres
-   password: postgrespw
+   password: postgres
 
   jpa:
     properties:
