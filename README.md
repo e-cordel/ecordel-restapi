@@ -12,6 +12,8 @@ You need
 - docker 20+  installed
 - maven 3.8.5+ installed
 
+:bulb: If you don't have the dependencies installed you can create a [github codespace](https://docs.github.com/pt/codespaces/overview) on your fork and run the commands below.
+
 ## How to build locally
 
 You can build with maven
@@ -38,6 +40,13 @@ Add in VMArguments to run in an IDE
 
     -Dspring.profiles.active=local
 
+or
+
+You can run with maven
+
+    mvn spring-boot:run -Dspring-boot.run.profiles=local
+
+
 ### Development data
 
 You can use the file [data.sql](src/test/resources/db/data/data.sql) to insert data to your local db.
@@ -45,12 +54,6 @@ You can use the file [data.sql](src/test/resources/db/data/data.sql) to insert d
 ### Cleaning DB
 
 All data volume is mapped to directory `tmp`. You can delete this folder to get rid of development data.
-
-## How to run
-
-You can run with maven
-
-    mvn spring-boot:run -Dspring-boot.run.profiles=local
 
 ## How to test
 
