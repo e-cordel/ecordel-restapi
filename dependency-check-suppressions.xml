@@ -66,4 +66,14 @@ the vulnerable feature is disabled by default in spring boot
    ]]></notes>
     <cve>CVE-2022-22978</cve>
   </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+   file name: jackson-core-2.14.2.jar
+   json-java CVE flagged for multiple unrelated Java JSON projects
+   https://github.com/jeremylong/DependencyCheck/issues/5502
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/com\.fasterxml\.jackson\.core/jackson\-core@.*$</packageUrl>
+    <cve>CVE-2022-45688</cve>
+  </suppress>
 </suppressions>
