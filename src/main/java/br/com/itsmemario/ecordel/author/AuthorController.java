@@ -58,15 +58,12 @@ public class AuthorController {
     @GetMapping("{id}")
     public ResponseEntity<AuthorDto> getAuthor(@PathVariable Long id){
         logger.info("request received get author by id: {}", id);
-
         Optional<Author> author = service.findById(id);
         if (author.isPresent()) {
             AuthorDto body = AuthorDto.of(author.get());
             return ResponseEntity.ok(body);
-        } else {
-            logger.info("author with id {} not fond", id);
-            return ResponseEntity.notFound().build();
         }
+        throw new AuthorNotFoundException();
     }
 
     @PutMapping("{id}")

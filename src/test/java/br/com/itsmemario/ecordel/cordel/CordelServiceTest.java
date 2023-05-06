@@ -45,24 +45,36 @@ class CordelServiceTest {
 
     @Test
     void testIfTitleIsInvalid_QueryOnlyByPublished() {
-        String invalidTitle = "";
 
-        cordelService.findPublishedByTitle(true, invalidTitle, page);
-        Mockito.verify(cordelRepository, times(1)).findAllByPublished(true, page);
+        //arrange
+        CordelSummaryRequest invalidRequest0 = CordelSummaryRequest.builder().published(true).title("").build();
+        CordelSummaryRequest invalidRequest1 = CordelSummaryRequest.builder().published(true).title(null).build();
 
-        cordelService.findPublishedByTitle(true, null, page);
-        Mockito.verify(cordelRepository, times(2)).findAllByPublished(true, page);
+        //act
+        cordelService.findPublishedByTitle(invalidRequest0, page);
+        cordelService.findPublishedByTitle(invalidRequest1, page);
 
-        Mockito.verify(cordelRepository, times(0)).findAllByPublishedAndTitleLike(true, invalidTitle, page);
+        //test
+        Mockito.verify(cordelRepository).findAllByPublished(invalidRequest0, page);
+        Mockito.verify(cordelRepository).findAllByPublished(invalidRequest1, page);
+        Mockito.verify(cordelRepository, times(0))
+                .findAllByPublishedAndTitleLike(invalidRequest0, page);
+
+
     }
 
     @Test
     void testIfTitleIsValid_QueryOnlyByPublishedAndTitleLike() {
-        String validTitle = "cordel";
 
-        cordelService.findPublishedByTitle(true, validTitle, page);
-        Mockito.verify(cordelRepository, times(1)).findAllByPublishedAndTitleLike(true, String.format("%%%s%%", validTitle), page);
+        //arrange
+        CordelSummaryRequest validRequest0 = CordelSummaryRequest.builder().published(true).title("title").build();
 
-        Mockito.verify(cordelRepository, times(0)).findAllByPublished(true, page);
+        //act
+        cordelService.findPublishedByTitle(validRequest0, page);
+
+        //test
+        Mockito.verify(cordelRepository).findAllByPublishedAndTitleLike(validRequest0, page);
+        Mockito.verify(cordelRepository, times(0)).findAllByPublished(validRequest0, page);
     }
+
 }
