@@ -126,6 +126,12 @@ paths:
             type: boolean
           required: false
           description: search only publish corldels. This parameter is always true if is omitted.
+        - name: author_id
+          in: query
+          schema:
+            type: integer
+          required: false
+          description: search corldels by author.
       responses:
         200:
           description: "successful operation"

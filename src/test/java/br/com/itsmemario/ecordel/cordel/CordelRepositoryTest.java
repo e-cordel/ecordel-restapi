@@ -3,6 +3,7 @@ package br.com.itsmemario.ecordel.cordel;
 import br.com.itsmemario.ecordel.AbstractIntegrationTest;
 import br.com.itsmemario.ecordel.author.Author;
 import br.com.itsmemario.ecordel.author.AuthorRepository;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +42,7 @@ class CordelRepositoryTest extends AbstractIntegrationTest {
 
     @Test
     void saveBigTextAsContent() throws IOException {
-        Long id = insertNewCordel(true);
+        Long id = insertNewCordel(true).getId();
 
         Cordel byId = repository.findById(id).get();
         String lines = Files.readAllLines(BIG_FILE).stream().collect(Collectors.joining());
@@ -88,7 +89,7 @@ class CordelRepositoryTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void testPaginationResultsByPublishedTitle() throws Exception {
+    void testPaginationResultsByPublishedTitle() {
 
         //arrange
         IntStream.range(0, 5).forEach(i -> insertNewCordel(true));
@@ -99,6 +100,33 @@ class CordelRepositoryTest extends AbstractIntegrationTest {
 
         //test
         assertThat(page).hasSize(2);
+    }
+
+    @Test
+    void testPaginationResultsByAuthor()  {
+
+        //arrange
+        Author a = insertNewCordel(true).getAuthor();
+        CordelSummaryRequest params = CordelSummaryRequest.builder().published(true).authorId(a.getId()).build();
+
+        //act
+        Page<CordelSummary> page = repository.findAllByPublished(params, PageRequest.of(0, 3));
+
+        //test
+        assertThat(page).hasSize(1);
+    }
+
+    @Test
+    void testPaginationResultsByWithoutMatchingAuthor()  {
+
+        //arrange
+        CordelSummaryRequest params = CordelSummaryRequest.builder().published(true).authorId(2L).build();
+
+        //act
+        Page<CordelSummary> page = repository.findAllByPublished(params, PageRequest.of(0, 3));
+
+        //test
+        assertThat(page).isEmpty();
     }
 
     @Test
@@ -124,10 +152,15 @@ class CordelRepositoryTest extends AbstractIntegrationTest {
         assertThat(page).isNotEmpty().hasSize(1);
     }
 
-    Long insertNewCordel(boolean published) {
-        var author = authorRepository.save(new Author("name"));
+    Author insertAuthor() {
+        Author a = new Author("name");
+        return authorRepository.save(a);
+    }
+
+    Cordel insertNewCordel(boolean published) {
+        var author = insertAuthor();
         var cordel = newCordel(published, author);
-        return repository.save(cordel).getId();
+        return repository.save(cordel);
     }
 
 }
