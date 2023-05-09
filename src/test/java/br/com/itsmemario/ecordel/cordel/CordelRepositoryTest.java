@@ -3,6 +3,7 @@ package br.com.itsmemario.ecordel.cordel;
 import br.com.itsmemario.ecordel.AbstractIntegrationTest;
 import br.com.itsmemario.ecordel.author.Author;
 import br.com.itsmemario.ecordel.author.AuthorRepository;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class CordelRepositoryTest extends AbstractIntegrationTest {
+class CordelRepositoryTest extends AbstractIntegrationTest {
 
     private static final Path BIG_FILE = Paths.get("src/test/resources/content.txt");
 
@@ -42,7 +42,7 @@ public class CordelRepositoryTest extends AbstractIntegrationTest {
 
     @Test
     void saveBigTextAsContent() throws IOException {
-        Long id = insertNewCordel(true);
+        Long id = insertNewCordel(true).getId();
 
         Cordel byId = repository.findById(id).get();
         String lines = Files.readAllLines(BIG_FILE).stream().collect(Collectors.joining());
@@ -56,39 +56,111 @@ public class CordelRepositoryTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void findByPublishedTitleLike() {
+    void findByPublishedTitleLikeWithTitleMatch() {
+
+        //arrange
         insertNewCordel(true);
-        Page<CordelSummary> page = repository.findAllByPublishedAndTitleLike(true, "%tit%", PageRequest.of(0,10));
+        CordelSummaryRequest params = CordelSummaryRequest.builder().published(true).title("").build();
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        //act
+        Page<CordelSummary> page = repository.findAllByPublishedAndTitleLike(params, pageRequest);
+
+        //test
         assertThat(page.getContent().get(0).getAuthorName()).isEqualTo("name");
         assertThat(page).hasSize(1);
 
-        page = repository.findAllByPublishedAndTitleLike(true, "%aaa%", PageRequest.of(0,10));
-        assertThat(page).hasSize(0);
     }
 
     @Test
-    void testPaginationResultsByPublishedTitle() throws Exception {
-        IntStream.range(0,5).forEach( i -> insertNewCordel(true));
+    void findPublishedTitlesWithoutMatchingTitle() {
 
-        Page<CordelSummary> page = repository.findAllByPublishedAndTitleLike(true, "%tit%", PageRequest.of(1,3));
-        page.getContent().forEach(cordel -> System.out.println(cordel.getTitle()));
+        //arrange
+        insertNewCordel(true);
+        CordelSummaryRequest params = CordelSummaryRequest.builder().published(true).title("aaa").build();
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        //act
+        Page<CordelSummary> page = repository.findAllByPublishedAndTitleLike(params, pageRequest);
+
+        //test
+        assertThat(page).isEmpty();
+
+    }
+
+    @Test
+    void testPaginationResultsByPublishedTitle() {
+
+        //arrange
+        IntStream.range(0, 5).forEach(i -> insertNewCordel(true));
+        CordelSummaryRequest params = CordelSummaryRequest.builder().published(true).title("tit").build();
+
+        //act
+        Page<CordelSummary> page = repository.findAllByPublishedAndTitleLike(params, PageRequest.of(1, 3));
+
+        //test
         assertThat(page).hasSize(2);
     }
 
     @Test
+    void testPaginationResultsByAuthor()  {
+
+        //arrange
+        Author a = insertNewCordel(true).getAuthor();
+        CordelSummaryRequest params = CordelSummaryRequest.builder().published(true).authorId(a.getId()).build();
+
+        //act
+        Page<CordelSummary> page = repository.findAllByPublished(params, PageRequest.of(0, 3));
+
+        //test
+        assertThat(page).hasSize(1);
+    }
+
+    @Test
+    void testPaginationResultsByWithoutMatchingAuthor()  {
+
+        //arrange
+        CordelSummaryRequest params = CordelSummaryRequest.builder().published(true).authorId(2L).build();
+
+        //act
+        Page<CordelSummary> page = repository.findAllByPublished(params, PageRequest.of(0, 3));
+
+        //test
+        assertThat(page).isEmpty();
+    }
+
+    @Test
     void findNotPublishedWorkTest() {
+
+        //arrange
         insertNewCordel(false);
-        Page<CordelSummary> page = repository.findAllByPublishedAndTitleLike(true, "%tit%", PageRequest.of(0, 10));
+        CordelSummaryRequest params0 = CordelSummaryRequest.builder().published(true).title("tit").build();
+
+        //act
+        Page<CordelSummary> page = repository.findAllByPublishedAndTitleLike(params0, PageRequest.of(0, 10));
+
+        //test
         assertThat(page).isEmpty();
 
-        page = repository.findAllByPublishedAndTitleLike(false, "%tit%", PageRequest.of(0, 10));
+        //arrange
+        CordelSummaryRequest params1 = CordelSummaryRequest.builder().published(false).title("tit").build();
+
+        //act
+        page = repository.findAllByPublishedAndTitleLike(params1, PageRequest.of(0, 10));
+
+        //test
         assertThat(page).isNotEmpty().hasSize(1);
     }
 
-    Long insertNewCordel(boolean published) {
-        var author = authorRepository.save(new Author("name"));
+    Author insertAuthor() {
+        Author a = new Author("name");
+        return authorRepository.save(a);
+    }
+
+    Cordel insertNewCordel(boolean published) {
+        var author = insertAuthor();
         var cordel = newCordel(published, author);
-        return repository.save(cordel).getId();
+        return repository.save(cordel);
     }
 
 }

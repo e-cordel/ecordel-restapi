@@ -49,12 +49,11 @@ public class CordelService {
 		return repository.findById(id);
 	}
 
-	public Page<CordelSummary> findPublishedByTitle(boolean published, String title, Pageable pageable) {
-		if (isAValidString(title)) {
-			return repository.findAllByPublishedAndTitleLike(published, String.format("%%%s%%", title), pageable);
+	public Page<CordelSummary> findPublishedByTitle(CordelSummaryRequest request, Pageable pageable) {
+		if (isAValidString(request.getTitle())) {
+			return repository.findAllByPublishedAndTitleLike(request, pageable);
 		}
-
-		return repository.findAllByPublished(published, pageable);
+		return repository.findAllByPublished(request, pageable);
 	}
 
 	public Cordel updateXilogravura(Long cordelId, MultipartFile file) {

@@ -59,11 +59,10 @@ public class CordelController {
     }
 
     @GetMapping("summaries")
-    public Page<CordelSummary> getCordels(@RequestParam(required = false) String title,
-                                          @RequestParam(defaultValue = "true") boolean published,
+    public Page<CordelSummary> getCordels(CordelSummaryRequest request,
                                           Pageable pageable) {
         logger.info("request received get cordels");
-        return service.findPublishedByTitle(published, title, pageable);
+        return service.findPublishedByTitle(request, pageable);
     }
 
     @PostMapping
