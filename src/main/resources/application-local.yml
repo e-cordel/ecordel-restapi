@@ -17,9 +17,13 @@ spring:
   jpa:
     properties:
       hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate:
+        format_sql: true
+
     hibernate:
       ddl-auto: none
 
+    show-sql: true
 #  flyway:
 #    baselineOnMigrate: true
 server.port: 5000
