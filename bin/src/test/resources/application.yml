@@ -1,0 +1,24 @@
+app.xilogravura.path: "./target/xilogravuras"
+
+ftp:
+  server: localhost
+  port: 10021
+  user: user
+  password: pass
+  baseUrl: "http://xilos.ecordel.com.br/"
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecd
+    username: postgres
+    password: postgres
+
+  jpa:
+    properties:
+      hibernate:
+        jdbc.lob.non_contextual_creation: true
+        format_sql: true
+    hibernate:
+      ddl-auto: none
+
+    show-sql: true

@@ -1,0 +1,20 @@
+name: Pull Request
+
+on:
+  pull_request:
+    types: [ opened ]
+
+jobs:
+  notification:
+    name: Discord Notification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@0.3.0
+        with:
+          args: |
+            Nova contribuição recebida. \\(>_<)/
+            ${{ github.event.pull_request.title }}
+            ${{ github.event.pull_request.html_url}}

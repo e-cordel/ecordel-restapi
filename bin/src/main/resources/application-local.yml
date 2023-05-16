@@ -1,0 +1,25 @@
+app.xilogravura.path: "./"
+
+server.servlet.context-path: "/api/v1"
+
+ftp:
+  server: ftp.turismonocariri.com.br
+  port: 21
+  user: user
+  password: password
+
+spring:
+  datasource:
+   url: jdbc:postgresql://localhost:5432/ecd
+   username: postgres
+   password: postgres
+
+  jpa:
+    properties:
+      hibernate.jdbc.lob.non_contextual_creation: true
+    hibernate:
+      ddl-auto: none
+
+#  flyway:
+#    baselineOnMigrate: true
+server.port: 5000

@@ -1,0 +1,25 @@
+app.xilogravura.path: "./"
+
+# discuss how to versioning the api for now it will be static
+server.servlet.context-path: "/api/v1"
+
+ftp:
+  server: ftp.turismonocariri.com.br
+  port: 21
+  user: user
+  password: pass
+  baseUrl: "http://xilos.ecordel.com.br/"
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/dbname
+    username: username
+    password: password
+
+  jpa:
+    properties:
+      hibernate.jdbc.lob.non_contextual_creation: true
+    hibernate:
+      ddl-auto: none
+
+server.port: ${PORT}

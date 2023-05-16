@@ -1,0 +1,392 @@
+openapi: 3.0.0
+
+info:
+  description: "Rest API to perform operations on e-cordels"
+  version: "1.0.0"
+  title: "E-cordel API"
+  contact:
+    url: https://ecordel.com.br
+    email: contato@ecordel.com.br
+
+servers:
+  - url: https://localhost:8080/api/v1
+
+paths:
+  /auth:
+    post:
+      summary: Login and get token
+      requestBody:
+        $ref: '#/components/requestBodies/login'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        401:
+          description: Unauthorized
+      tags:
+        - Authentication
+  /authors:
+    get:
+      summary: "Get authors"
+      responses:
+        200:
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorsResponsePage'
+        404:
+          description: Not found
+      tags:
+        - Author
+    post:
+      summary: "Create a new author"
+      requestBody:
+        $ref: '#/components/requestBodies/author'
+      responses:
+        201:
+          description: New author created
+        403:
+          description: Forbidden
+      security:
+        - bearerAuth: []
+      tags:
+        - Author
+  /authors/{id}:
+    get:
+      summary: "Get an author by id"
+      parameters:
+        - name: "id"
+          in: "path"
+          schema:
+            type: integer
+          description: "Author identification number"
+          required: true
+      responses:
+        200:
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+        404:
+          description: Not found
+      tags:
+        - Author
+    put:
+      summary: "Edit an author"
+      parameters:
+        - name: "id"
+          in: "path"
+          schema:
+            type: integer
+          description: "Author identification number"
+          required: true
+      requestBody:
+        $ref: '#/components/requestBodies/author'
+      responses:
+        200:
+          description: OK
+        403:
+          description: Forbidden
+        404:
+          description: Not found. If there is no author with the provided id
+      security:
+        - bearerAuth: []
+      tags:
+        - Author
+  /cordels/summaries:
+    get:
+      summary: "Retrieve all summaries by pages"
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type : integer
+          required: false
+          description: Number of the page, starts at 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+          required: false
+          description: Cordels per page.
+        - name: title
+          in: query
+          schema:
+            type: string
+          required: false
+          description: search corldels with titles that contains the parameter. It will work such as a like operation.
+        - name: published
+          in: query
+          schema:
+            type: boolean
+          required: false
+          description: search only publish corldels. This parameter is always true if is omitted.
+      responses:
+        200:
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SummariesResponsePage'
+      tags:
+        - Cordel
+  /cordels:
+    post:
+      summary: "Create a new cordel"
+      requestBody:
+        $ref: '#/components/requestBodies/cordel'
+      responses:
+        201:
+          description: Create new cordel
+        403:
+          description: Forbidden
+      security:
+        - bearerAuth: []
+      tags:
+        - Cordel
+  /cordels/{id}:
+    get:
+      summary: "Get a cordel with full content"
+      parameters:
+        - name: "id"
+          in: "path"
+          schema:
+            type: integer
+          description: "Cordel identification number"
+          required: true
+      responses:
+        200:
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cordel'
+        404:
+          description: "Not found"
+      tags:
+        - Cordel
+    put:
+      summary: "Update the cordel identified by id"
+      parameters:
+        - name: "id"
+          in: "path"
+          schema:
+            type : integer
+          description: "Cordel identification number"
+          required: true
+      requestBody:
+        $ref: '#/components/requestBodies/cordel'
+      responses:
+        200:
+          description: OK
+        403:
+          description: Forbidden
+      security:
+        - bearerAuth: []
+      tags:
+        - Cordel
+    delete:
+      summary: "Delete the cordel identified by id"
+      parameters:
+        - name: "id"
+          in: "path"
+          schema:
+            type : integer
+          description: "Cordel identification number"
+          required: true
+      responses:
+        200:
+          description: OK
+        403:
+          description: Forbidden
+      security:
+        - bearerAuth: []
+      tags:
+        - Cordel
+  /cordels/{id}/xilogravura:
+    put:
+      summary: Associate a xilogravura to a cordel
+      parameters:
+        - name: "id"
+          in: "path"
+          schema:
+            type : integer
+          description: "Cordel identification number"
+          required: true
+      requestBody:
+        $ref: '#/components/requestBodies/xilogravura'
+      responses:
+        200:
+          description: OK
+        403:
+          description: Forbidden
+      security:
+        - bearerAuth: []
+      tags:
+        - Cordel
+components:
+  requestBodies:
+    author:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Author'
+    cordel:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Cordel'
+    login:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+    xilogravura:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              description:
+                type: string
+              file:
+                type: string
+                format: binary
+  schemas:
+    Author:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: author's id
+        name:
+          type: string
+          description: author's name
+          minLength: 3
+        email:
+          type: string
+          description: author's email
+        about:
+          type: string
+          description: small text about the author
+    AuthorsResponsePage:
+      allOf:
+        - $ref: '#/components/schemas/ResponsePage'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/Author'
+    Cordel:
+      type: object
+      description: Cordel data with content. For operations like POST and PUT the inner objects only need the id
+      properties:
+        author:
+          type: object
+          properties:
+            id:
+              type: integer
+        title:
+          type: string
+          description: cordel title
+        description:
+          type: string
+          description: cordel's description
+        content:
+          type: string
+          description: cordel text
+        xilogravuraUrl:
+          type: string
+        published:
+          type: boolean
+        tags:
+          type: array
+          items:
+            type: string
+    CordelSummary:
+      type: object
+      description: Cordel main data used for endpoints that return many objects. This item does not include the content.
+      properties:
+        id:
+          type: integer
+          description: cordel id
+        title:
+          type: string
+          description: cordel title
+        authorName:
+          type: string
+        authorId:
+          type: integer
+          description: author id
+        xilogravuraUrl:
+          type: string
+          description: image url
+    Page:
+      type: object
+      properties:
+        pageSize:
+          type: integer
+        pageNumber:
+          type: integer
+    ResponsePage:
+      type: object
+      properties:
+        pageable:
+          $ref: '#/components/schemas/Page'
+        totalPages:
+          type: integer
+        totalElements:
+          type: integer
+          description: total number of elements that can be fetched
+        last:
+          type: boolean
+          description: indicates if it's the last page
+        first:
+          type: boolean
+          description: indicates if it's the last page
+        number:
+          type: integer
+          description: page number
+        numberOfElements:
+          type: integer
+          description: number of elements on the current page
+        size:
+          type: integer
+          description: size of the page
+        empty:
+          type: boolean
+          description: indicates if the page is empty
+    SummariesResponsePage:
+      allOf:
+        - $ref: '#/components/schemas/ResponsePage'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/CordelSummary'
+    Token:
+      type: object
+      properties:
+        token:
+          type: string
+        authenticationMethod:
+          type: string
+        expiresAt:
+          type: integer
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
