@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.5</version>
+        <version>3.1.7</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
@@ -26,11 +26,11 @@
         <commons-net.version>3.9.0</commons-net.version>
         <jjwt.version>0.9.1</jjwt.version>
         <lombok.version>1.18.26</lombok.version>
-        <testcontainers.version>1.17.6</testcontainers.version>
+        <testcontainers.version>1.19.3</testcontainers.version>
         <mockftp.version>3.1.0</mockftp.version>
         <commons-lang.version>2.6</commons-lang.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
-        <dependency-check-maven.version>8.4.2</dependency-check-maven.version>
+        <dependency-check-maven.version>8.4.3</dependency-check-maven.version>
         <openapi-generator-maven-plugin.version>5.1.0</openapi-generator-maven-plugin.version>
         <dockerfile-maven-plugin.version>1.4.9</dockerfile-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.9</jacoco-maven-plugin.version>
@@ -104,6 +104,18 @@
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>${jjwt.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.16.0</version>
         </dependency>
 
         <dependency>
