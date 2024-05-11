@@ -17,9 +17,13 @@
 
 package br.com.itsmemario.ecordel.security;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 
-import jakarta.persistence.*;
 
 @Entity
 @Table(name = "cordel_authority")
@@ -31,7 +35,7 @@ public class CordelAuthority implements GrantedAuthority{
 	public static final String AUTHOR = "AUTHOR";
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Long id;
 	private String authority;
 	

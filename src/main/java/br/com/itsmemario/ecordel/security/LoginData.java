@@ -17,8 +17,10 @@
 
 package br.com.itsmemario.ecordel.security;
 
+import lombok.Getter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
+@Getter
 public class LoginData {
 	
 	private String username;
@@ -32,15 +34,7 @@ public class LoginData {
 		this.password = password;
 	}
 
-	public String getUsername() {
-		return username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public UsernamePasswordAuthenticationToken toAuthenticationToken() {
+    public UsernamePasswordAuthenticationToken toAuthenticationToken() {
 		return new UsernamePasswordAuthenticationToken(username, password);
 	}
 

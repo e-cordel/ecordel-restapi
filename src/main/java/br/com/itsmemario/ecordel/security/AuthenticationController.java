@@ -17,12 +17,12 @@
 
 package br.com.itsmemario.ecordel.security;
 
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,16 +32,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
 	
-	private Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
+	private final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 	
-	private AuthenticationProvider provider;
-	private AuthenticationService authenticationService;
+	private final AuthenticationProvider provider;
+	private final AuthenticationService authenticationService;
 	
 	@Autowired
 	public AuthenticationController(AuthenticationProvider provider, AuthenticationService authenticationService) {
