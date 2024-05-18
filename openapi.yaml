@@ -2,7 +2,7 @@ openapi: 3.0.0
 
 info:
   description: "Rest API to perform operations on e-cordels"
-  version: "1.6.0"
+  version: "1.0.0"
   title: "E-cordel API"
   contact:
     url: https://ecordel.com.br
