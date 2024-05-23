@@ -32,10 +32,10 @@ import java.util.Optional;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter{
 
-	private final Logger logger = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
+	private final Logger tokenAuthLogger = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
 
 	public static final String AUTHORIZATION = "Authorization";
-	private AuthenticationService authenticationService;
+	private final AuthenticationService authenticationService;
 	
 	TokenAuthenticationFilter(AuthenticationService authenticationService) {
 		super();
@@ -76,7 +76,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter{
 		Optional<CordelUser> userFromToken = authenticationService.getUserFromToken(token);
 		if(userFromToken.isPresent()) {
 			CordelUser user = userFromToken.get();
-			logger.info("authorizing {}",user.getUsername());
+			tokenAuthLogger.info("authorizing {}",user.getUsername());
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}

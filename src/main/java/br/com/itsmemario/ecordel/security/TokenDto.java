@@ -17,36 +17,7 @@
 
 package br.com.itsmemario.ecordel.security;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-public class TokenDto {
-	
-	private final String token;
-	private final String authenticationMethod;
-	private final Long expiresAt;
-
-	@JsonCreator
-	public TokenDto(@JsonProperty("token") String token,
-					@JsonProperty("authenticationMethod") String authenticationMethod,
-					@JsonProperty("expiresAt") Long expiresAt) {
-		super();
-		this.token = token;
-		this.authenticationMethod = authenticationMethod;
-		this.expiresAt = expiresAt;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public String getAuthenticationMethod() {
-		return authenticationMethod;
-	}
-
-	public Long getExpiresAt() {
-		return expiresAt;
-	}
+public record TokenDto(String token, String authenticationMethod, Long expiresAt) {
 
 	@Override
 	public String toString() {

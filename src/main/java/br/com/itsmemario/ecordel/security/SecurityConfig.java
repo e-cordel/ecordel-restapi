@@ -27,6 +27,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -52,25 +53,26 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.cors().and()
-			.csrf().disable()// TODO review
-			.authorizeHttpRequests()
-			.requestMatchers(HttpMethod.POST, "/auth").permitAll()
-			.requestMatchers(HttpMethod.GET, "/**").permitAll()
-			.requestMatchers(HttpMethod.POST, "/cordels/**").hasAnyAuthority(CordelAuthority.ADMIN, CordelAuthority.AUTHOR, CordelAuthority.EDITOR)
-			.requestMatchers(HttpMethod.PUT, "/cordels/**").hasAnyAuthority(CordelAuthority.ADMIN, CordelAuthority.AUTHOR, CordelAuthority.EDITOR)
-			.requestMatchers(HttpMethod.POST, "/authors/**").hasAnyAuthority(CordelAuthority.ADMIN)
-			.requestMatchers(HttpMethod.PUT, "/authors/**").hasAnyAuthority(CordelAuthority.ADMIN)
-			.anyRequest().authenticated().and()
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and().addFilterBefore(new TokenAuthenticationFilter(authenticationService), UsernamePasswordAuthenticationFilter.class);
+		http.cors(cors -> corsConfigurationSource())
+			.csrf(AbstractHttpConfigurer::disable)
+			.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.authorizeHttpRequests(req -> {
+				req.requestMatchers(HttpMethod.POST, "/auth").permitAll();
+				req.requestMatchers(HttpMethod.GET, "/**").permitAll();
+				req.requestMatchers(HttpMethod.POST, "/cordels/**").hasAnyAuthority(CordelAuthority.ADMIN, CordelAuthority.AUTHOR, CordelAuthority.EDITOR);
+				req.requestMatchers(HttpMethod.PUT, "/cordels/**").hasAnyAuthority(CordelAuthority.ADMIN, CordelAuthority.AUTHOR, CordelAuthority.EDITOR);
+				req.requestMatchers(HttpMethod.POST, "/authors/**").hasAnyAuthority(CordelAuthority.ADMIN);
+				req.requestMatchers(HttpMethod.PUT, "/authors/**").hasAnyAuthority(CordelAuthority.ADMIN);
+				req.anyRequest().authenticated();
+			})
+			.addFilterBefore(new TokenAuthenticationFilter(authenticationService), UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
-	
+
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
-		 return (web) -> web.ignoring()
+		 return web -> web.ignoring()
 	        .requestMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**");
 	}
 
