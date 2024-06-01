@@ -48,14 +48,15 @@ public class AuthenticationController {
 	}
 
 	@PostMapping
-	public ResponseEntity<TokenDto> authenticate(@RequestBody @Valid LoginData data){
-		logger.info("Login attempt");
+	public ResponseEntity<TokenDto> authenticate(@RequestBody @Valid LoginData loginData){
+		logger.info("Login attempt, user: {}", loginData.getUsername());
 		try {
-			UsernamePasswordAuthenticationToken authenticationToken = data.toAuthenticationToken();
+			UsernamePasswordAuthenticationToken authenticationToken = loginData.toAuthenticationToken();
 			Authentication authentication = provider.authenticate(authenticationToken);
 			TokenDto tokenDto = authenticationService.generateToken(authentication);
 			return ResponseEntity.ok(tokenDto);
 		} catch (AuthenticationException e) {
+			logger.info("Authentication failed for user: {}", loginData.getUsername());
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
 	}

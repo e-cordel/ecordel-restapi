@@ -18,29 +18,23 @@
 package br.com.itsmemario.ecordel.security;
 
 import br.com.itsmemario.ecordel.AbstractIntegrationTest;
+import br.com.itsmemario.ecordel.security.jwt.JwtTokenService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AuthenticationControllerTest extends AbstractIntegrationTest {
-
-    @LocalServerPort
-    private int port;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
 
     @Autowired
     UserRepository repository;
+
+    @Autowired
+    JwtTokenService tokenService;
 
     @AfterEach
     void tearDown() {

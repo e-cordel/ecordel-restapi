@@ -46,7 +46,7 @@ public class FtpClientsTest {
     static final FakeFtpServer fakeFtpServer = new FakeFtpServer();
 
     @BeforeAll
-    public static void setup() throws IOException {
+    public static void setup() {
         setUpMockServer();
     }
 
