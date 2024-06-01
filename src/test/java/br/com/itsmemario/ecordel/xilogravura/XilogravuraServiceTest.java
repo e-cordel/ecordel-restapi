@@ -4,7 +4,6 @@ import br.com.itsmemario.ecordel.AbstractIntegrationTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockftpserver.fake.FakeFtpServer;
 import org.mockftpserver.fake.UserAccount;
 import org.mockftpserver.fake.filesystem.DirectoryEntry;
@@ -12,16 +11,10 @@ import org.mockftpserver.fake.filesystem.FileEntry;
 import org.mockftpserver.fake.filesystem.FileSystem;
 import org.mockftpserver.fake.filesystem.UnixFakeFileSystem;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
 public class XilogravuraServiceTest extends AbstractIntegrationTest {
 
     public static final int PORT = 10021;
@@ -34,7 +27,7 @@ public class XilogravuraServiceTest extends AbstractIntegrationTest {
     static final FakeFtpServer fakeFtpServer = new FakeFtpServer();
 
     @BeforeAll
-    public static void setup() throws IOException {
+    public static void setup() {
         setUpMockServer();
     }
 
@@ -49,12 +42,12 @@ public class XilogravuraServiceTest extends AbstractIntegrationTest {
     }
 
     @AfterAll
-    public static void afterClass() throws Exception {
+    public static void afterClass() {
         fakeFtpServer.stop();
     }
 
     @Test
-    public void createXilogravuraWithFile() {
+    void createXilogravuraWithFile() {
         MockMultipartFile file = new MockMultipartFile("file.txt", "content".getBytes());
 
         String xilogravuraUrl = service.createXilogravuraWithFile(file);

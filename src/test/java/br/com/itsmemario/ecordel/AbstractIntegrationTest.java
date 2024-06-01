@@ -17,46 +17,36 @@
 
 package br.com.itsmemario.ecordel;
 
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.MapPropertySource;
-import org.springframework.test.context.ContextConfiguration;
+import org.junit.jupiter.api.BeforeAll;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.lifecycle.Startables;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Stream;
-
-@ContextConfiguration(initializers = AbstractIntegrationTest.Initializer.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AbstractIntegrationTest {
 
-    static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:12.8").withReuse(true);
 
-        static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:12.8");
+    @LocalServerPort
+    protected int port;
 
-        private static void startContainers() {
-            Startables.deepStart(Stream.of(postgres)).join();
-        }
+    @Autowired
+    protected TestRestTemplate restTemplate;
 
-        private static Map<String, Object> createConnectionConfiguration() {
-            Map<String, Object> map = new HashMap<>();
-            map.put("spring.datasource.url", postgres.getJdbcUrl());
-            map.put("spring.datasource.username", postgres.getUsername());
-            map.put("spring.datasource.password", postgres.getPassword());
-            return map;
-        }
-
-        @Override
-        public void initialize(ConfigurableApplicationContext applicationContext) {
-            startContainers();
-            ConfigurableEnvironment environment = applicationContext.getEnvironment();
-            MapPropertySource testcontainers = new MapPropertySource(
-                    "testcontainers",
-                    createConnectionConfiguration()
-            );
-            environment.getPropertySources().addFirst(testcontainers);
-        }
+    @BeforeAll
+    static void beforeAll() {
+        postgres.start();
     }
+
+    @DynamicPropertySource
+    static void configureProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgres::getJdbcUrl);
+        registry.add("spring.datasource.username", postgres::getUsername);
+        registry.add("spring.datasource.password", postgres::getPassword);
+    }
+
 }

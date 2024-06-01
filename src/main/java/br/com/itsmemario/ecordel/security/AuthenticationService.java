@@ -17,7 +17,7 @@
 
 package br.com.itsmemario.ecordel.security;
 
-import br.com.itsmemario.ecordel.security.jwt.JwtToken;
+import br.com.itsmemario.ecordel.security.jwt.JwtTokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -34,7 +34,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.util.Date;
 import java.util.Optional;
 
@@ -49,7 +48,7 @@ public class AuthenticationService implements UserDetailsService {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private final UserRepository repository;
-	private final JwtToken jwtConfig;
+	private final JwtTokenService tokenService;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -63,23 +62,22 @@ public class AuthenticationService implements UserDetailsService {
 	public TokenDto generateToken(Authentication authentication) {
 		
 		CordelUser principal = (CordelUser) authentication.getPrincipal();
-		
-		Date today = new Date();
-		Date expiration = new Date(today.getTime() + jwtConfig.getExpiration());
-
-		byte[] keyBytes = Decoders.BASE64.decode(jwtConfig.getSecretKey());
-		Key key = Keys.hmacShaKeyFor(keyBytes);
+		Date expiration = calculateExpiration();
 
 		String token = Jwts.builder()
 			.issuer(ISSUER)
 			.subject(principal.getId().toString())
 			.claim(ROLES, principal.getAuthorityNames())
-			.issuedAt(today)
+			.issuedAt(new Date())
 			.expiration(expiration)
-			.signWith(key)
+			.signWith(decodeSecretKey())
 			.compact();
 
 		return new TokenDto(token, BEARER, expiration.getTime());
+	}
+
+	private Date calculateExpiration() {
+		return new Date(new Date().getTime() + tokenService.findTop().getExpiration());
 	}
 
 	public boolean isValidToken(String token) {
@@ -102,15 +100,16 @@ public class AuthenticationService implements UserDetailsService {
 	}
 
 	private Jws<Claims> parseToken(String token) throws SignatureException {
-		byte[] keyBytes = Decoders.BASE64.decode(jwtConfig.getSecretKey());
-		SecretKey key = Keys.hmacShaKeyFor(keyBytes);
-
 		return Jwts.parser()
-				.verifyWith(key)
+				.verifyWith(decodeSecretKey())
 				.requireIssuer(ISSUER)
 				.build()
 				.parseSignedClaims(token);
 	}
 
+	private SecretKey decodeSecretKey() {
+		byte[] keyBytes = Decoders.BASE64.decode(tokenService.findTop().getSecretKey());
+		return Keys.hmacShaKeyFor(keyBytes);
+	}
 
 }
