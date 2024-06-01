@@ -1,0 +1,405 @@
+{
+	"info": {
+		"_postman_id": "6c24e3de-35cb-4bb2-8dd9-60f05eaffd0a",
+		"name": "ecordel",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "cordels",
+			"item": [
+				{
+					"name": "cordels",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ecordel_url}}/cordels/summaries?size=30&page=0&authorId=3",
+							"host": [
+								"{{ecordel_url}}"
+							],
+							"path": [
+								"cordels",
+								"summaries"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "30"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "authorId",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Default",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/cordels",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"cordels"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": "[\n            {\n              xilogravura : 'https://img.elo7.com.br/product/original/1EF2F6C/xilogravura-carro-de-boi-xilogravura.jpg',\n              text: 'loren ipson dolor',\n              author: 'Mário Focking Santos',\n              title: 'My first e-cordel',\n              rating: 4.3\n            },\n            {\n              xilogravura : 'https://img.elo7.com.br/product/original/1EF2F6C/xilogravura-carro-de-boi-xilogravura.jpg',\n              text: 'loren ipson dolor',\n              author: 'Mário Focking Santos',\n              title: 'My first e-cordel',\n              rating: 3\n            }\n          ]"
+						}
+					]
+				},
+				{
+					"name": "cordels/{id}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ecordel_url}}/cordels/39",
+							"host": [
+								"{{ecordel_url}}"
+							],
+							"path": [
+								"cordels",
+								"39"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Default",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/cordels",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"cordels"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": "[\n            {\n              xilogravura : 'https://img.elo7.com.br/product/original/1EF2F6C/xilogravura-carro-de-boi-xilogravura.jpg',\n              text: 'loren ipson dolor',\n              author: 'Mário Focking Santos',\n              title: 'My first e-cordel',\n              rating: 4.3\n            },\n            {\n              xilogravura : 'https://img.elo7.com.br/product/original/1EF2F6C/xilogravura-carro-de-boi-xilogravura.jpg',\n              text: 'loren ipson dolor',\n              author: 'Mário Focking Santos',\n              title: 'My first e-cordel',\n              rating: 3\n            }\n          ]"
+						}
+					]
+				},
+				{
+					"name": "new cordel",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"author\": {\"id\": 1},\n    \"title\": \"Titulo\",\n    \"xilogravura\": \"\",\n    \"description\": \"Descrição\",\n    \"content\":\"Conteúdo\\nConteúdo\"\n}"
+						},
+						"url": {
+							"raw": "{{ecordel_url}}/cordels",
+							"host": [
+								"{{ecordel_url}}"
+							],
+							"path": [
+								"cordels"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Default",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/cordels",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"cordels"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": "[\n            {\n              xilogravura : 'https://img.elo7.com.br/product/original/1EF2F6C/xilogravura-carro-de-boi-xilogravura.jpg',\n              text: 'loren ipson dolor',\n              author: 'Mário Focking Santos',\n              title: 'My first e-cordel',\n              rating: 4.3\n            },\n            {\n              xilogravura : 'https://img.elo7.com.br/product/original/1EF2F6C/xilogravura-carro-de-boi-xilogravura.jpg',\n              text: 'loren ipson dolor',\n              author: 'Mário Focking Santos',\n              title: 'My first e-cordel',\n              rating: 3\n            }\n          ]"
+						}
+					]
+				},
+				{
+					"name": "put xilogravura",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ecordel_url}}/cordels/1/xilogravura",
+							"host": [
+								"{{ecordel_url}}"
+							],
+							"path": [
+								"cordels",
+								"1",
+								"xilogravura"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Default",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/cordels",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"cordels"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": "[\n            {\n              xilogravura : 'https://img.elo7.com.br/product/original/1EF2F6C/xilogravura-carro-de-boi-xilogravura.jpg',\n              text: 'loren ipson dolor',\n              author: 'Mário Focking Santos',\n              title: 'My first e-cordel',\n              rating: 4.3\n            },\n            {\n              xilogravura : 'https://img.elo7.com.br/product/original/1EF2F6C/xilogravura-carro-de-boi-xilogravura.jpg',\n              text: 'loren ipson dolor',\n              author: 'Mário Focking Santos',\n              title: 'My first e-cordel',\n              rating: 3\n            }\n          ]"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "authors",
+			"item": [
+				{
+					"name": "new author",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Author Test\",\n    \"about\": \"About author test\",\n    \"email\": \"author.test@ecordel.com\"\n}"
+						},
+						"url": {
+							"raw": "{{ecordel_url}}/authors",
+							"host": [
+								"{{ecordel_url}}"
+							],
+							"path": [
+								"authors"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Default",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/cordels",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"cordels"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": "[\n            {\n              xilogravura : 'https://img.elo7.com.br/product/original/1EF2F6C/xilogravura-carro-de-boi-xilogravura.jpg',\n              text: 'loren ipson dolor',\n              author: 'Mário Focking Santos',\n              title: 'My first e-cordel',\n              rating: 4.3\n            },\n            {\n              xilogravura : 'https://img.elo7.com.br/product/original/1EF2F6C/xilogravura-carro-de-boi-xilogravura.jpg',\n              text: 'loren ipson dolor',\n              author: 'Mário Focking Santos',\n              title: 'My first e-cordel',\n              rating: 3\n            }\n          ]"
+						}
+					]
+				},
+				{
+					"name": "authors",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ecordel_url}}/authors",
+							"host": [
+								"{{ecordel_url}}"
+							],
+							"path": [
+								"authors"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// set token collection variable\r",
+									"pm.collectionVariables.set(\"token\", pm.response.json().token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\":\"admin\",\n\t\"password\":\"admin\"\n}"
+						},
+						"url": {
+							"raw": "{{ecordel_url}}/auth",
+							"host": [
+								"{{ecordel_url}}"
+							],
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Default",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/cordels",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"cordels"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": "[\n            {\n              xilogravura : 'https://img.elo7.com.br/product/original/1EF2F6C/xilogravura-carro-de-boi-xilogravura.jpg',\n              text: 'loren ipson dolor',\n              author: 'Mário Focking Santos',\n              title: 'My first e-cordel',\n              rating: 4.3\n            },\n            {\n              xilogravura : 'https://img.elo7.com.br/product/original/1EF2F6C/xilogravura-carro-de-boi-xilogravura.jpg',\n              text: 'loren ipson dolor',\n              author: 'Mário Focking Santos',\n              title: 'My first e-cordel',\n              rating: 3\n            }\n          ]"
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}
