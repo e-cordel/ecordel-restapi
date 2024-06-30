@@ -20,16 +20,6 @@ You can build with maven
 
     mvn clean package
 
-### Dependency check 
-
-Dependency check is done automatically during `verify` phase.
-
-To suppress false positives include the proper information in the file [dependency-check-suppressions.xml](dependency-check-suppressions.xml)
-
-More info about this:
-
-https://jeremylong.github.io/DependencyCheck/general/suppression.html
-
 ## How to run in local develop
 
 To up postgres in a docker local
@@ -62,6 +52,23 @@ All data volume is mapped to directory `tmp`. You can delete this folder to get 
 ### Writing Tests
 
 If you want to use db connection on your test you must extend the class `AbstractIntegrationTest`. This class will run the docker container and configure the spring datasource. 
+
+### Dependency check
+
+Dependency check is done automatically during `verify` phase.
+
+To suppress false positives include the proper information in the file [dependency-check-suppressions.xml](dependency-check-suppressions.xml)
+
+More info about this:
+
+https://jeremylong.github.io/DependencyCheck/general/suppression.html
+
+### Checkstyle
+
+This project uses [Google Java Style](https://google.github.io/styleguide/javaguide.html). The style will be enforced in build time.
+Before creating a pull request ensure your code complies to the style by running: `mvnw checkstyle:check` or `mvnw checkstyle:checkstyle` to generate the report.
+You can also install checkstyle plugin on your IDE and set the checkstyle file to [checkstyle/google_checks.xml](checkstyle/google_checks.xml).
+The checkstyle version used by the maven plugin is the 9.3.
 
 ## How to contribute
 
