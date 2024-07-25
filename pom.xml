@@ -30,7 +30,7 @@
         <mockftp.version>3.1.0</mockftp.version>
         <commons-lang.version>2.6</commons-lang.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
-        <dependency-check-maven.version>9.1.0</dependency-check-maven.version>
+        <dependency-check-maven.version>10.0.3</dependency-check-maven.version>
         <openapi-generator-maven-plugin.version>5.1.0</openapi-generator-maven-plugin.version>
         <dockerfile-maven-plugin.version>1.4.9</dockerfile-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.9</jacoco-maven-plugin.version>
