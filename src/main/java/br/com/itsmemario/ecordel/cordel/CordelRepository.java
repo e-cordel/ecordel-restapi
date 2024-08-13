@@ -22,27 +22,27 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-interface CordelRepository extends JpaRepository<Cordel, Long>{
+interface CordelRepository extends JpaRepository<Cordel, Long> {
 
-    @Query("""
-            SELECT
-                new br.com.itsmemario.ecordel.cordel.CordelSummary(c.id, c.title, c.xilogravuraUrl, a.name, a.id)
-            FROM Cordel c
-            JOIN c.author a
-            WHERE c.published = :#{#request.published}
-                and (a.id = :#{#request.authorId} OR :#{#request.authorId} IS NULL)
-            """)
-    Page<CordelSummary> findAllByPublished(CordelSummaryRequest request, Pageable pageable);
+  @Query(value = """
+          SELECT
+              new br.com.itsmemario.ecordel.cordel.CordelSummary(c.id, c.title, c.xilogravuraUrl, a.name, a.id, c.ebookUrl, c.description)
+          FROM Cordel c
+          JOIN c.author a
+          WHERE c.published = :#{#request.published}
+              and (a.id = :#{#request.authorId} OR :#{#request.authorId} IS NULL)
+          """)
+  Page<CordelSummary> findAllByPublished(CordelSummaryRequest request, Pageable pageable);
 
-    @Query("""
-            SELECT
-                new br.com.itsmemario.ecordel.cordel.CordelSummary(c.id, c.title, c.xilogravuraUrl, a.name, a.id)
-            FROM Cordel c
-            JOIN c.author a
-            WHERE c.published = :#{#request.published}
-                and LOWER(c.title) LIKE lower(:#{#request.formatedTitle})
-                and (a.id = :#{#request.authorId} OR :#{#request.authorId} IS NULL)
-            """)
-    Page<CordelSummary> findAllByPublishedAndTitleLike(CordelSummaryRequest request, Pageable pageable);
+  @Query(value = """
+          SELECT
+             new br.com.itsmemario.ecordel.cordel.CordelSummary(c.id, c.title, c.xilogravuraUrl, a.name, a.id, c.ebookUrl, c.description)
+          FROM Cordel c
+          JOIN c.author a
+          WHERE c.published = :#{#request.published}
+              and LOWER(c.title) LIKE lower(:#{#request.formatedTitle})
+              and (a.id = :#{#request.authorId} OR :#{#request.authorId} IS NULL)
+          """)
+  Page<CordelSummary> findAllByPublishedAndTitleLike(CordelSummaryRequest request, Pageable pageable);
 
 }

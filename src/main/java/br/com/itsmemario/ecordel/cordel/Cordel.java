@@ -19,6 +19,7 @@ package br.com.itsmemario.ecordel.cordel;
 
 import br.com.itsmemario.ecordel.author.Author;
 import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -48,12 +49,17 @@ public class Cordel {
   private String title;
   @NotBlank
   private String content;
+  @Column(name = "xilogravura_url")
   private String xilogravuraUrl;
   private String description;
   @ElementCollection
   @CollectionTable(name = "cordel_tags")
   private Set<String> tags;
   private boolean published;
+  private Integer year;
+  @Column(name = "ebook_url")
+  private String ebookUrl;
+  private String source;
 
   Cordel() {
   }
