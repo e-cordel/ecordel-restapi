@@ -57,7 +57,7 @@ public class CordelController {
 
     Optional<Cordel> cordel = service.findById(id);
     if (cordel.isPresent()) {
-      CordelDto body = CordelDto.of(cordel.get());
+      CordelDto body = CordelMapper.INSTANCE.toDto(cordel.get());
       return ResponseEntity.ok(body);
     } else {
       logger.info("cordel with id {} not fond", id);
@@ -75,7 +75,7 @@ public class CordelController {
   public ResponseEntity<String> create(@RequestBody @Valid CordelDto dto, UriComponentsBuilder uriBuilder) {
     logger.info("request received for create cordel: {}", dto);
 
-    var newCordel = service.save(dto.toEntity());
+    var newCordel = service.save(CordelMapper.INSTANCE.toEntity(dto));
     var uri = uriBuilder.path("/cordels/{id}").buildAndExpand(newCordel.getId()).toUri();
     logger.info("new cordel Location header: {}", uri.getPath());
     return ResponseEntity.created(uri).build();
@@ -85,7 +85,7 @@ public class CordelController {
   public ResponseEntity<CordelDto> putXilogravura(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
     logger.info("request received, update xilogravura for cordel: {}", id);
     Cordel cordel = service.updateXilogravura(id, file);
-    return ResponseEntity.ok(CordelDto.of(cordel));
+    return ResponseEntity.ok(CordelMapper.INSTANCE.toDto(cordel));
   }
 
   @PutMapping("{id}")
@@ -97,10 +97,10 @@ public class CordelController {
       return ResponseEntity.notFound().build();
     }
 
-    var cordel = dto.toEntity();
+    var cordel = CordelMapper.INSTANCE.toEntity(dto);
     cordel.setId(id);
     Cordel updatedCordel = service.save(cordel);
-    return ResponseEntity.ok(CordelDto.of(updatedCordel));
+    return ResponseEntity.ok(CordelMapper.INSTANCE.toDto(updatedCordel));
   }
 
 }

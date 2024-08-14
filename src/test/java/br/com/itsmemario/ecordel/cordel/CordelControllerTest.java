@@ -20,75 +20,77 @@ package br.com.itsmemario.ecordel.cordel;
 import br.com.itsmemario.ecordel.AbstractIntegrationTest;
 import br.com.itsmemario.ecordel.author.Author;
 import br.com.itsmemario.ecordel.author.AuthorRepository;
+import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Map;
-
 import static br.com.itsmemario.ecordel.cordel.CordelUtil.newCordel;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CordelControllerTest extends AbstractIntegrationTest {
 
-    @Autowired
-    CordelRepository cordelRepository;
+  @Autowired
+  CordelRepository cordelRepository;
 
-    @Autowired
-    AuthorRepository authorRepository;
+  @Autowired
+  AuthorRepository authorRepository;
 
-    @AfterEach
-    void tearDown() {
-        cordelRepository.deleteAll();
-        authorRepository.deleteAll();
-    }
+  @AfterEach
+  void tearDown() {
+    cordelRepository.deleteAll();
+    authorRepository.deleteAll();
+  }
 
-    Cordel insertCordel(boolean published) {
-        Author author = authorRepository.save(new Author("name"));
-        var cordel = newCordel(published, author);
-        return cordelRepository.save(cordel);
-    }
+  @Test
+  void ifACordelExists_getRequestMustReturnOkAndTheCordel() {
+    Cordel cordel = insertCordel(true);
 
-    @Test
-    void ifACordelExists_ItMustReturnOkAndTheCordel() {
-        Cordel cordel = insertCordel(true);
+    ResponseEntity<Cordel> forEntity = restTemplate.getForEntity(getBaseUrl() + "/{id}", Cordel.class, cordel.getId());
 
-        ResponseEntity<Cordel> forEntity = restTemplate.getForEntity(getBaseUrl() + "/{id}", Cordel.class, cordel.getId());
+    assertThat(forEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+    Cordel returnedCordel = forEntity.getBody();
+    assertThat(returnedCordel.getContent()).isEqualTo(cordel.getContent());
+    assertThat(returnedCordel.getAuthor()).isNotNull();
+    assertThat(returnedCordel.getAuthor().getName()).isEqualTo(cordel.getAuthor().getName());
+  }
 
-        assertThat(forEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(forEntity.getBody()).hasFieldOrPropertyWithValue("content", cordel.getContent());
-    }
+  @Test
+  void ifACordelDoesNotExists_ItMustReturn404() {
+    Long id = 100L;
 
-    @Test
-    void ifACordelDoesNotExists_ItMustReturn404() {
-        Long id = 100L;
+    ResponseEntity<Cordel> forEntity = restTemplate.getForEntity(getBaseUrl() + "/{id}", Cordel.class, id);
 
-        ResponseEntity<Cordel> forEntity = restTemplate.getForEntity(getBaseUrl() + "/{id}", Cordel.class, id);
+    assertThat(forEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+  }
 
-        assertThat(forEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-    }
+  @Test
+  void ifPublishedParamIsFalse_theOnlyDraftCordelsMustBeRetrieved() {
+    insertCordel(false);
 
-    @Test
-    void ifPublishedParamIsFalse_theOnlyDraftCordelsMustBeRetrieved() {
-        insertCordel(false);
+    ResponseEntity<Map> response = restTemplate.getForEntity(getBaseUrl() + "/summaries?published=false", Map.class);
+    assertThat(response.getBody()).containsEntry("totalElements", 1);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+  }
 
-        ResponseEntity<Map> response = restTemplate.getForEntity(getBaseUrl()+"/summaries?published=false", Map.class);
-        assertThat(response.getBody()).containsEntry("totalElements",1);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
+  @Test
+  void ifPublishedParamIsNotInformed_itMustBeConsideredTrue() {
+    insertCordel(true);
 
-    @Test
-    void ifPublishedParamIsNotInformed_itMustBeConsideredTrue() {
-        insertCordel(true);
+    ResponseEntity<Map> response = restTemplate.getForEntity(getBaseUrl() + "/summaries", Map.class);
+    assertThat(response.getBody()).containsEntry("totalElements", 1);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+  }
 
-        ResponseEntity<Map> response = restTemplate.getForEntity(getBaseUrl()+"/summaries", Map.class);
-        assertThat(response.getBody()).containsEntry("totalElements",1);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
+  private String getBaseUrl() {
+    return "http://localhost:" + port + "/cordels";
+  }
 
-    private String getBaseUrl() {
-        return "http://localhost:" + port + "/cordels";
-    }
+  Cordel insertCordel(boolean published) {
+    Author author = authorRepository.save(new Author("name"));
+    var cordel = newCordel(published, author);
+    return cordelRepository.save(cordel);
+  }
 }

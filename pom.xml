@@ -11,32 +11,33 @@
 
     <groupId>br.com.itsmemario</groupId>
     <artifactId>ecordel</artifactId>
-    <version>1.6.0</version>
+    <version>1.7.0</version>
     <name>e-cordel</name>
-    <description>e-reader for cordels</description>
+    <description>e-cordel api</description>
 
     <properties>
+        <commons-lang.version>2.6</commons-lang.version>
+        <commons-net.version>3.10.0</commons-net.version>
+        <dependency-check-maven.version>10.0.3</dependency-check-maven.version>
+        <jacoco-maven-plugin.version>0.8.9</jacoco-maven-plugin.version>
         <java.version>21</java.version>
-        <docker.image.prefix>itsmemario</docker.image.prefix>
+        <jaxb-api.version>2.3.1</jaxb-api.version>
+        <jjwt.version>0.12.5</jjwt.version>
+        <lombok.version>1.18.32</lombok.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <mapstruct.version>1.6.0</mapstruct.version>
+        <mockftp.version>3.1.0</mockftp.version>
+        <openapi-generator-maven-plugin.version>5.1.0</openapi-generator-maven-plugin.version>
+        <postgresql.version>42.7.3</postgresql.version>
         <sonar.projectKey>e-cordel_ecordel-restapi</sonar.projectKey>
         <sonar.organization>e-cordel</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.coverage.jacoco.xmlReportPaths>${basedir}/target/site/jacoco/**</sonar.coverage.jacoco.xmlReportPaths>
-        <postgresql.version>42.7.3</postgresql.version>
-        <commons-net.version>3.10.0</commons-net.version>
-        <jjwt.version>0.12.5</jjwt.version>
-        <lombok.version>1.18.32</lombok.version>
         <testcontainers.version>1.19.8</testcontainers.version>
-        <mockftp.version>3.1.0</mockftp.version>
-        <commons-lang.version>2.6</commons-lang.version>
-        <jaxb-api.version>2.3.1</jaxb-api.version>
-        <dependency-check-maven.version>10.0.3</dependency-check-maven.version>
-        <openapi-generator-maven-plugin.version>5.1.0</openapi-generator-maven-plugin.version>
-        <dockerfile-maven-plugin.version>1.4.9</dockerfile-maven-plugin.version>
-        <jacoco-maven-plugin.version>0.8.9</jacoco-maven-plugin.version>
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -131,6 +132,18 @@
             <version>${lombok.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-mapstruct-binding</artifactId>
+            <version>${lombok-mapstruct-binding.version}</version>
+        </dependency>
+
         <!-- test dependencies-->
 
         <dependency>
@@ -172,6 +185,30 @@
         <finalName>server</finalName>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>0.2.0</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+
+            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco-maven-plugin.version}</version>
@@ -192,17 +229,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>${dockerfile-maven-plugin.version}</version>
-                <configuration>
-                    <repository>${docker.image.prefix}/${project.artifactId}</repository>
-                    <buildArgs>
-                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
-                    </buildArgs>
-                </configuration>
-            </plugin>
+
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
@@ -219,6 +246,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
@@ -240,6 +268,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -261,6 +290,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Projeto e-cordel (http://ecordel.com.br)
+ * Copyright 2024 Projeto e-cordel (http://ecordel.com.br)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,17 @@
  *
  */
 
-package br.com.itsmemario.ecordel.author;
+package br.com.itsmemario.ecordel.cordel;
 
-import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-@Data
-public class AuthorDto {
+@Mapper
+interface CordelMapper {
 
-  private Long id;
-  private String about;
-  @NotNull
-  private String name;
-  private String email;
+  CordelMapper INSTANCE = Mappers.getMapper(CordelMapper.class);
 
+  CordelDto toDto(Cordel cordel);
+
+  Cordel toEntity(CordelDto dto);
 }

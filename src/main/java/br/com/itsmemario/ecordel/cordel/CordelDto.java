@@ -18,11 +18,10 @@
 package br.com.itsmemario.ecordel.cordel;
 
 import br.com.itsmemario.ecordel.author.AuthorDto;
-import lombok.Data;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.Set;
+import lombok.Data;
 
 /**
  * Class used to represent data sent do the backend.
@@ -30,44 +29,20 @@ import java.util.Set;
 @Data
 public class CordelDto {
 
-    private Long id;
-    @NotNull
-    private AuthorDto author;
-    @NotBlank
-    private String title;
-    @NotBlank
-    private String description;
-    @NotBlank
-    private String content;
-    private boolean published;
-    private Set<String> tags;
-    private String xilogravuraUrl;
-
-    public static CordelDto of( Cordel cordel ){
-        var dto = new CordelDto();
-        var authorDto = AuthorDto.of(cordel.getAuthor());
-        dto.setAuthor(authorDto);
-        dto.setTags(cordel.getTags());
-        dto.setPublished(cordel.isPublished());
-        dto.setId(cordel.getId());
-        dto.setContent(cordel.getContent());
-        dto.setDescription(cordel.getDescription());
-        dto.setTitle(cordel.getTitle());
-        dto.setXilogravuraUrl(cordel.getXilogravuraUrl());
-        return dto;
-    }
-
-    public Cordel toEntity() {
-        var cordel = new Cordel();
-        cordel.setId( id );
-        cordel.setAuthor( author.toEntity() );
-        cordel.setTitle( title );
-        cordel.setDescription( description );
-        cordel.setContent( content );
-        cordel.setPublished( published );
-        cordel.setTags( tags );
-        cordel.setXilogravuraUrl( xilogravuraUrl );
-        return cordel;
-    }
+  private Long id;
+  @NotNull
+  private AuthorDto author;
+  @NotBlank
+  private String title;
+  @NotBlank
+  private String description;
+  @NotBlank
+  private String content;
+  private boolean published;
+  private Set<String> tags;
+  private String xilogravuraUrl;
+  private Integer year;
+  private String ebookUrl;
+  private String source;
 
 }

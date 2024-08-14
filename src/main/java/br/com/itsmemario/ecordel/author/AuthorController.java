@@ -17,65 +17,71 @@
 
 package br.com.itsmemario.ecordel.author;
 
+import jakarta.validation.Valid;
+import java.net.URI;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import jakarta.validation.Valid;
-import java.net.URI;
-import java.util.Optional;
 
 @CrossOrigin
 @RestController
 @RequestMapping("authors")
 public class AuthorController {
 
-    private final Logger logger = LoggerFactory.getLogger(AuthorController.class);
+  private final Logger logger = LoggerFactory.getLogger(AuthorController.class);
 
-    private AuthorService service;
+  private AuthorService service;
 
-    public AuthorController(AuthorService service) {
-        this.service = service;
+  public AuthorController(AuthorService service) {
+    this.service = service;
+  }
+
+  @GetMapping
+  public Page<AuthorView> getAll(Pageable pageable) {
+    return service.findAll(pageable);
+  }
+
+  @PostMapping
+  public ResponseEntity<Author> create(@RequestBody @Valid AuthorDto author, UriComponentsBuilder uriBuilder) {
+    logger.info("request received for create author: {}", author);
+    var saved = service.save(AuthorMapper.INSTANCE.toEntity(author));
+    URI uri = uriBuilder.path("/authors/{id}").buildAndExpand(saved.getId()).toUri();
+    return ResponseEntity.created(uri).build();
+  }
+
+  @GetMapping("{id}")
+  public ResponseEntity<AuthorDto> getAuthor(@PathVariable Long id) {
+    logger.info("request received get author by id: {}", id);
+    Optional<Author> author = service.findById(id);
+    if (author.isPresent()) {
+      AuthorDto body = AuthorMapper.INSTANCE.toDto(author.get());
+      return ResponseEntity.ok(body);
     }
+    throw new AuthorNotFoundException();
+  }
 
-    @GetMapping
-    public Page<AuthorView> getAll(Pageable pageable){
-        return service.findAll(pageable);
+  @PutMapping("{id}")
+  public ResponseEntity<AuthorDto> update(@RequestBody @Valid AuthorDto dto, @PathVariable Long id) {
+    logger.info("request received for update author with id: {}", id);
+    Optional<Author> byId = service.findById(id);
+    if (byId.isEmpty()) {
+      return ResponseEntity.notFound().build();
     }
-
-    @PostMapping
-    public ResponseEntity<Author> create(@RequestBody @Valid AuthorDto author, UriComponentsBuilder uriBuilder){
-        logger.info("request received for create author: {}", author);
-        var saved = service.save(author.toEntity());
-        URI uri = uriBuilder.path("/authors/{id}").buildAndExpand(saved.getId()).toUri();
-        return ResponseEntity.created(uri).build();
-    }
-
-    @GetMapping("{id}")
-    public ResponseEntity<AuthorDto> getAuthor(@PathVariable Long id){
-        logger.info("request received get author by id: {}", id);
-        Optional<Author> author = service.findById(id);
-        if (author.isPresent()) {
-            AuthorDto body = AuthorDto.of(author.get());
-            return ResponseEntity.ok(body);
-        }
-        throw new AuthorNotFoundException();
-    }
-
-    @PutMapping("{id}")
-    public ResponseEntity<AuthorDto> update(@RequestBody @Valid AuthorDto dto, @PathVariable Long id){
-        logger.info("request received for update author with id: {}", id);
-        Optional<Author> byId = service.findById(id);
-        if(byId.isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
-        Author newAuthor = dto.toEntity();
-        newAuthor.setId(id);
-        var saved = service.save(newAuthor);
-        return ResponseEntity.ok(AuthorDto.of(saved));
-    }
+    Author newAuthor = AuthorMapper.INSTANCE.toEntity(dto);
+    newAuthor.setId(id);
+    var saved = service.save(newAuthor);
+    return ResponseEntity.ok(AuthorMapper.INSTANCE.toDto(saved));
+  }
 }
