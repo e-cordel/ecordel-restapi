@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Projeto e-cordel (http://ecordel.com.br)
+ * Copyright 2024 Projeto e-cordel (http://ecordel.com.br)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,17 @@
  *
  */
 
-package br.com.itsmemario.ecordel.cordel;
+package br.com.itsmemario.ecordel.author;
 
-/**
- * Summary used to transfer only required data to mobile devices and long cordel lists.
- */
-record CordelSummary(Long id, String title, String xilogravuraUrl, String authorName, Long authorId, String ebookUrl,
-                     String description) {
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
+
+@Mapper
+interface AuthorMapper {
+
+  AuthorMapper INSTANCE = Mappers.getMapper(AuthorMapper.class);
+
+  AuthorDto toDto(Author author);
+
+  Author toEntity(AuthorDto dto);
 }

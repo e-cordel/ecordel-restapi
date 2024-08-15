@@ -17,34 +17,16 @@
 
 package br.com.itsmemario.ecordel.author;
 
-import lombok.Data;
-
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 @Data
 public class AuthorDto {
 
-    private Long id;
-    private String about;
-    @NotNull
-    private String name;
-    private String email;
+  private Long id;
+  private String about;
+  @NotNull
+  private String name;
+  private String email;
 
-    public static AuthorDto of(Author author) {
-        var dto = new AuthorDto();
-        dto.setName(author.getName());
-        dto.setAbout(author.getAbout());
-        dto.setEmail(author.getEmail());
-        dto.setId(author.getId());
-        return dto;
-    }
-
-    public Author toEntity() {
-        var author = new Author();
-        author.setId(id);
-        author.setAbout(about);
-        author.setName(name);
-        author.setEmail(email);
-        return author;
-    }
 }

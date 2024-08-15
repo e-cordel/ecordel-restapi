@@ -18,116 +18,83 @@
 package br.com.itsmemario.ecordel.cordel;
 
 import br.com.itsmemario.ecordel.author.Author;
-
-import jakarta.persistence.*;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class Cordel {
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
-	@ManyToOne
-	@JoinColumn(name = "author_id")
-	private Author author;
-	@NotBlank
-	private String title;
-	@NotBlank
-	private String content;
-	private String xilogravuraUrl;
-	private String description;
-	@ElementCollection
-	@CollectionTable(name = "cordel_tags")
-	private Set<String> tags;
-	private boolean published;
 
-	Cordel() {}
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  @ManyToOne
+  @JoinColumn(name = "author_id")
+  private Author author;
+  @NotBlank
+  private String title;
+  @NotBlank
+  private String content;
+  @Column(name = "xilogravura_url")
+  private String xilogravuraUrl;
+  private String description;
+  @ElementCollection
+  @CollectionTable(name = "cordel_tags")
+  private Set<String> tags;
+  private boolean published;
+  private Integer year;
+  @Column(name = "ebook_url")
+  private String ebookUrl;
+  private String source;
 
-	public static Cordel of(Long id) {
-		Cordel cordel = new Cordel();
-		cordel.id = id;
-		return cordel;
-	}
+  Cordel() {
+  }
 
-	public Long getId() {
-		return id;
-	}
+  /**
+   * Creates an empty cordel with only the id.
+   *
+   * @param id cordel identifier.
+   * @return a new cordel.
+   */
+  public static Cordel of(Long id) {
+    Cordel cordel = new Cordel();
+    cordel.id = id;
+    return cordel;
+  }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+  public Set<String> getTags() {
+    return Collections.unmodifiableSet(tags);
+  }
 
-	public Author getAuthor() {
-		return author;
-	}
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Cordel cordel = (Cordel) o;
+    return Objects.equals(id, cordel.id) &&
+        Objects.equals(title, cordel.title);
+  }
 
-	public void setAuthor(Author author) {
-		this.author = author;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	public String getXilogravuraUrl() {
-		return xilogravuraUrl;
-	}
-
-	public void setXilogravuraUrl(String xilogravuraUrl) {
-		this.xilogravuraUrl = xilogravuraUrl;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Set<String> getTags() {
-		return Collections.unmodifiableSet(tags);
-	}
-
-	public void setTags(Set<String> tags) {
-		this.tags = tags;
-	}
-
-	public boolean isPublished() {
-		return published;
-	}
-
-	public void setPublished(boolean published) {
-		this.published = published;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Cordel cordel = (Cordel) o;
-		return Objects.equals(id, cordel.id) &&
-				Objects.equals(title, cordel.title);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, title);
-	}
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, title);
+  }
 }
