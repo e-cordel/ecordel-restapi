@@ -76,4 +76,16 @@ the vulnerable feature is disabled by default in spring boot
     <packageUrl regex="true">^pkg:maven/com\.fasterxml\.jackson\.core/jackson\-core@.*$</packageUrl>
     <cve>CVE-2022-45688</cve>
   </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+   file name: spring-web-6.1.11.jar
+   Applications that parse ETags from "If-Match" or "If-None-Match" request headers are vulnerable to DoS attack.
+
+   We do not support etags.
+   TODO it may be removed when spring web is upgraded to 6.1.12
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework/spring-web@.*$</packageUrl>
+    <vulnerabilityName>CVE-2024-38809</vulnerabilityName>
+  </suppress>
 </suppressions>
