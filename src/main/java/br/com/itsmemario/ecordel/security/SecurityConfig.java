@@ -82,7 +82,7 @@ public class SecurityConfig {
    * @param args
    */
   public static void main(String[] args) {
-    // System.out.println(new BCryptPasswordEncoder().encode("user"));
+    // System.out.println(new BCryptPasswordEncoder().encode("user")); NOSONAR
   }
 
   @Bean

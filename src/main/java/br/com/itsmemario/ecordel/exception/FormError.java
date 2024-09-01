@@ -17,5 +17,12 @@
 
 package br.com.itsmemario.ecordel.exception;
 
-public record FormError(String field, String error) {
+import java.io.Serializable;
+
+/**
+ * Record used to wrap API errors.
+ * @param field The field associated with the error.
+ * @param error The error description.
+ */
+public record FormError(String field, String error) implements Serializable {
 }
