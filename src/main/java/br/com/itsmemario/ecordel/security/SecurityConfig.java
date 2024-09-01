@@ -55,14 +55,15 @@ public class SecurityConfig {
     http.cors(cors -> corsConfigurationSource())
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(authz ->
-              authz.requestMatchers(HttpMethod.POST, "/auth").permitAll()
-              // All gets are public for now
-              .requestMatchers(HttpMethod.GET, "/**").permitAll()
+            .authorizeHttpRequests(authz -> authz
               .requestMatchers(HttpMethod.POST, "/cordels/**").hasAnyAuthority(CordelAuthority.ADMIN, CordelAuthority.AUTHOR, CordelAuthority.EDITOR)
               .requestMatchers(HttpMethod.PUT, "/cordels/**").hasAnyAuthority(CordelAuthority.ADMIN, CordelAuthority.AUTHOR, CordelAuthority.EDITOR)
               .requestMatchers(HttpMethod.POST, "/authors/**").hasAnyAuthority(CordelAuthority.ADMIN)
               .requestMatchers(HttpMethod.PUT, "/authors/**").hasAnyAuthority(CordelAuthority.ADMIN)
+              // public endpoints
+              .requestMatchers(HttpMethod.POST, "/auth").permitAll()
+              // All gets are public for now
+              .requestMatchers(HttpMethod.GET, "/**").permitAll()
               .anyRequest().authenticated()
             ).addFilterBefore(new TokenAuthenticationFilter(authenticationService), UsernamePasswordAuthenticationFilter.class);
 
@@ -81,7 +82,7 @@ public class SecurityConfig {
    * @param args
    */
   public static void main(String[] args) {
-    // System.out.println(new BCryptPasswordEncoder().encode("admin"));
+    // System.out.println(new BCryptPasswordEncoder().encode("user"));
   }
 
   @Bean

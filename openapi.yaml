@@ -2,7 +2,7 @@ openapi: 3.0.0
 
 info:
   description: "Rest API to perform operations on e-cordels"
-  version: "1.0.0"
+  version: "1.1.0"
   title: "E-cordel API"
   contact:
     url: https://ecordel.com.br
@@ -119,19 +119,19 @@ paths:
           schema:
             type: string
           required: false
-          description: search corldels with titles that contains the parameter. It will work such as a like operation.
+          description: search cordels with titles that contains the parameter. It will work such as a like operation.
         - name: published
           in: query
           schema:
             type: boolean
           required: false
-          description: search only publish corldels. This parameter is always true if is omitted.
+          description: search only publish cordels. This parameter is always true if is omitted.
         - name: authorId
           in: query
           schema:
             type: integer
           required: false
-          description: search corldels by author.
+          description: search cordels by author.
       responses:
         200:
           description: "successful operation"
@@ -235,6 +235,32 @@ paths:
         - bearerAuth: []
       tags:
         - Cordel
+  /cordels/{id}/ebook-url:
+    put:
+      summary: Updates the ebook URL with a new value
+      parameters:
+        - name: "id"
+          in: "path"
+          schema:
+            type: integer
+          description: "Cordel identification number"
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        200:
+          description: OK
+        400:
+          description: Bad request. If the URL is invalid
+        404:
+          description: Not found. If the cordel with id does not exist
+      security:
+        - bearerAuth: []
+      tags:
+        - Cordel
 components:
   requestBodies:
     author:
@@ -308,7 +334,7 @@ components:
           description: cordel title
         description:
           type: string
-          description: cordel's description
+          description: cordel description
         content:
           type: string
           description: cordel text

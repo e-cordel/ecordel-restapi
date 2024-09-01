@@ -17,59 +17,67 @@
 
 package br.com.itsmemario.ecordel.cordel;
 
+import br.com.itsmemario.ecordel.exception.BadRequestException;
+import br.com.itsmemario.ecordel.exception.FormError;
 import br.com.itsmemario.ecordel.xilogravura.XilogravuraService;
+import java.net.URL;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Optional;
-
 @Service
+@RequiredArgsConstructor
 public class CordelService {
 
-	private static final int MINIMUM_SIZE = 3;
+  private static final int MINIMUM_SIZE = 3;
 
-	private CordelRepository repository;
-	private XilogravuraService xilogravuraService;
+  private final CordelRepository repository;
+  private final XilogravuraService xilogravuraService;
 
-	@Autowired
-	public CordelService(CordelRepository repository, XilogravuraService xilogravuraService) {
-		super();
-		this.repository = repository;
-		this.xilogravuraService = xilogravuraService;
-	}
+  public Cordel save(Cordel cordel) {
+    return repository.save(cordel);
+  }
 
-	public Cordel save(Cordel cordel) {
-		return repository.save(cordel);
-	}
+  public Optional<Cordel> findById(Long id) {
+    return repository.findById(id);
+  }
 
-	public Optional<Cordel> findById(Long id) {
-		return repository.findById(id);
-	}
+  public Page<CordelSummary> findPublishedByTitle(CordelSummaryRequest request, Pageable pageable) {
+    if (isAValidString(request.getTitle())) {
+      return repository.findAllByPublishedAndTitleLike(request, pageable);
+    }
+    return repository.findAllByPublished(request, pageable);
+  }
 
-	public Page<CordelSummary> findPublishedByTitle(CordelSummaryRequest request, Pageable pageable) {
-		if (isAValidString(request.getTitle())) {
-			return repository.findAllByPublishedAndTitleLike(request, pageable);
-		}
-		return repository.findAllByPublished(request, pageable);
-	}
+  public Cordel updateXilogravura(Long cordelId, MultipartFile file) {
+    Optional<Cordel> byId = findById(cordelId);
 
-	public Cordel updateXilogravura(Long cordelId, MultipartFile file) {
-		Optional<Cordel> byId = findById(cordelId);
+    if (byId.isPresent()) {
+      Cordel cordel = byId.get();
+      String xilogravuraUrl = xilogravuraService.createXilogravuraWithFile(file);
+      cordel.setXilogravuraUrl(xilogravuraUrl);
+      return save(cordel);
+    } else {
+      throw new CordelNotFoundException();
+    }
+  }
 
-		if(byId.isPresent()) {
-			Cordel cordel = byId.get();
-			String xilogravuraUrl = xilogravuraService.createXilogravuraWithFile(file);
-			cordel.setXilogravuraUrl( xilogravuraUrl );
-			return save(cordel);
-		}else{
-			throw new CordelNotFoundException();
-		}
-	}
+  private boolean isAValidString(String title) {
+    return title != null && title.length() >= MINIMUM_SIZE;
+  }
 
-	private boolean isAValidString(String title) {
-		return title != null && title.length() >= MINIMUM_SIZE;
-	}
+  public void updateEbookUrl(Long id, String ebookUrl) {
+    try {
+      new URL(ebookUrl).toURI();
+    } catch (Exception e) {
+      throw new BadRequestException(new FormError("ebookUrl", "Invalid value"));
+    }
+    Cordel cordel = repository.findById(id).orElseThrow(CordelNotFoundException::new);
+    cordel.setEbookUrl(ebookUrl);
+    repository.save(cordel);
+  }
 }

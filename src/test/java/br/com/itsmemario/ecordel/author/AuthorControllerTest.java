@@ -50,7 +50,7 @@ class AuthorControllerTest extends AbstractIntegrationTest {
   }
 
   @Test
-  @Sql(scripts = "classpath:db/data/add-admin-user.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+  @Sql(scripts = "classpath:db/data/add-users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
   @Sql(scripts = "classpath:db/data/clean-user-authorities.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void requestWithValidTokenMustReturnStatusCodeCreated() throws Exception {
     TokenDto token = getAdminToken(mockMvc);
@@ -84,7 +84,7 @@ class AuthorControllerTest extends AbstractIntegrationTest {
   }
 
   @Test
-  @Sql(scripts = "classpath:db/data/add-admin-user.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+  @Sql(scripts = "classpath:db/data/add-users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
   @Sql(scripts = "classpath:db/data/clean-user-authorities.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void putRequestWithValidTokenMustReturnStatusCodeOk() throws Exception {
     TokenDto token = getAdminToken(mockMvc);

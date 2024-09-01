@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Projeto e-cordel (http://ecordel.com.br)
+ * Copyright 2024 Projeto e-cordel (http://ecordel.com.br)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,5 +17,13 @@
 
 package br.com.itsmemario.ecordel.exception;
 
-public record FormError(String field, String error) {
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
+public class BadRequestException extends RuntimeException {
+
+  private final FormError error;
+
 }

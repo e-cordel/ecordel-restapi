@@ -18,6 +18,7 @@
 package br.com.itsmemario.ecordel.cordel;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,13 +82,6 @@ public class CordelController {
     return ResponseEntity.created(uri).build();
   }
 
-  @PutMapping("{id}/xilogravura")
-  public ResponseEntity<CordelDto> putXilogravura(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
-    logger.info("request received, update xilogravura for cordel: {}", id);
-    Cordel cordel = service.updateXilogravura(id, file);
-    return ResponseEntity.ok(CordelMapper.INSTANCE.toDto(cordel));
-  }
-
   @PutMapping("{id}")
   public ResponseEntity<CordelDto> update(@RequestBody @Valid CordelDto dto, @PathVariable Long id) {
     logger.info("request received update cordel with id: {}", id);
@@ -101,6 +95,26 @@ public class CordelController {
     cordel.setId(id);
     Cordel updatedCordel = service.save(cordel);
     return ResponseEntity.ok(CordelMapper.INSTANCE.toDto(updatedCordel));
+  }
+
+  @PutMapping("{id}/xilogravura")
+  public ResponseEntity<CordelDto> putXilogravura(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+    logger.info("request received, update xilogravura for cordel: {}", id);
+    Cordel cordel = service.updateXilogravura(id, file);
+    return ResponseEntity.ok(CordelMapper.INSTANCE.toDto(cordel));
+  }
+
+  /**
+   * This endpoint is called by automatic routines to generate ebook files.
+   * @param id cordel id.
+   * @param ebookUrl the url where the ebook is served.
+   * @return ok if the request completes successfully.
+   */
+  @PutMapping("{id}/ebook-url")
+  public ResponseEntity<Void> updateEbookUrl(@PathVariable Long id, @RequestBody @NotBlank String ebookUrl) {
+    logger.info("request received, update ebook url for cordel: {}", id);
+    service.updateEbookUrl(id, ebookUrl);
+    return ResponseEntity.ok().build();
   }
 
 }
