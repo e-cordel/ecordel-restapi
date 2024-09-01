@@ -19,8 +19,8 @@ package br.com.itsmemario.ecordel.security;
 
 public record TokenDto(String token, String authenticationMethod, Long expiresAt) {
 
-	@Override
-	public String toString() {
-		return authenticationMethod + " " + token;
-	}
+  @Override
+  public String toString() {
+    return authenticationMethod + " " + token;
+  }
 }

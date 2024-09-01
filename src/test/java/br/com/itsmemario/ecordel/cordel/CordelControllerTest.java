@@ -20,12 +20,17 @@ package br.com.itsmemario.ecordel.cordel;
 import br.com.itsmemario.ecordel.AbstractIntegrationTest;
 import br.com.itsmemario.ecordel.author.Author;
 import br.com.itsmemario.ecordel.author.AuthorRepository;
+import br.com.itsmemario.ecordel.security.TokenDto;
 import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.jdbc.Sql;
 
 import static br.com.itsmemario.ecordel.cordel.CordelUtil.newCordel;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -82,6 +87,42 @@ class CordelControllerTest extends AbstractIntegrationTest {
     ResponseEntity<Map> response = restTemplate.getForEntity(getBaseUrl() + "/summaries", Map.class);
     assertThat(response.getBody()).containsEntry("totalElements", 1);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:db/data/add-users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+  @Sql(scripts = "classpath:db/data/clean-user-authorities.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  void onlyAdminAndEditorRoles_shouldBeAbleToUpdateEbookUrl() {
+    var cordel = insertCordel(true);
+
+    var adminToken = login("admin", "admin");
+    var adminHeaders = new HttpHeaders();
+    adminHeaders.add(HttpHeaders.AUTHORIZATION, adminToken.toString());
+    HttpEntity<String> requestEntity = new HttpEntity<>("http://url.com", adminHeaders);
+    ResponseEntity<Void> response = restTemplate.exchange(getBaseUrl() + "/{id}/ebook-url", HttpMethod.PUT, requestEntity, Void.class, cordel.getId());
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+    var userToken = login("user", "user");
+    var userHeaders = new HttpHeaders();
+    userHeaders.add(HttpHeaders.AUTHORIZATION, userToken.toString());
+    HttpEntity<String> userRequest = new HttpEntity<>("http://url.com", userHeaders);
+    ResponseEntity<Void> userResponse = restTemplate.exchange(getBaseUrl() + "/{id}/ebook-url", HttpMethod.PUT, userRequest, Void.class, cordel.getId());
+    assertThat(userResponse.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+  }
+
+  @Test
+  @Sql(scripts = "classpath:db/data/add-users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+  @Sql(scripts = "classpath:db/data/clean-user-authorities.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  void shouldReturnABadRequest_ifEbookUrlIsInvalid() {
+    var cordel = insertCordel(true);
+
+    TokenDto tokenDto = login("admin", "admin");
+    var headers = new HttpHeaders();
+    headers.add(HttpHeaders.AUTHORIZATION, tokenDto.toString());
+    HttpEntity<String> requestEntity = new HttpEntity<>("INVALID_URL", headers);
+
+    ResponseEntity<Void> response = restTemplate.exchange(getBaseUrl() + "/{id}/ebook-url", HttpMethod.PUT, requestEntity, Void.class, cordel.getId());
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
   }
 
   private String getBaseUrl() {

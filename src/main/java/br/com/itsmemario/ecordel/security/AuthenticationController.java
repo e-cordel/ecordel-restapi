@@ -35,30 +35,30 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
-	
-	private final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
-	
-	private final AuthenticationProvider provider;
-	private final AuthenticationService authenticationService;
-	
-	@Autowired
-	public AuthenticationController(AuthenticationProvider provider, AuthenticationService authenticationService) {
-		this.provider = provider;
-		this.authenticationService = authenticationService;
-	}
 
-	@PostMapping
-	public ResponseEntity<TokenDto> authenticate(@RequestBody @Valid LoginData loginData){
-		logger.info("Login attempt, user: {}", loginData.getUsername());
-		try {
-			UsernamePasswordAuthenticationToken authenticationToken = loginData.toAuthenticationToken();
-			Authentication authentication = provider.authenticate(authenticationToken);
-			TokenDto tokenDto = authenticationService.generateToken(authentication);
-			return ResponseEntity.ok(tokenDto);
-		} catch (AuthenticationException e) {
-			logger.info("Authentication failed for user: {}", loginData.getUsername());
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-		}
-	}
+  private final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
+
+  private final AuthenticationProvider provider;
+  private final AuthenticationService authenticationService;
+
+  @Autowired
+  public AuthenticationController(AuthenticationProvider provider, AuthenticationService authenticationService) {
+    this.provider = provider;
+    this.authenticationService = authenticationService;
+  }
+
+  @PostMapping
+  public ResponseEntity<TokenDto> authenticate(@RequestBody @Valid LoginData loginData) {
+    logger.info("Login attempt, user: {}", loginData.getUsername());
+    try {
+      UsernamePasswordAuthenticationToken authenticationToken = loginData.toAuthenticationToken();
+      Authentication authentication = provider.authenticate(authenticationToken);
+      TokenDto tokenDto = authenticationService.generateToken(authentication);
+      return ResponseEntity.ok(tokenDto);
+    } catch (AuthenticationException e) {
+      logger.info("Authentication failed for user: {}", loginData.getUsername());
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+  }
 
 }

@@ -17,71 +17,70 @@
 
 package br.com.itsmemario.ecordel.security;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.filter.OncePerRequestFilter;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-public class TokenAuthenticationFilter extends OncePerRequestFilter{
+public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
-	private final Logger tokenAuthLogger = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
+  private final Logger tokenAuthLogger = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
 
-	public static final String AUTHORIZATION = "Authorization";
-	private final AuthenticationService authenticationService;
-	
-	TokenAuthenticationFilter(AuthenticationService authenticationService) {
-		super();
-		this.authenticationService = authenticationService;
-	}
+  public static final String AUTHORIZATION = "Authorization";
+  private final AuthenticationService authenticationService;
 
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
-		
-		Optional<String> token = getToken(request);
-		
-		if(isValidToken(token)) {
-			authorizeRequestWithToken(token.get());
-		}
-			
-		filterChain.doFilter(request, response);
-		
-	}
+  TokenAuthenticationFilter(AuthenticationService authenticationService) {
+    super();
+    this.authenticationService = authenticationService;
+  }
 
-	private Optional<String> getToken(HttpServletRequest request) {
+  @Override
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+          throws ServletException, IOException {
 
-		String token = request.getHeader(AUTHORIZATION);
+    Optional<String> token = getToken(request);
 
-		if(token!=null) {
-			token = token.substring(7);
-		}
+    if (isValidToken(token)) {
+      authorizeRequestWithToken(token.get());
+    }
 
-		return Optional.ofNullable(token);
+    filterChain.doFilter(request, response);
 
-	}
+  }
 
-	private boolean isValidToken(Optional<String> token) {
-		return token.isPresent() && authenticationService.isValidToken(token.get());
-	}
+  private Optional<String> getToken(HttpServletRequest request) {
 
-	private void authorizeRequestWithToken(String token) {
-		Optional<CordelUser> userFromToken = authenticationService.getUserFromToken(token);
-		if(userFromToken.isPresent()) {
-			CordelUser user = userFromToken.get();
-			tokenAuthLogger.info("authorizing {}",user.getUsername());
-			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-		}
-	
-	}
+    String token = request.getHeader(AUTHORIZATION);
+
+    if (token != null) {
+      token = token.substring(7);
+    }
+
+    return Optional.ofNullable(token);
+
+  }
+
+  private boolean isValidToken(Optional<String> token) {
+    return token.isPresent() && authenticationService.isValidToken(token.get());
+  }
+
+  private void authorizeRequestWithToken(String token) {
+    Optional<CordelUser> userFromToken = authenticationService.getUserFromToken(token);
+    if (userFromToken.isPresent()) {
+      CordelUser user = userFromToken.get();
+      tokenAuthLogger.info("authorizing {}", user.getUsername());
+      UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+      SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+  }
 
 
 }

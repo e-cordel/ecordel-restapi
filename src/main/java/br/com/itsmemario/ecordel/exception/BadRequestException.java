@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Projeto e-cordel (http://ecordel.com.br)
+ * Copyright 2024 Projeto e-cordel (http://ecordel.com.br)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,13 @@
 
 package br.com.itsmemario.ecordel.exception;
 
-import java.io.Serializable;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-/**
- * Record used to wrap API errors.
- * @param field The field associated with the error.
- * @param error The error description.
- */
-public record FormError(String field, String error) implements Serializable {
+@Getter
+@RequiredArgsConstructor
+public class BadRequestException extends RuntimeException {
+
+  private final FormError error;
+
 }
