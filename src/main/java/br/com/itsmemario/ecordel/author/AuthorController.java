@@ -20,8 +20,6 @@ package br.com.itsmemario.ecordel.author;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +38,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequestMapping("authors")
 public class AuthorController {
 
-  private final Logger logger = LoggerFactory.getLogger(AuthorController.class);
-
   private AuthorService service;
 
   public AuthorController(AuthorService service) {
@@ -55,7 +51,6 @@ public class AuthorController {
 
   @PostMapping
   public ResponseEntity<Author> create(@RequestBody @Valid AuthorDto author, UriComponentsBuilder uriBuilder) {
-    logger.info("request received for create author: {}", author);
     var saved = service.save(AuthorMapper.INSTANCE.toEntity(author));
     URI uri = uriBuilder.path("/authors/{id}").buildAndExpand(saved.getId()).toUri();
     return ResponseEntity.created(uri).build();
@@ -63,7 +58,6 @@ public class AuthorController {
 
   @GetMapping("{id}")
   public ResponseEntity<AuthorDto> getAuthor(@PathVariable Long id) {
-    logger.info("request received get author by id: {}", id);
     Optional<Author> author = service.findById(id);
     if (author.isPresent()) {
       AuthorDto body = AuthorMapper.INSTANCE.toDto(author.get());
@@ -74,7 +68,6 @@ public class AuthorController {
 
   @PutMapping("{id}")
   public ResponseEntity<AuthorDto> update(@RequestBody @Valid AuthorDto dto, @PathVariable Long id) {
-    logger.info("request received for update author with id: {}", id);
     Optional<Author> byId = service.findById(id);
     if (byId.isEmpty()) {
       return ResponseEntity.notFound().build();

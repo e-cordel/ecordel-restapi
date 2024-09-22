@@ -54,7 +54,6 @@ public class CordelController {
 
   @GetMapping("{id}")
   public ResponseEntity<CordelDto> getCordel(@PathVariable Long id) {
-    logger.info("request received get cordel by id: {}", id);
 
     Optional<Cordel> cordel = service.findById(id);
     if (cordel.isPresent()) {
@@ -68,13 +67,11 @@ public class CordelController {
 
   @GetMapping("summaries")
   public Page<CordelSummary> getCordels(CordelSummaryRequest request, Pageable pageable) {
-    logger.info("request received get cordels");
     return service.findPublishedByTitle(request, pageable);
   }
 
   @PostMapping
   public ResponseEntity<String> create(@RequestBody @Valid CordelDto dto, UriComponentsBuilder uriBuilder) {
-    logger.info("request received for create cordel: {}", dto);
 
     var newCordel = service.save(CordelMapper.INSTANCE.toEntity(dto));
     var uri = uriBuilder.path("/cordels/{id}").buildAndExpand(newCordel.getId()).toUri();
@@ -84,7 +81,6 @@ public class CordelController {
 
   @PutMapping("{id}")
   public ResponseEntity<CordelDto> update(@RequestBody @Valid CordelDto dto, @PathVariable Long id) {
-    logger.info("request received update cordel with id: {}", id);
 
     Optional<Cordel> existingCordel = service.findById(id);
     if (existingCordel.isEmpty()) {
@@ -99,7 +95,6 @@ public class CordelController {
 
   @PutMapping("{id}/xilogravura")
   public ResponseEntity<CordelDto> putXilogravura(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
-    logger.info("request received, update xilogravura for cordel: {}", id);
     Cordel cordel = service.updateXilogravura(id, file);
     return ResponseEntity.ok(CordelMapper.INSTANCE.toDto(cordel));
   }
@@ -112,7 +107,6 @@ public class CordelController {
    */
   @PutMapping("{id}/ebook-url")
   public ResponseEntity<Void> updateEbookUrl(@PathVariable Long id, @RequestBody @NotBlank String ebookUrl) {
-    logger.info("request received, update ebook url for cordel: {}", id);
     service.updateEbookUrl(id, ebookUrl);
     return ResponseEntity.ok().build();
   }
