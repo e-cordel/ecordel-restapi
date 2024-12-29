@@ -172,6 +172,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Cordel'
+            text/plain:
+              schema:
+                  type: string
         404:
           description: "Not found"
       tags:

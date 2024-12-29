@@ -19,12 +19,15 @@ package br.com.itsmemario.ecordel.cordel;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import java.io.ByteArrayInputStream;
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,12 +41,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+@Slf4j
 @CrossOrigin
 @RestController
 @RequestMapping("cordels")
 public class CordelController {
-
-  private final Logger logger = LoggerFactory.getLogger(CordelController.class);
 
   private CordelService service;
 
@@ -54,15 +56,27 @@ public class CordelController {
 
   @GetMapping("{id}")
   public ResponseEntity<CordelDto> getCordel(@PathVariable Long id) {
-
     Optional<Cordel> cordel = service.findById(id);
     if (cordel.isPresent()) {
       CordelDto body = CordelMapper.INSTANCE.toDto(cordel.get());
       return ResponseEntity.ok(body);
     } else {
-      logger.info("cordel with id {} not fond", id);
+      log.info("cordel with id {} not fond", id);
       return ResponseEntity.notFound().build();
     }
+  }
+
+  @GetMapping(value = "{id}", produces = MediaType.TEXT_PLAIN_VALUE)
+  public ResponseEntity<InputStreamResource> downloadTxt(@PathVariable Long id) {
+    var cordelDto = service.getContentForDownload(id);
+
+    var inputStreamResource = new InputStreamResource(new ByteArrayInputStream(cordelDto.getContent().getBytes()));
+
+    return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + cordelDto.getTitle() + ".txt\"")
+            .contentType(MediaType.TEXT_PLAIN)
+            .contentLength(cordelDto.getContent().length())
+            .body(inputStreamResource);
   }
 
   @GetMapping("summaries")
@@ -72,16 +86,14 @@ public class CordelController {
 
   @PostMapping
   public ResponseEntity<String> create(@RequestBody @Valid CordelDto dto, UriComponentsBuilder uriBuilder) {
-
     var newCordel = service.save(CordelMapper.INSTANCE.toEntity(dto));
     var uri = uriBuilder.path("/cordels/{id}").buildAndExpand(newCordel.getId()).toUri();
-    logger.info("new cordel Location header: {}", uri.getPath());
+    log.info("new cordel Location header: {}", uri.getPath());
     return ResponseEntity.created(uri).build();
   }
 
   @PutMapping("{id}")
   public ResponseEntity<CordelDto> update(@RequestBody @Valid CordelDto dto, @PathVariable Long id) {
-
     Optional<Cordel> existingCordel = service.findById(id);
     if (existingCordel.isEmpty()) {
       return ResponseEntity.notFound().build();
@@ -100,8 +112,9 @@ public class CordelController {
   }
 
   /**
-   * This endpoint is called by automatic routines to generate ebook files.
-   * @param id cordel id.
+   * This endpoint is called by automatic routines to set the ebook url for download.
+   *
+   * @param id       cordel id.
    * @param ebookUrl the url where the ebook is served.
    * @return ok if the request completes successfully.
    */
