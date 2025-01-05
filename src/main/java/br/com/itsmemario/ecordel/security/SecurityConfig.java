@@ -97,6 +97,8 @@ public class SecurityConfig {
   CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowedOrigins(Collections.singletonList("*"));
+    // allow download, it will be included in the response header Access-Control-Expose-Headers
+    configuration.addExposedHeader(HttpHeaders.CONTENT_DISPOSITION);
     configuration.addExposedHeader(HttpHeaders.LOCATION);
     configuration.addAllowedHeader("*");
     configuration.addAllowedMethod("*");

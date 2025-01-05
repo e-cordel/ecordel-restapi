@@ -21,12 +21,14 @@ import br.com.itsmemario.ecordel.author.AuthorDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.Set;
+import lombok.Builder;
 import lombok.Data;
 
 /**
  * Class used to represent data sent do the backend.
  */
 @Data
+@Builder
 public class CordelDto {
 
   private Long id;

@@ -21,7 +21,9 @@ import br.com.itsmemario.ecordel.AbstractIntegrationTest;
 import br.com.itsmemario.ecordel.author.Author;
 import br.com.itsmemario.ecordel.author.AuthorRepository;
 import br.com.itsmemario.ecordel.security.TokenDto;
+import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +31,14 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
 
 import static br.com.itsmemario.ecordel.cordel.CordelUtil.newCordel;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 class CordelControllerTest extends AbstractIntegrationTest {
 
   @Autowired
@@ -123,6 +127,27 @@ class CordelControllerTest extends AbstractIntegrationTest {
 
     ResponseEntity<Void> response = restTemplate.exchange(getBaseUrl() + "/{id}/ebook-url", HttpMethod.PUT, requestEntity, Void.class, cordel.getId());
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+  }
+
+  @Test
+  void shouldReturnPlainTextContent() {
+    Cordel cordel = insertCordel(true);
+    HttpHeaders headers = new HttpHeaders();
+    headers.setAccept(List.of(MediaType.TEXT_PLAIN));
+    HttpEntity<String> entity = new HttpEntity<>(null, headers);
+    ResponseEntity<String> response = restTemplate.exchange(getBaseUrl() + "/{id}", HttpMethod.GET, entity, String.class, cordel.getId());
+
+    log.info("Headers: {}", response.getHeaders());
+    String contentDisposition = response.getHeaders().getFirst(HttpHeaders.CONTENT_DISPOSITION);
+    String contentLength = response.getHeaders().getFirst(HttpHeaders.CONTENT_LENGTH);
+    var expectedContentDisposition = "attachment; filename=\"" + cordel.getTitle() + ".txt\"";
+
+    assertThat(contentDisposition).isEqualTo(expectedContentDisposition);
+    assertThat(contentLength).isNotNull();
+    // content length is greater than the content length of the cordel because the template adds some text
+    assertThat(Integer.valueOf(contentLength)).isGreaterThan(cordel.getContent().length());
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).contains("Conteúdo baixado através do site ler.ecordel.com.br", "Título: " + cordel.getTitle());
   }
 
   private String getBaseUrl() {

@@ -20,20 +20,27 @@ package br.com.itsmemario.ecordel.cordel;
 import br.com.itsmemario.ecordel.exception.BadRequestException;
 import br.com.itsmemario.ecordel.exception.FormError;
 import br.com.itsmemario.ecordel.xilogravura.XilogravuraService;
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheFactory;
+import java.io.StringWriter;
 import java.net.URL;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CordelService {
 
-  private static final int MINIMUM_SIZE = 3;
+  private static final int MINIMUM_TITLE_SIZE = 3;
+  private static final MustacheFactory mf = new DefaultMustacheFactory();
+  private static final Mustache cordelTemplate = mf.compile("mustache/cordel.mustache");
 
   private final CordelRepository repository;
   private final XilogravuraService xilogravuraService;
@@ -47,7 +54,7 @@ public class CordelService {
   }
 
   public Page<CordelSummary> findPublishedByTitle(CordelSummaryRequest request, Pageable pageable) {
-    if (isAValidString(request.getTitle())) {
+    if (titleIsValid(request.getTitle())) {
       return repository.findAllByPublishedAndTitleLike(request, pageable);
     }
     return repository.findAllByPublished(request, pageable);
@@ -66,8 +73,8 @@ public class CordelService {
     }
   }
 
-  private boolean isAValidString(String title) {
-    return title != null && title.length() >= MINIMUM_SIZE;
+  private boolean titleIsValid(String title) {
+    return title != null && title.length() >= MINIMUM_TITLE_SIZE;
   }
 
   public void updateEbookUrl(Long id, String ebookUrl) {
@@ -79,5 +86,23 @@ public class CordelService {
     Cordel cordel = repository.findById(id).orElseThrow(CordelNotFoundException::new);
     cordel.setEbookUrl(ebookUrl);
     repository.save(cordel);
+  }
+
+  /**
+   * Generate a txt content for download using a mustache template.
+   * Only the title and content are set in the DTO.
+   * @param id cordel id
+   * @return content for download
+   */
+  public CordelDto getContentForDownload(Long id) {
+    Cordel cordel = repository.findById(id).orElseThrow(CordelNotFoundException::new);
+
+    StringWriter contentWriter = new StringWriter(cordel.getContent().length());
+    cordelTemplate.execute(contentWriter, cordel);
+
+    return CordelDto.builder()
+        .title(cordel.getTitle())
+        .content(contentWriter.toString())
+        .build();
   }
 }
