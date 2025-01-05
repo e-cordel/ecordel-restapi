@@ -31,7 +31,15 @@ public class CordelUtil {
         cordel.setDescription("description");
         cordel.setAuthor(author);
         cordel.setTitle("title");
-        cordel.setContent("content");
+        cordel.setContent("""
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+        Proin eget scelerisque nulla, vel cursus nunc. Maecenas ac malesuada purus, vitae vulputate mauris.
+        
+        Praesent malesuada mi ac nunc dignissim, eu congue nunc facilisis. Aenean dictum ex quis convallis laoreet.
+        Nullam efficitur massa ut nulla blandit congue. Etiam ornare ipsum nec nunc suscipit ultrices. Proin a turpis est.
+        
+        Mauris blandit sagittis risus a tincidunt. Nulla in purus purus.
+        """);
         cordel.setPublished(published);
         cordel.setTags(new HashSet<>(Arrays.asList("tag1","tag2")));
         return cordel;

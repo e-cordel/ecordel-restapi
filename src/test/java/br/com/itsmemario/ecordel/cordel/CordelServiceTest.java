@@ -87,5 +87,7 @@ class CordelServiceTest {
     assertThat(contentForDownload).isNotNull();
     assertThat(contentForDownload.getTitle()).isEqualTo(cordel.getTitle());
     assertThat(contentForDownload.getContent()).contains("Título: " + cordel.getTitle(), "Autor: Test", "Texto do cordel:", "ler.ecordel.com.br");
+    // should not contain html entities
+    assertThat(contentForDownload.getContent()).doesNotContain("&#10;");
   }
 }
