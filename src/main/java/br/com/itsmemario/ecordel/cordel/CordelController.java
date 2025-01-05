@@ -69,13 +69,13 @@ public class CordelController {
   @GetMapping(value = "{id}", produces = MediaType.TEXT_PLAIN_VALUE)
   public ResponseEntity<InputStreamResource> downloadTxt(@PathVariable Long id) {
     var cordelDto = service.getContentForDownload(id);
-
-    var inputStreamResource = new InputStreamResource(new ByteArrayInputStream(cordelDto.getContent().getBytes()));
+    var contentBytes = cordelDto.getContent().getBytes();
+    var inputStreamResource = new InputStreamResource(new ByteArrayInputStream(contentBytes));
 
     return ResponseEntity.ok()
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + cordelDto.getTitle() + ".txt\"")
             .contentType(MediaType.TEXT_PLAIN)
-            .contentLength(cordelDto.getContent().length())
+            .contentLength(contentBytes.length)
             .body(inputStreamResource);
   }
 
