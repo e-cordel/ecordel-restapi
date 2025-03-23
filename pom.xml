@@ -11,7 +11,7 @@
 
     <groupId>br.com.itsmemario</groupId>
     <artifactId>ecordel</artifactId>
-    <version>1.7.0</version>
+    <version>1.7.1</version>
     <name>e-cordel</name>
     <description>e-cordel api</description>
 
