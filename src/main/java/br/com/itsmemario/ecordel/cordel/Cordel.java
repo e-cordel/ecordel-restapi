@@ -49,7 +49,11 @@ public class Cordel {
   private String title;
   @NotBlank
   private String content;
+  /**
+   * @deprecated This field is deprecated and will be removed in the future. Use {@link Xilogravura} instead.
+   */
   @Column(name = "xilogravura_url")
+  @Deprecated(forRemoval = true, since = "2025-01-01")
   private String xilogravuraUrl;
   private String description;
   @ElementCollection
