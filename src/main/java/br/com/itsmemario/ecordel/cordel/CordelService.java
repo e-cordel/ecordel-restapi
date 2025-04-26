@@ -94,15 +94,16 @@ public class CordelService {
    * @param id cordel id
    * @return content for download
    */
-  public CordelDto getContentForDownload(Long id) {
+  public Cordel getContentForDownload(Long id) {
     Cordel cordel = repository.findById(id).orElseThrow(CordelNotFoundException::new);
 
     StringWriter contentWriter = new StringWriter(cordel.getContent().length());
     cordelTemplate.execute(contentWriter, cordel);
+    log.info("text generated for cordel: {}", id);
 
-    return CordelDto.builder()
-        .title(cordel.getTitle())
-        .content(contentWriter.toString())
-        .build();
+    var cordelWithContent = new Cordel();
+    cordelWithContent.setTitle(cordel.getTitle());
+    cordelWithContent.setContent(contentWriter.toString());
+    return cordelWithContent;
   }
 }

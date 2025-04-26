@@ -38,7 +38,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequestMapping("authors")
 public class AuthorController {
 
-  private AuthorService service;
+  private final AuthorService service;
 
   public AuthorController(AuthorService service) {
     this.service = service;
@@ -50,31 +50,27 @@ public class AuthorController {
   }
 
   @PostMapping
-  public ResponseEntity<Author> create(@RequestBody @Valid AuthorDto author, UriComponentsBuilder uriBuilder) {
-    var saved = service.save(AuthorMapper.INSTANCE.toEntity(author));
+  public ResponseEntity<Author> create(@RequestBody @Valid Author author, UriComponentsBuilder uriBuilder) {
+    var saved = service.save(author);
     URI uri = uriBuilder.path("/authors/{id}").buildAndExpand(saved.getId()).toUri();
     return ResponseEntity.created(uri).build();
   }
 
   @GetMapping("{id}")
-  public ResponseEntity<AuthorDto> getAuthor(@PathVariable Long id) {
+  public ResponseEntity<Author> getAuthor(@PathVariable Long id) {
     Optional<Author> author = service.findById(id);
-    if (author.isPresent()) {
-      AuthorDto body = AuthorMapper.INSTANCE.toDto(author.get());
-      return ResponseEntity.ok(body);
-    }
-    throw new AuthorNotFoundException();
+    return author.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
   }
 
+  // TODO create test for this method changing the author name
   @PutMapping("{id}")
-  public ResponseEntity<AuthorDto> update(@RequestBody @Valid AuthorDto dto, @PathVariable Long id) {
-    Optional<Author> byId = service.findById(id);
-    if (byId.isEmpty()) {
+  public ResponseEntity<Author> update(@RequestBody @Valid Author author, @PathVariable Long id) {
+    Optional<Author> authorById = service.findById(id);
+    if (authorById.isEmpty()) {
       return ResponseEntity.notFound().build();
     }
-    Author newAuthor = AuthorMapper.INSTANCE.toEntity(dto);
-    newAuthor.setId(id);
-    var saved = service.save(newAuthor);
-    return ResponseEntity.ok(AuthorMapper.INSTANCE.toDto(saved));
+    author.setId(id);
+    var saved = service.save(author);
+    return ResponseEntity.ok(saved);
   }
 }

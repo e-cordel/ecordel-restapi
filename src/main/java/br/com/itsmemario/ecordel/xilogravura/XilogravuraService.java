@@ -29,26 +29,26 @@ import java.util.UUID;
 @Service
 public class XilogravuraService {
 
-    private static final String JPG = ".jpg";
+  private static final String JPG = ".jpg";
 
-    private FileManager fileManager;
+  private FileManager fileManager;
 
-    @Autowired
-    public XilogravuraService(FileManager fileManager) {
-        this.fileManager = fileManager;
+  @Autowired
+  public XilogravuraService(FileManager fileManager) {
+    this.fileManager = fileManager;
+  }
+
+  public String createXilogravuraWithFile(MultipartFile file) {
+    try {
+      var fileName = generateRandomFileName();
+      return fileManager.saveFile(file.getBytes(), fileName);
+    } catch (IOException e) {
+      throw new FileProcessException("Error while saving file", e);
     }
+  }
 
-    public String createXilogravuraWithFile(MultipartFile file){
-        try {
-            var fileName = generateRandomFileName();
-            return fileManager.saveFile(file.getBytes(), fileName);
-        } catch (IOException e) {
-            throw new FileProcessException("Error while saving file", e);
-        }
-    }
-
-    private String generateRandomFileName() {
-        return UUID.randomUUID() + JPG;
-    }
+  private String generateRandomFileName() {
+    return UUID.randomUUID() + JPG;
+  }
 
 }

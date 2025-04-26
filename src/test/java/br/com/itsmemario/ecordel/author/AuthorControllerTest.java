@@ -54,7 +54,7 @@ class AuthorControllerTest extends AbstractIntegrationTest {
   @Sql(scripts = "classpath:db/data/clean-user-authorities.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void requestWithValidTokenMustReturnStatusCodeCreated() throws Exception {
     TokenDto token = getAdminToken(mockMvc);
-    AuthorDto dto = new AuthorDto();
+    Author dto = new Author();
     dto.setName("name");
     String json = new ObjectMapper().writer().writeValueAsString(dto);
     mockMvc.perform(
@@ -89,8 +89,7 @@ class AuthorControllerTest extends AbstractIntegrationTest {
   void putRequestWithValidTokenMustReturnStatusCodeOk() throws Exception {
     TokenDto token = getAdminToken(mockMvc);
     var dummyAuthor = repository.save(new Author("Dummy Author"));
-    AuthorDto dto = AuthorMapper.INSTANCE.toDto(dummyAuthor);
-    String json = new ObjectMapper().writer().writeValueAsString(dto);
+    String json = new ObjectMapper().writer().writeValueAsString(dummyAuthor);
     mockMvc.perform(
             put(AUTHORS.concat("/" + dummyAuthor.getId()))
                     .header(HttpHeaders.AUTHORIZATION, token.toString())
@@ -101,10 +100,10 @@ class AuthorControllerTest extends AbstractIntegrationTest {
 
   @Test
   void requestWithoutTokenMustReturnForbidden() throws Exception {
-    AuthorDto dto = new AuthorDto();
-    dto.setId(1L);
-    dto.setName("Author 1 - Ed");
-    String json = new ObjectMapper().writer().writeValueAsString(dto);
+    Author author = new Author();
+    author.setId(1L);
+    author.setName("Author 1 - Ed");
+    String json = new ObjectMapper().writer().writeValueAsString(author);
     mockMvc.perform(
             put(AUTHORS.concat("/1"))
                     .contentType(MediaType.APPLICATION_JSON)
