@@ -20,6 +20,7 @@ package br.com.itsmemario.ecordel.cordel;
 /**
  * Summary used to transfer only required data to mobile devices and long cordel lists.
  */
-record CordelSummary(Long id, String title, String xilogravuraUrl, String authorName, Long authorId, String ebookUrl,
+record CordelSummary(Long id, String title, String xilogravuraUrl,
+                     String authorName, Long authorId, String ebookUrl,
                      String description) {
 }

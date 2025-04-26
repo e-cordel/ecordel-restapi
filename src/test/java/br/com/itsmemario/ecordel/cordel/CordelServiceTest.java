@@ -81,7 +81,7 @@ class CordelServiceTest {
     cordel.setSource("https://ler.ecordel.com.br");
     when(cordelRepository.findById(1L)).thenReturn(Optional.of(cordel));
 
-    CordelDto contentForDownload = cordelService.getContentForDownload(1L);
+    Cordel contentForDownload = cordelService.getContentForDownload(1L);
     log.info("contentForDownload: {}", contentForDownload.getContent());
 
     assertThat(contentForDownload).isNotNull();

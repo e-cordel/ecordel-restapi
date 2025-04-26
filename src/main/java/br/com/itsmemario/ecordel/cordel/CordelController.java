@@ -55,11 +55,10 @@ public class CordelController {
   }
 
   @GetMapping("{id}")
-  public ResponseEntity<CordelDto> getCordel(@PathVariable Long id) {
+  public ResponseEntity<Cordel> getCordel(@PathVariable Long id) {
     Optional<Cordel> cordel = service.findById(id);
     if (cordel.isPresent()) {
-      CordelDto body = CordelMapper.INSTANCE.toDto(cordel.get());
-      return ResponseEntity.ok(body);
+      return ResponseEntity.ok(cordel.get());
     } else {
       log.info("cordel with id {} not fond", id);
       return ResponseEntity.notFound().build();
@@ -68,12 +67,12 @@ public class CordelController {
 
   @GetMapping(value = "{id}", produces = MediaType.TEXT_PLAIN_VALUE)
   public ResponseEntity<InputStreamResource> downloadTxt(@PathVariable Long id) {
-    var cordelDto = service.getContentForDownload(id);
-    var contentBytes = cordelDto.getContent().getBytes();
+    var cordel = service.getContentForDownload(id);
+    var contentBytes = cordel.getContent().getBytes();
     var inputStreamResource = new InputStreamResource(new ByteArrayInputStream(contentBytes));
 
     return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + cordelDto.getTitle() + ".txt\"")
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + cordel.getTitle() + ".txt\"")
             .contentType(MediaType.TEXT_PLAIN)
             .contentLength(contentBytes.length)
             .body(inputStreamResource);
@@ -85,30 +84,29 @@ public class CordelController {
   }
 
   @PostMapping
-  public ResponseEntity<String> create(@RequestBody @Valid CordelDto dto, UriComponentsBuilder uriBuilder) {
-    var newCordel = service.save(CordelMapper.INSTANCE.toEntity(dto));
+  public ResponseEntity<String> create(@RequestBody @Valid Cordel cordel, UriComponentsBuilder uriBuilder) {
+    var newCordel = service.save(cordel);
     var uri = uriBuilder.path("/cordels/{id}").buildAndExpand(newCordel.getId()).toUri();
     log.info("new cordel Location header: {}", uri.getPath());
     return ResponseEntity.created(uri).build();
   }
 
   @PutMapping("{id}")
-  public ResponseEntity<CordelDto> update(@RequestBody @Valid CordelDto dto, @PathVariable Long id) {
+  public ResponseEntity<Cordel> update(@RequestBody @Valid Cordel cordel, @PathVariable Long id) {
     Optional<Cordel> existingCordel = service.findById(id);
     if (existingCordel.isEmpty()) {
       return ResponseEntity.notFound().build();
     }
 
-    var cordel = CordelMapper.INSTANCE.toEntity(dto);
     cordel.setId(id);
     Cordel updatedCordel = service.save(cordel);
-    return ResponseEntity.ok(CordelMapper.INSTANCE.toDto(updatedCordel));
+    return ResponseEntity.ok(updatedCordel);
   }
 
   @PutMapping("{id}/xilogravura")
-  public ResponseEntity<CordelDto> putXilogravura(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+  public ResponseEntity<Cordel> putXilogravura(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
     Cordel cordel = service.updateXilogravura(id, file);
-    return ResponseEntity.ok(CordelMapper.INSTANCE.toDto(cordel));
+    return ResponseEntity.ok(cordel);
   }
 
   /**
