@@ -24,6 +24,8 @@ CREATE SEQUENCE public.xilogravura_id_seq
 
 ALTER SEQUENCE public.xilogravura_id_seq OWNED BY public.xilogravura.id;
 
+ALTER TABLE ONLY public.xilogravura ALTER COLUMN id SET DEFAULT nextval('public.xilogravura_id_seq'::regclass);
+
 -- Migration script to generate xilogravura entries from cordel table
 INSERT INTO public.xilogravura (id, url)
 SELECT nextval('public.xilogravura_id_seq'), xilogravura_url
@@ -31,6 +33,7 @@ FROM (
     SELECT DISTINCT xilogravura_url
     FROM public.cordel
     WHERE xilogravura_url IS NOT NULL
+    AND xilogravura_url != ''
 ) AS distinct_urls;
 
 -- Add xilogravura_id to cordel table
