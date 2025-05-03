@@ -62,7 +62,6 @@ public class AuthorController {
     return author.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
   }
 
-  // TODO create test for this method changing the author name
   @PutMapping("{id}")
   public ResponseEntity<Author> update(@RequestBody @Valid Author author, @PathVariable Long id) {
     Optional<Author> authorById = service.findById(id);

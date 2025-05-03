@@ -3,6 +3,8 @@ package br.com.itsmemario.ecordel.cordel;
 import br.com.itsmemario.ecordel.AbstractIntegrationTest;
 import br.com.itsmemario.ecordel.author.Author;
 import br.com.itsmemario.ecordel.author.AuthorRepository;
+import br.com.itsmemario.ecordel.xilogravura.Xilogravura;
+import br.com.itsmemario.ecordel.xilogravura.XilogravuraRepository;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,6 +29,9 @@ class CordelRepositoryTest extends AbstractIntegrationTest {
 
   @Autowired
   AuthorRepository authorRepository;
+
+  @Autowired
+  private XilogravuraRepository xilogravuraRepository;
 
   @AfterEach
   void deleteAllCordels() {
@@ -60,7 +65,7 @@ class CordelRepositoryTest extends AbstractIntegrationTest {
     Page<CordelSummary> page = repository.findAllByPublishedAndTitleLike(params, pageRequest);
 
     //test
-    assertThat(page.getContent().get(0).authorName()).isEqualTo("name");
+    assertThat(page.getContent().get(0).getAuthorName()).isEqualTo("name");
     assertThat(page).hasSize(1);
 
   }
@@ -143,6 +148,68 @@ class CordelRepositoryTest extends AbstractIntegrationTest {
 
     //test
     assertThat(page).isNotEmpty().hasSize(1);
+  }
+
+  @Test
+  void shouldReturnCordelIfThereIsNoXilogravura() {
+    insertNewCordel(true);
+    insertNewCordel(true);
+
+    CordelSummaryRequest request = CordelSummaryRequest.builder()
+            .published(true)
+            .build();
+
+    var result = repository.findAllByPublished(request, PageRequest.of(0, 10));
+
+    assertThat(result.getTotalElements()).isEqualTo(2);
+    result.getContent().forEach(summary -> {
+      assertThat(summary.getId()).isNotNull();
+      assertThat(summary.getTitle()).isNotNull();
+      assertThat(summary.getAuthorName()).isNotNull();
+      assertThat(summary.getXilogravuraUrl()).isNull();
+    });
+  }
+
+  @Test
+  void shouldReturnCordelByTitleIfThereIsNoXilogravura() {
+    insertNewCordel(true);
+    insertNewCordel(true);
+
+    CordelSummaryRequest request = CordelSummaryRequest.builder()
+            .published(true)
+            .title("titl")
+            .build();
+
+    var result = repository.findAllByPublishedAndTitleLike(request, PageRequest.of(0, 10));
+
+    assertThat(result.getTotalElements()).isEqualTo(2);
+    result.getContent().forEach(summary -> {
+      assertThat(summary.getId()).isNotNull();
+      assertThat(summary.getTitle()).isNotNull();
+      assertThat(summary.getAuthorName()).isNotNull();
+      assertThat(summary.getXilogravuraUrl()).isNull();
+    });
+  }
+
+  @Test
+  void shouldReturnCordelWithXilogravuraUrlFromNewTable() {
+    var xilogravura = new Xilogravura();
+    xilogravura.setUrl("http://xilogravura.com");
+    var newXilogravura = xilogravuraRepository.save(xilogravura);
+
+    var cordel = newCordel(true, insertAuthor());
+    cordel.setXilogravura(newXilogravura);
+    repository.save(cordel);
+
+    CordelSummaryRequest request = CordelSummaryRequest.builder()
+            .published(true)
+            .title("titl")
+            .build();
+
+    var result = repository.findAllByPublishedAndTitleLike(request, PageRequest.of(0, 10));
+
+    assertThat(result.getTotalElements()).isEqualTo(1);
+    assertThat(result.getContent().get(0).getXilogravuraUrl()).isEqualTo(newXilogravura.getUrl());
   }
 
   Author insertAuthor() {

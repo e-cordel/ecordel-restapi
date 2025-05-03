@@ -18,6 +18,7 @@
 package br.com.itsmemario.ecordel.cordel;
 
 import br.com.itsmemario.ecordel.author.Author;
+import br.com.itsmemario.ecordel.xilogravura.Xilogravura;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -27,6 +28,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
 import java.util.Collections;
 import java.util.Objects;
@@ -34,6 +36,12 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Cordel entity class.
+ * This class represents a cordel in the system.
+ * It contains fields and methods related to the cordel.
+ * It is also used to transfer data to frontend clients.
+ */
 @Entity
 @Getter
 @Setter
@@ -42,27 +50,41 @@ public class Cordel {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
   @ManyToOne
   @JoinColumn(name = "author_id")
   private Author author;
+
   @NotBlank
   private String title;
+
   @NotBlank
   private String content;
+
   /**
    * @deprecated This field is deprecated and will be removed in the future. Use {@link Xilogravura} instead.
    */
   @Column(name = "xilogravura_url")
   @Deprecated(forRemoval = true, since = "2025-01-01")
   private String xilogravuraUrl;
+
+  @OneToOne
+  @JoinColumn(name = "xilogravura_id")
+  private Xilogravura xilogravura;
+
   private String description;
+
   @ElementCollection
   @CollectionTable(name = "cordel_tags")
   private Set<String> tags;
+
   private boolean published;
+
   private Integer year;
+
   @Column(name = "ebook_url")
   private String ebookUrl;
+
   private String source;
 
   Cordel() {

@@ -15,25 +15,9 @@
  *
  */
 
-package br.com.itsmemario.ecordel.cordel;
+package br.com.itsmemario.ecordel.xilogravura;
 
-/**
- * Summary used to transfer only required data to mobile devices and long cordel lists.
- */
-public interface CordelSummary {
-  Long getId();
+import org.springframework.data.jpa.repository.JpaRepository;
 
-  String getTitle();
-
-  String getDescription();
-
-  String getEbookUrl();
-
-  Long getAuthorId();
-
-  String getAuthorName();
-
-  String getXilogravuraDescription();
-
-  String getXilogravuraUrl();
+public interface XilogravuraRepository extends JpaRepository<Xilogravura, Long> {
 }

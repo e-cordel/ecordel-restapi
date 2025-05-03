@@ -343,6 +343,8 @@ components:
           description: cordel text
         xilogravuraUrl:
           type: string
+          description: url for the xilogravura
+          deprecated: true
         published:
           type: boolean
         tags:
@@ -358,15 +360,20 @@ components:
           description: cordel id
         title:
           type: string
-          description: cordel title
+        description:
+          type: string
         authorName:
           type: string
         authorId:
           type: integer
-          description: author id
+        ebookUrl:
+          type: string
+          description: url for the ebook
         xilogravuraUrl:
           type: string
-          description: image url
+        xilogravuraDescription:
+          type: string
+          description: image description for accessibility
     Page:
       type: object
       properties:
