@@ -261,7 +261,6 @@
                 <configuration>
                     <failBuildOnCVSS>7</failBuildOnCVSS>
                     <suppressionFile>dependency-check-suppressions.xml</suppressionFile>
-                    <ossIndexServerId>ossindex</ossIndexServerId>
                 </configuration>
                 <executions>
                     <execution>
