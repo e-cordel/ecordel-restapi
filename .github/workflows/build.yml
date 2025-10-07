@@ -26,7 +26,7 @@ jobs:
           distribution: "temurin"
 
       - name: Cache SonarCloud packages
-        uses: actions/cache@v5
+        uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
@@ -45,7 +45,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -DnvdApiKey=${{ secrets.NVD_API_KEY }}
 
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v4
         with:
           name: Dependency-Check Report
           path: target/dependency-check-report.html
