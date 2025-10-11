@@ -50,8 +50,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         run: |
-          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -DnvdApiKey=${{ secrets.NVD_API_KEY }}
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -DnvdApiKey=$NVD_API_KEY
 
       - uses: actions/upload-artifact@v4
         with:
@@ -63,7 +64,7 @@ jobs:
         if: failure()
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        uses: Ilshidur/action-discord@master
+        uses: Ilshidur/action-discord@ad5235de713df3ef38022185499b02ffe93b7efe
         with:
           args: |
             Alguma coisa errada não está certa! :cry:
