@@ -1,4 +1,5 @@
 #!/bin/sh
+# ----------------------------------------------------------------------------
 #
 # Copyright 2021 Projeto e-cordel (http://ecordel.com.br)
 #
@@ -14,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-#
+# ----------------------------------------------------------------------------
 
 # ----------------------------------------------------------------------------
 # Maven Start Up Batch script

@@ -8,7 +8,7 @@ In this project you can find an openapi [specification](./openapi.yaml) with all
 
 ## Dependencies
 You need
-- java 21 installed
+- java 25 installed
 - docker 20+  installed
 - maven 3.8.5+ installed
 
