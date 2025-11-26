@@ -17,8 +17,8 @@
 
     <properties>
         <commons-net.version>3.12.0</commons-net.version>
-        <dependency-check-maven.version>12.1.6</dependency-check-maven.version>
-        <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
+        <dependency-check-maven.version>12.1.9</dependency-check-maven.version>
+        <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
         <java.version>25</java.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
         <jjwt.version>0.12.5</jjwt.version>
