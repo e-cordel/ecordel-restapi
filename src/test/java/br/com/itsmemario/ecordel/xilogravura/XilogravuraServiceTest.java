@@ -27,7 +27,7 @@ public class XilogravuraServiceTest extends AbstractIntegrationTest {
     static final FakeFtpServer fakeFtpServer = new FakeFtpServer();
 
     @BeforeAll
-    public static void setup() {
+    static void setup() {
         setUpMockServer();
     }
 
@@ -42,7 +42,7 @@ public class XilogravuraServiceTest extends AbstractIntegrationTest {
     }
 
     @AfterAll
-    public static void afterClass() {
+    static void afterClass() {
         fakeFtpServer.stop();
     }
 
