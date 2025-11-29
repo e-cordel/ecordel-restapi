@@ -19,6 +19,7 @@ package br.com.itsmemario.ecordel.cordel;
 
 import br.com.itsmemario.ecordel.author.Author;
 import br.com.itsmemario.ecordel.xilogravura.Xilogravura;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -68,7 +69,7 @@ public class Cordel {
   @Deprecated(forRemoval = true, since = "2025-01-01")
   private String xilogravuraUrl;
 
-  @OneToOne
+  @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinColumn(name = "xilogravura_id")
   private Xilogravura xilogravura;
 

@@ -19,6 +19,7 @@ package br.com.itsmemario.ecordel.xilogravura;
 
 import br.com.itsmemario.ecordel.file.FileManager;
 import br.com.itsmemario.ecordel.file.FileProcessException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,15 +28,16 @@ import java.io.IOException;
 import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 public class XilogravuraService {
 
   private static final String JPG = ".jpg";
 
   private FileManager fileManager;
+  private XilogravuraRepository xilogravuraRepository;
 
-  @Autowired
-  public XilogravuraService(FileManager fileManager) {
-    this.fileManager = fileManager;
+  public Xilogravura save(Xilogravura xilogravura) {
+    return xilogravuraRepository.save(xilogravura);
   }
 
   public String createXilogravuraWithFile(MultipartFile file) {

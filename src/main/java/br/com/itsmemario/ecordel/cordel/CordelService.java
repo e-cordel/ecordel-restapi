@@ -19,12 +19,14 @@ package br.com.itsmemario.ecordel.cordel;
 
 import br.com.itsmemario.ecordel.exception.BadRequestException;
 import br.com.itsmemario.ecordel.exception.FormError;
+import br.com.itsmemario.ecordel.xilogravura.Xilogravura;
 import br.com.itsmemario.ecordel.xilogravura.XilogravuraService;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +48,15 @@ public class CordelService {
   private final XilogravuraService xilogravuraService;
 
   public Cordel save(Cordel cordel) {
+    if (xilogravuraIsNew(cordel.getXilogravura())) {
+      Xilogravura persistedXilo = xilogravuraService.save(cordel.getXilogravura());
+      cordel.setXilogravura(persistedXilo);
+    }
     return repository.save(cordel);
+  }
+
+  private static boolean xilogravuraIsNew(Xilogravura xilogravura) {
+    return Objects.nonNull(xilogravura) && (xilogravura.getId() == null || xilogravura.getId() == 0);
   }
 
   public Optional<Cordel> findById(Long id) {

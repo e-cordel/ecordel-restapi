@@ -41,13 +41,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+
+/**
+ * Controller for Cordel entity endpoints.
+ */
 @Slf4j
 @CrossOrigin
 @RestController
 @RequestMapping("cordels")
 public class CordelController {
 
-  private CordelService service;
+  private final CordelService service;
 
   @Autowired
   CordelController(CordelService service) {

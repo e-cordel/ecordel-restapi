@@ -18,8 +18,7 @@
 package br.com.itsmemario.ecordel.security;
 
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,11 +31,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
-
-  private final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
   private final AuthenticationProvider provider;
   private final AuthenticationService authenticationService;
@@ -49,14 +47,15 @@ public class AuthenticationController {
 
   @PostMapping
   public ResponseEntity<TokenDto> authenticate(@RequestBody @Valid LoginData loginData) {
-    logger.info("Login attempt, user: {}", loginData.getUsername());
+    log.info("Login attempt, user: {}", loginData.getUsername());
     try {
       UsernamePasswordAuthenticationToken authenticationToken = loginData.toAuthenticationToken();
       Authentication authentication = provider.authenticate(authenticationToken);
       TokenDto tokenDto = authenticationService.generateToken(authentication);
       return ResponseEntity.ok(tokenDto);
     } catch (AuthenticationException e) {
-      logger.info("Authentication failed for user: {}", loginData.getUsername());
+      log.debug(e.getMessage());
+      log.error("Authentication failed for user: {}", loginData.getUsername());
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
   }
