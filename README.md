@@ -10,7 +10,7 @@ In this project you can find an openapi [specification](./openapi.yaml) with all
 You need
 - java 25 installed
 - docker 20+  installed
-- maven 3.8.5+ installed
+- maven 3.9.0+ installed
 
 :bulb: If you don't have the dependencies installed you can create a [github codespace](https://docs.github.com/pt/codespaces/overview) on your fork and run the commands below.
 
