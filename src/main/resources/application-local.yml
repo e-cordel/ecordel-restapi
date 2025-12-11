@@ -24,6 +24,5 @@ spring:
       ddl-auto: none
 
     show-sql: true
-#  flyway:
-#    baselineOnMigrate: true
+
 server.port: 5000

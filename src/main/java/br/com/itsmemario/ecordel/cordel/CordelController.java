@@ -41,13 +41,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+
+/**
+ * Controller for Cordel entity endpoints.
+ */
 @Slf4j
 @CrossOrigin
 @RestController
 @RequestMapping("cordels")
 public class CordelController {
 
-  private CordelService service;
+  private final CordelService service;
 
   @Autowired
   CordelController(CordelService service) {
@@ -105,6 +109,7 @@ public class CordelController {
 
   @PutMapping("{id}/xilogravura")
   public ResponseEntity<Cordel> putXilogravura(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+    log.warn("The xilogravura endpoint is deprecated and will be removed in future versions.");
     Cordel cordel = service.updateXilogravura(id, file);
     return ResponseEntity.ok(cordel);
   }

@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 import static br.com.itsmemario.ecordel.cordel.CordelUtil.newCordel;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -192,6 +193,7 @@ class CordelRepositoryTest extends AbstractIntegrationTest {
   }
 
   @Test
+  @Transactional
   void shouldReturnCordelWithXilogravuraUrlFromNewTable() {
     var xilogravura = new Xilogravura();
     xilogravura.setUrl("http://xilogravura.com");

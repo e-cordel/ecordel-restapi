@@ -41,6 +41,14 @@ You can run with maven
 
 You can use the file [data.sql](src/test/resources/db/data/data.sql) to insert data to your local db.
 
+To generate new password hashes you can run the following code snippet:
+
+```java
+static void main(String[] args) {
+  System.out.println(new BCryptPasswordEncoder().encode("admin"));
+}
+```
+
 ### Cleaning DB
 
 All data volume is mapped to directory `tmp`. You can delete this folder to get rid of development data.
