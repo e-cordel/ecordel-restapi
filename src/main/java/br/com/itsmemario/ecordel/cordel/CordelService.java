@@ -33,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
@@ -47,9 +48,11 @@ public class CordelService {
   private final CordelRepository repository;
   private final XilogravuraService xilogravuraService;
 
+  @Transactional
   public Cordel save(Cordel cordel) {
-    if (xilogravuraIsNew(cordel.getXilogravura())) {
-      Xilogravura persistedXilo = xilogravuraService.save(cordel.getXilogravura());
+    // this handles the case when a new xilogravura is set to an existing cordel during review and hibernate is not able to merge it properly
+    if (xilogravuraIsNew(cordel.getXilogravura()) && Objects.nonNull(cordel.getId())) {
+      var persistedXilo = xilogravuraService.save(cordel.getXilogravura());
       cordel.setXilogravura(persistedXilo);
     }
     return repository.save(cordel);
