@@ -58,7 +58,7 @@ public class CordelService {
     return repository.save(cordel);
   }
 
-  private static boolean xilogravuraIsNew(Xilogravura xilogravura) {
+  private boolean xilogravuraIsNew(Xilogravura xilogravura) {
     return Objects.nonNull(xilogravura) && (xilogravura.getId() == null || xilogravura.getId() == 0);
   }
 
@@ -73,6 +73,12 @@ public class CordelService {
     return repository.findAllByPublished(request, pageable);
   }
 
+  /**
+   * @deprecated new xilogravura model was created. This method will be removed in future versions.
+   * @param cordelId
+   * @param file
+   * @return
+   */
   public Cordel updateXilogravura(Long cordelId, MultipartFile file) {
     Optional<Cordel> byId = findById(cordelId);
 
@@ -80,7 +86,7 @@ public class CordelService {
       Cordel cordel = byId.get();
       String xilogravuraUrl = xilogravuraService.createXilogravuraWithFile(file);
       cordel.setXilogravuraUrl(xilogravuraUrl);
-      return save(cordel);
+      return repository.save(cordel);
     } else {
       throw new CordelNotFoundException();
     }

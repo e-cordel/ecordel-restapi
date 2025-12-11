@@ -76,15 +76,6 @@ public class SecurityConfig {
             .requestMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**");
   }
 
-  /**
-   * Deprecated used only to generate passwords locally
-   *
-   * @param args
-   */
-  static void main(String[] args) {
-    System.out.println(new BCryptPasswordEncoder().encode("admin")); // NOSONAR
-  }
-
   @Bean
   public AuthenticationProvider authenticationProvider() {
     DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider(authenticationService);

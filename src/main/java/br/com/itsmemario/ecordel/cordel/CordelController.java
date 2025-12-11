@@ -109,6 +109,7 @@ public class CordelController {
 
   @PutMapping("{id}/xilogravura")
   public ResponseEntity<Cordel> putXilogravura(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+    log.warn("The xilogravura endpoint is deprecated and will be removed in future versions.");
     Cordel cordel = service.updateXilogravura(id, file);
     return ResponseEntity.ok(cordel);
   }
