@@ -21,6 +21,7 @@ import br.com.itsmemario.ecordel.AbstractIntegrationTest;
 import br.com.itsmemario.ecordel.author.Author;
 import br.com.itsmemario.ecordel.author.AuthorRepository;
 import br.com.itsmemario.ecordel.security.TokenDto;
+import br.com.itsmemario.ecordel.xilogravura.Xilogravura;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -148,6 +149,30 @@ class CordelControllerTest extends AbstractIntegrationTest {
     assertThat(Integer.valueOf(contentLength)).isGreaterThan(cordel.getContent().length());
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).contains("Conteúdo baixado através do site ler.ecordel.com.br", "Título: " + cordel.getTitle());
+  }
+
+  @Test
+  @Sql(scripts = "classpath:db/data/add-users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+  @Sql(scripts = "classpath:db/data/clean-user-authorities.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  void shouldPersistNewXilogravuraWhenUpdatingCordel() {
+    var cordel = insertCordel(false);
+    var xilogravura = new Xilogravura();
+    var xiloUrl = "http://new-url.com/xilo.jpg";
+    xilogravura.setUrl(xiloUrl);
+    cordel.setXilogravura(xilogravura);
+
+    TokenDto tokenDto = login("admin", "admin");
+    var headers = new HttpHeaders();
+    headers.add(HttpHeaders.AUTHORIZATION, tokenDto.toString());
+    var requestEntity = new HttpEntity<>(cordel, headers);
+
+    var putResponse = restTemplate.exchange(getBaseUrl() + "/{id}", HttpMethod.PUT, requestEntity, Cordel.class, cordel.getId());
+
+    assertThat(putResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+    var updatedCordel = putResponse.getBody();
+
+    assertThat(updatedCordel.getXilogravura().getId()).isNotNull();
+    assertThat(updatedCordel.getXilogravura().getUrl()).isEqualTo(xiloUrl);
   }
 
   private String getBaseUrl() {
