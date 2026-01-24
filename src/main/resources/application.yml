@@ -23,3 +23,17 @@ spring:
       ddl-auto: none
 
 server.port: ${PORT}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,metrics"
+
+resilience4j.ratelimiter:
+  instances:
+    default:
+      limitForPeriod: 50
+      limitRefreshPeriod: 500ms
+      timeoutDuration: 0ms        # Fail immediately if limit reached
+      registerHealthIndicator: true

@@ -17,6 +17,7 @@
 
 package br.com.itsmemario.ecordel.author;
 
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.Optional;
@@ -44,6 +45,7 @@ public class AuthorController {
     this.service = service;
   }
 
+  @RateLimiter(name = "default")
   @GetMapping
   public Page<AuthorView> getAll(Pageable pageable) {
     return service.findAll(pageable);
@@ -56,6 +58,7 @@ public class AuthorController {
     return ResponseEntity.created(uri).build();
   }
 
+  @RateLimiter(name = "default")
   @GetMapping("{id}")
   public ResponseEntity<Author> getAuthor(@PathVariable Long id) {
     Optional<Author> author = service.findById(id);

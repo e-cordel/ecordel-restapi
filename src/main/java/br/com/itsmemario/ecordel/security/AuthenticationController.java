@@ -17,6 +17,7 @@
 
 package br.com.itsmemario.ecordel.security;
 
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ public class AuthenticationController {
     this.authenticationService = authenticationService;
   }
 
+  @RateLimiter(name = "default")
   @PostMapping
   public ResponseEntity<TokenDto> authenticate(@RequestBody @Valid LoginData loginData) {
     log.info("Login attempt, user: {}", loginData.getUsername());
