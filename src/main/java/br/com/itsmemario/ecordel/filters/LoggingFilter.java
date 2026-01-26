@@ -44,6 +44,6 @@ public class LoggingFilter extends OncePerRequestFilter {
     long starTime = System.currentTimeMillis();
     filterChain.doFilter(request, response);
     long duration = System.currentTimeMillis() - starTime;
-    log.info("response sent: {} in {}ms", response.getStatus(), duration);
+    log.info("response sent: {} status code in {}ms", response.getStatus(), duration);
   }
 }

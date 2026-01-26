@@ -17,6 +17,7 @@
 
 package br.com.itsmemario.ecordel.cordel;
 
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import java.io.ByteArrayInputStream;
@@ -58,6 +59,7 @@ public class CordelController {
     this.service = service;
   }
 
+  @RateLimiter(name = "default")
   @GetMapping("{id}")
   public ResponseEntity<Cordel> getCordel(@PathVariable Long id) {
     Optional<Cordel> cordel = service.findById(id);
@@ -69,6 +71,7 @@ public class CordelController {
     }
   }
 
+  @RateLimiter(name = "default")
   @GetMapping(value = "{id}", produces = MediaType.TEXT_PLAIN_VALUE)
   public ResponseEntity<InputStreamResource> downloadTxt(@PathVariable Long id) {
     var cordel = service.getContentForDownload(id);
@@ -82,6 +85,7 @@ public class CordelController {
             .body(inputStreamResource);
   }
 
+  @RateLimiter(name = "default")
   @GetMapping("summaries")
   public Page<CordelSummary> getCordels(CordelSummaryRequest request, Pageable pageable) {
     return service.findPublishedByTitle(request, pageable);

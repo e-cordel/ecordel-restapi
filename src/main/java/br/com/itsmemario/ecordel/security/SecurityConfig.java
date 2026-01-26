@@ -62,6 +62,8 @@ public class SecurityConfig {
               .requestMatchers(HttpMethod.PUT, "/authors/**").hasAnyAuthority(CordelAuthority.ADMIN)
               // public endpoints
               .requestMatchers(HttpMethod.POST, "/auth").permitAll()
+              // Allow actuator endpoints for health, metrics, prometheus, etc.
+              .requestMatchers("/api/v1/actuator/**").permitAll()
               // All gets are public for now
               .requestMatchers(HttpMethod.GET, "/**").permitAll()
               .anyRequest().authenticated()
