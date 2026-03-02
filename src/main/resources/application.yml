@@ -3,6 +3,10 @@ app.xilogravura.path: "./"
 # discuss how to versioning the api for now it will be static
 server.servlet.context-path: "/api/v1"
 
+cache:
+  maximum-size: 1000
+  ttl-in-minutes: 10
+
 ftp:
   server: ftp.turismonocariri.com.br
   port: 21
