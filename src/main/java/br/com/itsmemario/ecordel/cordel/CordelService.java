@@ -30,6 +30,7 @@ import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -62,11 +63,15 @@ public class CordelService {
     return Objects.nonNull(xilogravura) && (xilogravura.getId() == null || xilogravura.getId() == 0);
   }
 
+  @Cacheable(value = "cordels", key = "#id")
   public Optional<Cordel> findById(Long id) {
+    log.info("finding cordel by id: {}", id);
     return repository.findById(id);
   }
 
+  @Cacheable(value = "publishedCordels", key = "#request.toString() + '-' + #pageable.pageNumber + '-' + #pageable.pageSize")
   public Page<CordelSummary> findPublishedByTitle(CordelSummaryRequest request, Pageable pageable) {
+    log.info("finding published cordels by title: {}, page: {}, size: {}", request.getTitle(), pageable.getPageNumber(), pageable.getPageSize());
     if (titleIsValid(request.getTitle())) {
       return repository.findAllByPublishedAndTitleLike(request, pageable);
     }
@@ -113,12 +118,13 @@ public class CordelService {
    * @param id cordel id
    * @return content for download
    */
+  @Cacheable(value = "cordelContentForDownload", key = "#id")
   public Cordel getContentForDownload(Long id) {
+    log.info("generating txt for cordel: {}", id);
     Cordel cordel = repository.findById(id).orElseThrow(CordelNotFoundException::new);
 
     StringWriter contentWriter = new StringWriter(cordel.getContent().length());
     cordelTemplate.execute(contentWriter, cordel);
-    log.info("text generated for cordel: {}", id);
 
     var cordelWithContent = new Cordel();
     cordelWithContent.setTitle(cordel.getTitle());

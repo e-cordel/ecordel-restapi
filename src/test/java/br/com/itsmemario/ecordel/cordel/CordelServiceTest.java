@@ -42,7 +42,7 @@ class CordelServiceTest {
   @Mock
   private CordelRepository cordelRepository;
 
-  private final Pageable page = Pageable.unpaged();
+  private final Pageable page = Pageable.ofSize(1);
   private CordelService cordelService;
 
   @BeforeEach
