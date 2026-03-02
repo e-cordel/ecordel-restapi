@@ -321,6 +321,10 @@
                 <configuration>
                     <failBuildOnCVSS>7</failBuildOnCVSS>
                     <suppressionFile>dependency-check-suppressions.xml</suppressionFile>
+                    <excludes>
+                        <!-- Exclude New Relic Java agent from dependency check analysis since it is not part of the final jar-->
+                        <exclude>com.newrelic.agent.java:newrelic-java</exclude>
+                    </excludes>
                 </configuration>
                 <executions>
                     <execution>
