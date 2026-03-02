@@ -38,3 +38,6 @@ build/
 src/main/resources/templates/index.html
 
 TODO
+
+# heroku configurations
+newrelic/
