@@ -26,8 +26,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import static org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO;
+
 @SpringBootApplication
-@EnableSpringDataWebSupport
+@EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 @EnableCaching
 @RequiredArgsConstructor
 public class EcordelApplication {
