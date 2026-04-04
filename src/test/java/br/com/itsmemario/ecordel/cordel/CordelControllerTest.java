@@ -77,6 +77,20 @@ class CordelControllerTest extends AbstractIntegrationTest {
   }
 
   @Test
+  void aiReviewEndpointWithoutTokenMustReturnForbidden() {
+    Cordel cordel = insertCordel(false);
+
+    ResponseEntity<String> response = restTemplate.postForEntity(
+        getBaseUrl() + "/{id}/ai-review",
+        null,
+        String.class,
+        cordel.getId()
+    );
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+  }
+
+  @Test
   void ifPublishedParamIsFalse_theOnlyDraftCordelsMustBeRetrieved() {
     insertCordel(false);
 

@@ -30,6 +30,8 @@ import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,6 +52,8 @@ public class CordelService {
   private final XilogravuraService xilogravuraService;
 
   @Transactional
+  @CachePut(value = "cordels", key = "#result.id")
+  @CacheEvict(value = "publishedCordels", allEntries = true)
   public Cordel save(Cordel cordel) {
     // this handles the case when a new xilogravura is set to an existing cordel during review and hibernate is not able to merge it properly
     if (xilogravuraIsNew(cordel.getXilogravura()) && Objects.nonNull(cordel.getId())) {

@@ -53,10 +53,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class CordelController {
 
   private final CordelService service;
+  private final AiReviewService aiReviewService;
 
   @Autowired
-  CordelController(CordelService service) {
+  CordelController(CordelService service, AiReviewService aiReviewService) {
     this.service = service;
+    this.aiReviewService = aiReviewService;
   }
 
   @RateLimiter(name = "default")
@@ -97,6 +99,12 @@ public class CordelController {
     var uri = uriBuilder.path("/cordels/{id}").buildAndExpand(newCordel.getId()).toUri();
     log.info("new cordel Location header: {}", uri.getPath());
     return ResponseEntity.created(uri).build();
+  }
+
+  @PostMapping("{id}/ai-review")
+  public ResponseEntity<AiReviewResponse> reviewWithAi(@PathVariable Long id) {
+    String reviewedContent = aiReviewService.review(id);
+    return ResponseEntity.ok(new AiReviewResponse(reviewedContent));
   }
 
   @PutMapping("{id}")
