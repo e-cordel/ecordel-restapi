@@ -48,7 +48,7 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
         var cordelUser = new CordelUser(test,pass);
         repository.save(cordelUser);
 
-        var url =  "http://localhost:" + port + "/auth";
+        var url = apiUrl("/auth");
         ResponseEntity<TokenDto> response = restTemplate.postForEntity(url, new LoginData(test, test), TokenDto.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -57,7 +57,7 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
 
     @Test
     void failedAuthenticationMustReturn401() {
-        var url =  "http://localhost:" + port + "/auth";
+        var url = apiUrl("/auth");
         ResponseEntity<TokenDto> response = restTemplate.postForEntity(url, new LoginData("", ""), TokenDto.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }

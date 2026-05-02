@@ -17,8 +17,8 @@
 
 package br.com.itsmemario.ecordel.cordel;
 
-import br.com.itsmemario.ecordel.exception.BadRequestException;
 import java.util.Optional;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +26,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ai.chat.client.ChatClient;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -50,12 +49,7 @@ class AiReviewServiceTest {
   void shouldThrowBadRequestWhenCordelDoesNotExist() {
     when(cordelService.findById(999L)).thenReturn(Optional.empty());
 
-    BadRequestException thrown = org.junit.jupiter.api.Assertions.assertThrows(
-        BadRequestException.class,
-        () -> aiReviewService.review(999L)
-    );
-
-    assertThat(thrown.getError().field()).isEqualTo("cordel");
-    assertThat(thrown.getError().error()).isEqualTo("Cordel not found");
+    Assertions.assertThatThrownBy(() -> aiReviewService.review(999L))
+    .isInstanceOf(CordelNotFoundException.class);
   }
 }

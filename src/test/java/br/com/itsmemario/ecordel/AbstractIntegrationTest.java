@@ -20,18 +20,21 @@ package br.com.itsmemario.ecordel;
 import br.com.itsmemario.ecordel.security.LoginData;
 import br.com.itsmemario.ecordel.security.TokenDto;
 import org.junit.jupiter.api.BeforeAll;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 @AutoConfigureTestRestTemplate
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 public class AbstractIntegrationTest {
 
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:12.8").withReuse(true);
@@ -41,6 +44,9 @@ public class AbstractIntegrationTest {
 
     @Autowired
     protected TestRestTemplate restTemplate;
+
+    @Value("${server.servlet.context-path:}")
+    protected String contextPath;
 
     @BeforeAll
     static void beforeAll() {
@@ -56,8 +62,25 @@ public class AbstractIntegrationTest {
 
     public TokenDto login(String username, String password) {
         ResponseEntity<TokenDto> response = restTemplate.
-                postForEntity("http://localhost:" + port + "/auth", new LoginData(username, password), TokenDto.class);
+                postForEntity(apiUrl("/auth"), new LoginData(username, password), TokenDto.class);
         return response.getBody();
+    }
+
+    protected String apiUrl(String endpointPath) {
+        return "http://localhost:" + port + apiPath(endpointPath);
+    }
+
+    protected String apiPath(String endpointPath) {
+        String normalizedContextPath = normalizeContextPath();
+        String normalizedEndpointPath = endpointPath.startsWith("/") ? endpointPath : "/" + endpointPath;
+        return normalizedContextPath + normalizedEndpointPath;
+    }
+
+    private String normalizeContextPath() {
+        if (contextPath == null || contextPath.isBlank() || "/".equals(contextPath)) {
+            return "";
+        }
+        return contextPath.startsWith("/") ? contextPath : "/" + contextPath;
     }
 
 }
