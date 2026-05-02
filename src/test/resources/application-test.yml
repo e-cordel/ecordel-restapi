@@ -1,0 +1,43 @@
+app.xilogravura.path: "./target/xilogravuras"
+app.ai.review.prompt: |-
+  Você é um especialista em revisão de literatura de cordel brasileira.
+  O texto abaixo foi extraído por OCR e pode conter erros de digitação,
+  acentuação incorreta, palavras quebradas e pequenos ruídos.
+
+  Contexto do cordel:
+  - Título: %s
+  - Autor: %s
+  - Ano: %s
+  - Fonte: %s
+
+  Tarefas:
+  - Corrigir apenas erros de OCR e ortografia.
+  - Preservar estilo, ritmo, rima e organização em estrofes.
+  - Não reescrever o texto para "modernizar".
+  - Responder somente com o texto revisado.
+
+  Texto original:
+  %s
+
+ftp:
+  server: localhost
+  port: 10021
+  user: user
+  password: pass
+  baseUrl: "http://xilos.ecordel.com.br/"
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecd
+    username: postgres
+    password: postgres
+
+  jpa:
+    properties:
+      hibernate:
+        jdbc.lob.non_contextual_creation: true
+        format_sql: true
+    hibernate:
+      ddl-auto: none
+
+    show-sql: true

@@ -77,6 +77,20 @@ class CordelControllerTest extends AbstractIntegrationTest {
   }
 
   @Test
+  void aiReviewEndpointWithoutTokenMustReturnForbidden() {
+    Cordel cordel = insertCordel(false);
+
+    ResponseEntity<String> response = restTemplate.postForEntity(
+        getBaseUrl() + "/{id}/ai-review",
+        null,
+        String.class,
+        cordel.getId()
+    );
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+  }
+
+  @Test
   void ifPublishedParamIsFalse_theOnlyDraftCordelsMustBeRetrieved() {
     insertCordel(false);
 
@@ -138,7 +152,7 @@ class CordelControllerTest extends AbstractIntegrationTest {
     HttpEntity<String> entity = new HttpEntity<>(null, headers);
     ResponseEntity<String> response = restTemplate.exchange(getBaseUrl() + "/{id}", HttpMethod.GET, entity, String.class, cordel.getId());
 
-    log.info("Headers: {}", response.getHeaders());
+    log.info("Response: {}, Headers: {}", response.getStatusCode(), response.getHeaders());
     String contentDisposition = response.getHeaders().getFirst(HttpHeaders.CONTENT_DISPOSITION);
     String contentLength = response.getHeaders().getFirst(HttpHeaders.CONTENT_LENGTH);
     var expectedContentDisposition = "attachment; filename=\"" + cordel.getTitle() + ".txt\"";
@@ -176,7 +190,7 @@ class CordelControllerTest extends AbstractIntegrationTest {
   }
 
   private String getBaseUrl() {
-    return "http://localhost:" + port + "/cordels";
+    return apiUrl("/cordels");
   }
 
   Cordel insertCordel(boolean published) {

@@ -238,6 +238,31 @@ paths:
         - bearerAuth: []
       tags:
         - Cordel
+  /cordels/{id}/ai-review:
+    post:
+      summary: Review cordel text with AI
+      parameters:
+        - name: "id"
+          in: "path"
+          schema:
+            type: integer
+          description: "Cordel identification number"
+          required: true
+      responses:
+        200:
+          description: Reviewed cordel content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiReviewResponse'
+        400:
+          description: Bad request. If the cordel does not exist
+        403:
+          description: Forbidden
+      security:
+        - bearerAuth: []
+      tags:
+        - Cordel
   /cordels/{id}/ebook-url:
     put:
       summary: Updates the ebook URL with a new value
@@ -298,6 +323,12 @@ components:
                 type: string
                 format: binary
   schemas:
+    AiReviewResponse:
+      type: object
+      properties:
+        content:
+          type: string
+          description: reviewed cordel content returned by AI
     Author:
       type: object
       properties:
