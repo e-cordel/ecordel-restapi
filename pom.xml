@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.6</version>
+        <version>4.1.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -18,11 +18,11 @@
 
     <properties>
         <commons-net.version>3.12.0</commons-net.version>
-        <dependency-check-maven.version>12.2.1</dependency-check-maven.version>
+        <dependency-check-maven.version>12.2.2</dependency-check-maven.version>
         <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
         <java.version>25</java.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
-        <jjwt.version>0.12.5</jjwt.version>
+        <jjwt.version>0.12.7</jjwt.version>
         <lombok.version>1.18.42</lombok.version>
         <mockftp.version>3.1.0</mockftp.version>
         <openapi-generator-maven-plugin.version>5.1.0</openapi-generator-maven-plugin.version>
