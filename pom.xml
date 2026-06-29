@@ -343,6 +343,10 @@
                         <!-- Exclude New Relic Java agent from dependency check analysis since it is not part of the final jar-->
                         <exclude>com.newrelic.agent.java:newrelic-java</exclude>
                     </excludes>
+                    <!-- Retry configuration for NVD API failures -->
+                    <nvcDataFeedRetryCount>3</nvcDataFeedRetryCount>
+                    <!-- Use cached data when NVD is unavailable -->
+                    <useCached>true</useCached>
                 </configuration>
                 <executions>
                     <execution>
