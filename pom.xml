@@ -344,7 +344,9 @@
                         <exclude>com.newrelic.agent.java:newrelic-java</exclude>
                     </excludes>
                     <!-- Retry configuration for NVD API failures -->
-                    <nvcDataFeedRetryCount>3</nvcDataFeedRetryCount>
+                    <nvdApiRetryCount>3</nvdApiRetryCount>
+                    <!-- Don't fail build when NVD API is unavailable -->
+                    <failBuildOnNvdApiError>false</failBuildOnNvdApiError>
                     <!-- Use cached data when NVD is unavailable -->
                     <useCached>true</useCached>
                 </configuration>
