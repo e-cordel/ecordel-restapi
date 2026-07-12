@@ -1,0 +1,4 @@
+# Enable automatic java and maven version switching
+# https://sdkman.io/usage#env
+java=25-zulu
+maven=3.9.6

@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.6</version>
+        <version>4.1.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -18,15 +18,15 @@
 
     <properties>
         <commons-net.version>3.12.0</commons-net.version>
-        <dependency-check-maven.version>12.2.1</dependency-check-maven.version>
+        <dependency-check-maven.version>12.2.2</dependency-check-maven.version>
         <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
         <java.version>25</java.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
-        <jjwt.version>0.12.5</jjwt.version>
+        <jjwt.version>0.12.7</jjwt.version>
         <lombok.version>1.18.42</lombok.version>
         <mockftp.version>3.1.0</mockftp.version>
         <openapi-generator-maven-plugin.version>5.1.0</openapi-generator-maven-plugin.version>
-        <postgresql.version>42.7.11</postgresql.version>
+        <postgresql.version>42.7.13</postgresql.version>
         <spring-ai.version>2.0.0-M3</spring-ai.version>
         <sonar.projectKey>e-cordel_ecordel-restapi</sonar.projectKey>
         <sonar.organization>e-cordel</sonar.organization>
@@ -35,6 +35,7 @@
         <testcontainers.version>2.0.2</testcontainers.version>
         <commons-compress.version>1.28.0</commons-compress.version>
         <commons-lang3.version>3.19.0</commons-lang3.version>
+        <tomcat-embed.version>11.0.24</tomcat-embed.version>
     </properties>
 
     <dependencyManagement>
@@ -54,6 +55,28 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.tomcat.embed</groupId>
+                    <artifactId>tomcat-embed-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.tomcat.embed</groupId>
+                    <artifactId>tomcat-embed-websocket</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>${tomcat-embed.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-websocket</artifactId>
+            <version>${tomcat-embed.version}</version>
         </dependency>
 
         <dependency>
@@ -343,6 +366,10 @@
                         <!-- Exclude New Relic Java agent from dependency check analysis since it is not part of the final jar-->
                         <exclude>com.newrelic.agent.java:newrelic-java</exclude>
                     </excludes>
+                    <!-- Retry configuration for NVD API failures -->
+                    <nvdMaxRetryCount>3</nvdMaxRetryCount>
+                    <!-- Don't fail build when NVD API is unavailable -->
+                    <failOnError>false</failOnError>
                 </configuration>
                 <executions>
                     <execution>
