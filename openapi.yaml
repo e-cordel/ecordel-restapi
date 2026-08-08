@@ -174,7 +174,7 @@ paths:
                 $ref: '#/components/schemas/Cordel'
             text/plain:
               schema:
-                  type: string
+                type: string
         404:
           description: "Not found"
       tags:
@@ -193,26 +193,14 @@ paths:
       responses:
         200:
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cordel'
         403:
           description: Forbidden
-      security:
-        - bearerAuth: []
-      tags:
-        - Cordel
-    delete:
-      summary: "Delete the cordel identified by id"
-      parameters:
-        - name: "id"
-          in: "path"
-          schema:
-            type : integer
-          description: "Cordel identification number"
-          required: true
-      responses:
-        200:
-          description: OK
-        403:
-          description: Forbidden
+        404:
+          description: Not found. If there is no cordel with the provided id
       security:
         - bearerAuth: []
       tags:
@@ -220,6 +208,7 @@ paths:
   /cordels/{id}/xilogravura:
     put:
       summary: Associate a xilogravura to a cordel
+      deprecated: true
       parameters:
         - name: "id"
           in: "path"
@@ -232,35 +221,65 @@ paths:
       responses:
         200:
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cordel'
         403:
           description: Forbidden
+        404:
+          description: Not found. If there is no cordel with the provided id
       security:
         - bearerAuth: []
       tags:
         - Cordel
-  /cordels/{id}/ai-review:
+  /cordels/{cordelId}/ai-reviews:
     post:
-      summary: Review cordel text with AI
+      summary: Start asynchronous AI review for a cordel
       parameters:
-        - name: "id"
+        - name: "cordelId"
           in: "path"
           schema:
             type: integer
           description: "Cordel identification number"
           required: true
       responses:
+        202:
+          description: Accepted. AI review started
+          headers:
+            Location:
+              description: URL to poll the review status
+              schema:
+                type: string
+        403:
+          description: Forbidden
+        404:
+          description: Not found. If there is no cordel with the provided id
+      security:
+        - bearerAuth: []
+      tags:
+        - Cordel
+  /ai-reviews/{reviewId}:
+    get:
+      summary: Get AI review status and result by review id
+      parameters:
+        - name: "reviewId"
+          in: "path"
+          schema:
+            type: string
+          description: "AI review identifier returned by the start endpoint"
+          required: true
+      responses:
         200:
-          description: Reviewed cordel content
+          description: AI review completed
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AiReviewResponse'
-        400:
-          description: Bad request. If the cordel does not exist
-        403:
-          description: Forbidden
-      security:
-        - bearerAuth: []
+        202:
+          description: AI review still in progress
+        404:
+          description: Not found. If there is no review with the provided id
       tags:
         - Cordel
   /cordels/{id}/ebook-url:
@@ -326,6 +345,9 @@ components:
     AiReviewResponse:
       type: object
       properties:
+        completed:
+          type: boolean
+          description: indicates whether the AI review is completed
         content:
           type: string
           description: reviewed cordel content returned by AI
