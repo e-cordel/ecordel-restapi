@@ -15,11 +15,11 @@
  *
  */
 
-package br.com.itsmemario.ecordel.cordel;
+package br.com.itsmemario.ecordel.exception;
 
-/**
- * Response payload for AI-assisted cordel review.
- * @param content revised cordel text returned by the model.
- */
-public record AiReviewResponse(String content) {
+public class DownstreamException extends RuntimeException {
+
+  public DownstreamException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

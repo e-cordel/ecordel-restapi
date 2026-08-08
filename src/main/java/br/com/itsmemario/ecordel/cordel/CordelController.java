@@ -17,11 +17,16 @@
 
 package br.com.itsmemario.ecordel.cordel;
 
+import br.com.itsmemario.ecordel.review.AiReviewService;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -40,6 +45,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.util.UriComponentsBuilder;
 
 
@@ -101,10 +107,12 @@ public class CordelController {
     return ResponseEntity.created(uri).build();
   }
 
-  @PostMapping("{id}/ai-review")
-  public ResponseEntity<AiReviewResponse> reviewWithAi(@PathVariable Long id) {
-    String reviewedContent = aiReviewService.review(id);
-    return ResponseEntity.ok(new AiReviewResponse(reviewedContent));
+  @PostMapping(value = "{cordelId}/ai-reviews", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+  public ResponseEntity<Void> reviewWithAi(@PathVariable Long cordelId, UriComponentsBuilder uriBuilder) {
+    var reviewId = UUID.randomUUID().toString();
+    aiReviewService.review(cordelId, reviewId);
+    var uri = uriBuilder.path("/ai-reviews/{reviewId}").buildAndExpand(reviewId).toUri();
+    return ResponseEntity.accepted().header(HttpHeaders.LOCATION, uri.toString()).build();
   }
 
   @PutMapping("{id}")
@@ -137,6 +145,15 @@ public class CordelController {
   public ResponseEntity<Void> updateEbookUrl(@PathVariable Long id, @RequestBody @NotBlank String ebookUrl) {
     service.updateEbookUrl(id, ebookUrl);
     return ResponseEntity.ok().build();
+  }
+
+  private static void writeChunk(java.io.OutputStream outputStream, String chunk) {
+    try {
+      outputStream.write(chunk.getBytes(StandardCharsets.UTF_8));
+      outputStream.flush();
+    } catch (IOException ex) {
+      throw new UncheckedIOException(ex);
+    }
   }
 
 }

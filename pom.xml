@@ -27,7 +27,7 @@
         <mockftp.version>3.1.0</mockftp.version>
         <openapi-generator-maven-plugin.version>5.1.0</openapi-generator-maven-plugin.version>
         <postgresql.version>42.7.11</postgresql.version>
-        <spring-ai.version>2.0.0-M3</spring-ai.version>
+        <spring-ai.version>2.0.0</spring-ai.version>
         <sonar.projectKey>e-cordel_ecordel-restapi</sonar.projectKey>
         <sonar.organization>e-cordel</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -166,6 +166,7 @@
             <artifactId>resilience4j-spring-boot3</artifactId>
             <version>2.2.0</version>
         </dependency>
+
         <dependency>
             <groupId>io.github.resilience4j</groupId>
             <artifactId>resilience4j-micrometer</artifactId>
