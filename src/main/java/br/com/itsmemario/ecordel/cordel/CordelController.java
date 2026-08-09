@@ -22,9 +22,6 @@ import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +42,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.util.UriComponentsBuilder;
 
 
@@ -145,15 +141,6 @@ public class CordelController {
   public ResponseEntity<Void> updateEbookUrl(@PathVariable Long id, @RequestBody @NotBlank String ebookUrl) {
     service.updateEbookUrl(id, ebookUrl);
     return ResponseEntity.ok().build();
-  }
-
-  private static void writeChunk(java.io.OutputStream outputStream, String chunk) {
-    try {
-      outputStream.write(chunk.getBytes(StandardCharsets.UTF_8));
-      outputStream.flush();
-    } catch (IOException ex) {
-      throw new UncheckedIOException(ex);
-    }
   }
 
 }
