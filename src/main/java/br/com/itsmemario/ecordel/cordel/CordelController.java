@@ -17,11 +17,13 @@
 
 package br.com.itsmemario.ecordel.cordel;
 
+import br.com.itsmemario.ecordel.review.AiReviewService;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import java.io.ByteArrayInputStream;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -101,10 +103,12 @@ public class CordelController {
     return ResponseEntity.created(uri).build();
   }
 
-  @PostMapping("{id}/ai-review")
-  public ResponseEntity<AiReviewResponse> reviewWithAi(@PathVariable Long id) {
-    String reviewedContent = aiReviewService.review(id);
-    return ResponseEntity.ok(new AiReviewResponse(reviewedContent));
+  @PostMapping(value = "{cordelId}/ai-reviews", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+  public ResponseEntity<Void> reviewWithAi(@PathVariable Long cordelId, UriComponentsBuilder uriBuilder) {
+    var reviewId = UUID.randomUUID().toString();
+    aiReviewService.review(cordelId, reviewId);
+    var uri = uriBuilder.path("/ai-reviews/{reviewId}").buildAndExpand(reviewId).toUri();
+    return ResponseEntity.accepted().header(HttpHeaders.LOCATION, uri.toString()).build();
   }
 
   @PutMapping("{id}")

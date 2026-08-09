@@ -60,4 +60,10 @@ public class DefaultExceptionHandler {
     return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
   }
 
+  @ExceptionHandler(DownstreamException.class)
+  public ResponseEntity<Void> handleDownstreamExceptions(DownstreamException ex) {
+    log.error("AI review downstream failure: {}", ex.getMessage());
+    return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
+  }
+
 }

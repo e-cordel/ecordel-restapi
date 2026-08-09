@@ -26,3 +26,9 @@ spring:
     show-sql: true
 
 server.port: 5000
+
+logging:
+  level:
+    root: INFO
+    br.com.itsmemario.ecordel.cordel: DEBUG
+    org.springframework.ai: DEBUG
