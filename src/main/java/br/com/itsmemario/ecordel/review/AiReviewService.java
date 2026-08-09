@@ -75,6 +75,7 @@ public class AiReviewService {
 
     log.info("sending AI review request for cordel id {} with prompt length {}", cordelId, finalUserPrompt.length());
     cache.put(reviewId, new AiReviewResponse(false, null));
+    long requestStartNanos = System.nanoTime();
 
     CompletableFuture.supplyAsync(() ->
       chatClientBuilder.build()
@@ -83,8 +84,12 @@ public class AiReviewService {
           .user(finalUserPrompt)
           .call()
           .content()
-    ).thenAccept(text -> {
-      log.info("AI review result received for cordel id {}", cordelId);
+    ).exceptionally(ex -> {
+      log.error("AI review request failed for cordel id {}", cordelId, ex);
+      return null;
+    }).thenAccept(text -> {
+      long elapsedMillis = (System.nanoTime() - requestStartNanos) / 1_000_000;
+      log.info("AI review result received for cordel id {} in {} ms", cordelId, elapsedMillis);
       cache.put(reviewId, new AiReviewResponse(true, text));
     });
   }
