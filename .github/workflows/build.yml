@@ -55,6 +55,7 @@ jobs:
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -DnvdApiKey=$NVD_API_KEY
 
       - uses: actions/upload-artifact@v7
+        if: always()
         with:
           name: Dependency-Check Report
           path: target/dependency-check-report.html
