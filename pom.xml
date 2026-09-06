@@ -28,6 +28,8 @@
         <openapi-generator-maven-plugin.version>5.1.0</openapi-generator-maven-plugin.version>
         <postgresql.version>42.7.13</postgresql.version>
         <spring-ai.version>2.0.1</spring-ai.version>
+        <!-- todo to be removed after spring update -->
+        <tomcat.version>11.0.25</tomcat.version>
         <sonar.projectKey>e-cordel_ecordel-restapi</sonar.projectKey>
         <sonar.organization>e-cordel</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
